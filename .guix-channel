@@ -2,5 +2,11 @@
 
 (channel
   (version 0)
-  (name "my-guix-packages"))
-;;(news-file "news.scm"))
+  (name "my-guix-packages")
+  (dependencies
+   (channel
+    (name some-collection)
+    (url "https://gitlab.com/methuselah-0/bash-coding-utils.sh.git")))
+;;(news-file "news.scm")    
+)
+

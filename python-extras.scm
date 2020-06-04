@@ -5,6 +5,12 @@
 #:use-module (gnu packages python-xyz)
 ;;#:use-module (gnu packages python) ;; python-testpath to figure out python version
 #:use-module (gnu packages check) ;; python-pytest
+#:use-module (gnu packages monitoring) ;; python-prometheus-client
+#:use-module (gnu packages xml) ;; python-defusedxml
+#:use-module (gnu packages python-web) ;; python-terminado
+#:use-module (gnu packages sphinx) ;; python-sphinx
+#:use-module (gnu packages textutils) ;; python-pandocfilters
+#:use-module (gnu packages python-crypto) ;; python-certifi
 #:use-module (guix build-system python)
 #:use-module (gnu packages graphviz)
 #:use-module ((guix licenses) #:prefix license:)
@@ -165,11 +171,14 @@
     (propagated-inputs
      `(("python-bleach" ,python-bleach)
        ("python-entrypoints" ,python-entrypoints)
+       ("python-defusedxml" ,python-defusedxml)
        ("python-jinja2" ,python-jinja2)
        ("python-jupyter-core" ,python-jupyter-core)
        ("python-mistune" ,python-mistune)
        ("python-nbformat" ,python-nbformat)
        ("python-pygments" ,python-pygments)
+       ("python-testpath" ,python-testpath-0.4.4)
+       ("python-pandocfilters" ,python-pandocfilters)
        ("python-traitlets" ,python-traitlets)))
     (home-page "http://jupyter.org")
     (synopsis "Converting Jupyter Notebooks")
@@ -187,24 +196,7 @@ convert an @code{.ipynb} notebook file into various static formats including:
 @item executable script
 @end enumerate\n")
     (license license:bsd-3)))
-(define-public python-defusedxml (package
-  (name "python-defusedxml")
-  (version "0.6.0")
-  (source
-    (origin
-      (method url-fetch)
-      (uri (pypi-uri "defusedxml" version))
-      (sha256
-        (base32
-          "1xbp8fivl3wlbyg2jrvs4lalaqv1xp9a9f29p75wdx2s2d6h717n"))))
-  (build-system python-build-system)
-  (home-page "https://github.com/tiran/defusedxml")
-  (synopsis
-    "XML bomb protection for Python stdlib modules")
-  (description
-    "XML bomb protection for Python stdlib modules")
-  (license #f))
-)
+
 (define-public python-testpath-0.4.4
   (package
     (name "python-testpath")
@@ -269,14 +261,28 @@ tools for mocking system commands and recording calls to those.")
   (build-system python-build-system)
   (arguments
    `(#:tests? #f ; this package does not even have a setup.py
-  ))
+     #:modules ((guix build python-build-system)
+                (guix build utils)
+                (srfi srfi-1))
+     #:phases
+     (modify-phases %standard-phases
+       ;;(delete 'install)
+       (replace 'build
+         (lambda* (#:key inputs outputs #:allow-other-keys)
+           (let* ((version (last
+                            (string-split (assoc-ref inputs "python") #\-)))
+                  (x.y (string-join (take (string-split version #\.) 2)
+                                    "."))
+                  (dir (string-append
+                        (assoc-ref outputs "out")
+                        "/lib/python" x.y "/site-packages")))
+             (mkdir-p (string-append dir "/nbdev"))
+             (copy-file "nbdev/nbdev_build_docs_from_org.sh" (string-append dir "/nbdev/nbdev_build_docs_from_org.sh"))))))))
   (native-inputs
-   `(("python-defusedxml" ,python-defusedxml)
-     )
-   )
+   `(("python-defusedxml" ,python-defusedxml)))
   ;; (inputs
   ;;  `(("python-testpath" ,python-testpath)
-  ;;    ))  
+  ;;    ))
   (propagated-inputs
    `(("python-fastscript" ,python-fastscript)
      ("python-nbconvert" ,python-nbconvert-5.6.1)
@@ -291,10 +297,216 @@ tools for mocking system commands and recording calls to those.")
    "Writing a jupyter notebooks library entirely in emacs org-babel")
   (license #f))
 )
-;; myjupyter is just like jupyter but uses a later nbdev-convert
+
+;; (define-public python-ipython
+;;   (package
+;;     (name "python-ipython")
+;;     (version "7.9.0")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (pypi-uri "ipython" version ".tar.gz"))
+;;        (sha256
+;;         (base32 "103jkw18z7fnwdal1mdbijjxi1fndzn31g887lmj7ddpf2r07lyz"))))
+;;     (build-system python-build-system)
+;;     (propagated-inputs
+;;      `(("python-backcall" ,python-backcall)
+;;        ("python-pyzmq" ,python-pyzmq)
+;;        ("python-prompt-toolkit" ,python-prompt-toolkit-2)
+;;        ("python-terminado" ,python-terminado)
+;;        ("python-matplotlib" ,python-matplotlib)
+;;        ("python-numpy" ,python-numpy)
+;;        ("python-numpydoc" ,python-numpydoc)
+;;        ("python-jedi" ,python-jedi)
+;;        ("python-jinja2" ,python-jinja2)
+;;        ("python-mistune" ,python-mistune)
+;;        ("python-pexpect" ,python-pexpect)
+;;        ("python-pickleshare" ,python-pickleshare)
+;;        ("python-simplegeneric" ,python-simplegeneric)
+;;        ("python-jsonschema" ,python-jsonschema)
+;;        ("python-traitlets" ,python-traitlets)
+;;        ("python-nbformat" ,python-nbformat)
+;;        ("python-pygments" ,python-pygments)))
+;;     (inputs
+;;      `(("readline" ,readline)
+;;        ("which" ,which)))
+;;     (native-inputs
+;;      `(("graphviz" ,graphviz)
+;;        ("pkg-config" ,pkg-config)
+;;        ("python-requests" ,python-requests) ;; for tests
+;;        ("python-testpath" ,python-testpath)
+;;        ("python-nose" ,python-nose)))
+;;     (arguments
+;;      `(#:phases
+;;        (modify-phases %standard-phases
+;;          (add-after 'unpack 'make-docs-reproducible
+;;            (lambda _
+;;              (substitute* "IPython/sphinxext/ipython_directive.py"
+;;                ((".*import datetime") "")
+;;                ((".*datetime.datetime.now\\(\\)") "")
+;;                (("%timeit") "# %timeit"))
+;;              #t))
+;;          ;; Tests can only be run after the library has been installed and not
+;;          ;; within the source directory.
+;;          (delete 'check)
+;;          (add-after 'install 'check
+;;            (lambda* (#:key inputs outputs tests? #:allow-other-keys)
+;;              (if tests?
+;;                  (begin
+;;                    ;; Make installed package available for running the tests
+;;                    (add-installed-pythonpath inputs outputs)
+;;                    (setenv "HOME" "/tmp/") ;; required by a test
+;;                    ;; We only test the core because one of the other tests
+;;                    ;; tries to import ipykernel.
+;;                    (invoke "python" "IPython/testing/iptest.py"
+;;                            "-v" "IPython/core/tests"))
+;;                  #t)))
+;;          (add-before 'check 'fix-tests
+;;            (lambda* (#:key inputs #:allow-other-keys)
+;;              (substitute* "./IPython/utils/_process_posix.py"
+;;                (("/usr/bin/env', 'which") (which "which")))
+;;              (substitute* "./IPython/core/tests/test_inputtransformer.py"
+;;                (("#!/usr/bin/env python")
+;;                 (string-append "#!" (which "python"))))
+;;              ;; This test introduces a circular dependency on ipykernel
+;;              ;; (which depends on ipython).
+;;              (delete-file "IPython/core/tests/test_display.py")
+;;              ;; AttributeError: module 'IPython.core' has no attribute 'formatters'
+;;              (delete-file "IPython/core/tests/test_interactiveshell.py")
+;;              #t)))))
+;;     (home-page "https://ipython.org")
+;;     (synopsis "IPython is a tool for interactive computing in Python")
+;;     (description
+;;      "IPython provides a rich architecture for interactive computing with:
+;; Powerful interactive shells, a browser-based notebook, support for interactive
+;; data visualization, embeddable interpreters and tools for parallel
+;; computing.")
+;;     (properties `((python2-variant . ,(delay python2-ipython))))
+;;     (license license:bsd-3)))
+
+;;
+;; python-ipywidgets-next is just like python-ipywidgets but uses python-widgetsnbextension-next
+;;
+
+(define-public python-ipywidgets-next
+  (package
+    (name "python-ipywidgets-next")
+    (version "7.5.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "ipywidgets" version))
+       (sha256
+        (base32
+         "15sww2mvnkqlvx55gwa82v05062a8j1xpncnqna4k9sl53hgcig9"))))
+    (build-system python-build-system)
+    (arguments `(#:tests? #f )) ;; testpath problem it wont be found when running python setup.py test command either way
+    (propagated-inputs
+     `(("python-ipython" ,python-ipython)
+       ("python-traitlets" ,python-traitlets)
+       ("python-testpath" ,python-testpath-0.4.4)
+       ("python-widgetsnbextension" ,python-widgetsnbextension-next)))
+    (native-inputs
+     `(("python-nose" ,python-nose)
+       ("python-pytest" ,python-pytest)))
+    (home-page "https://ipython.org")
+    (synopsis "IPython HTML widgets for Jupyter")
+    (description "Ipywidgets are interactive HTML widgets for Jupyter
+notebooks and the IPython kernel.  Notebooks come alive when interactive
+widgets are used.  Users gain control of their data and can visualize changes
+in the data.")
+    (license license:bsd-3)))
+
+;;
+;; python-widgetsnbextension-next uses a later nbdev-convert and adds python-testpath to native-inputs
+;;
+
+(define-public python-widgetsnbextension-next
+  (package
+    (name "python-widgetsnbextension-next")
+    (version "3.5.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "widgetsnbextension" version))
+       (sha256
+        (base32
+         "1ismyaxbv9d56yqqqb8xl58hg0iq0bbyy014a53y1g3hfbc8g7q7"))))
+    (build-system python-build-system)
+    ;; error: Could not find suitable distribution for Requirement.parse('testpath')
+    ;; adding it doesn't help...
+    (arguments '(#:tests? #f))
+    (propagated-inputs
+     `(("python-ipykernel" ,python-ipykernel)
+       ("python-testpath" ,python-testpath-0.4.4)
+       ("python-notebook" ,python-notebook-next)))
+    (native-inputs
+     `(("python-certifi" ,python-certifi)
+       ("python-nose" ,python-nose)
+       ;;("python-testpath" ,python-testpath-0.4.4)
+       ))
+    (home-page "https://ipython.org")
+    (synopsis "IPython HTML widgets for Jupyter")
+    (description "This package provides interactive HTML widgets for Jupyter
+notebooks.")
+    (license license:bsd-3)))
+
+;;
+;; python-notebook-next is just like jupyter but uses a later nbdev-convert
+;;
+
+(define-public python-notebook-next
+  (package
+    (name "python-notebook-next")
+    (version "5.7.4")
+    (source (origin
+              (method url-fetch)
+              (uri (pypi-uri "notebook" version))
+              (sha256
+               (base32
+                "0jm7324mbxljmn9hgapj66q7swyz5ai92blmr0jpcy0h80x6f26r"))))
+    (build-system python-build-system)
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (replace 'check
+           (lambda _
+             ;; These tests require a browser
+             (delete-file-recursively "notebook/tests/selenium")
+             ;; Some tests need HOME
+             (setenv "HOME" "/tmp")
+             ;; This file contains "warningfilters", which are not supported
+             ;; by this version of nose.
+             (delete-file "setup.cfg")
+             (with-directory-excursion "/tmp"
+               (invoke "nosetests" "-v"))
+             #t)))))
+    (propagated-inputs
+     `(("python-jupyter-core" ,python-jupyter-core)
+       ("python-nbformat" ,python-nbformat)
+       ("python-nbconvert" ,python-nbconvert-5.6.1)
+       ("python-prometheus-client" ,python-prometheus-client)
+       ("python-send2trash" ,python-send2trash)
+       ("python-terminado" ,python-terminado)))
+    (native-inputs
+     `(("python-nose" ,python-nose)
+       ("python-sphinx" ,python-sphinx)
+       ("python-requests" ,python-requests)))
+    (home-page "http://jupyter.org/")
+    (synopsis "Web-based notebook environment for interactive computing")
+    (description
+     "The Jupyter HTML notebook is a web-based notebook environment for
+interactive computing.")
+    (properties `((python2-variant . ,(delay python2-notebook))))
+    (license license:bsd-3)))
+
+;;
+;; jupyter-next is just like jupyter but uses a later nbdev-convert
+;;
+
 (define-public jupyter-next
   (package
-    (name "myjupyter")
+    (name "jupyter-next")
     (version "1.0.0")
     (source
      (origin
@@ -307,10 +519,11 @@ tools for mocking system commands and recording calls to those.")
     (arguments '(#:tests? #f)) ; there are none.
     (propagated-inputs
      `(("python-ipykernel" ,python-ipykernel)
-       ("python-ipywidgets" ,python-ipywidgets)
+       ("python-ipywidgets" ,python-ipywidgets-next)
        ("python-jupyter-console" ,python-jupyter-console)
        ("python-nbconvert" ,python-nbconvert-5.6.1)
-       ("python-notebook" ,python-notebook)
+       ("python-notebook" ,python-notebook-next)
+       ("python-prompt-toolkit" ,python-prompt-toolkit)
        ("python-qtconsole" ,python-qtconsole)))
     (native-search-paths
      (list (search-path-specification
@@ -629,6 +842,7 @@ simulation, statistical modeling, machine learning and much more.")
        ))
     (propagated-inputs
       `(("python-nbconvert" ,python-nbconvert-5.6.1)
+        ("python-testpath" ,python-testpath-0.4.4)
         ("python-pandoc" ,python-pandoc)))
     (home-page "https://github.com/ahrenberg/nbcorg")
     (synopsis "An nbconvert orgmode-exporter")
@@ -638,7 +852,7 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-pandoc
 ;;python-pydotplus
 ;;python-nbdev-org-babel
-;;myjupyter
+;;jupyter-next
 ;;python-nbconvert
 ;;python-defusedxml
 ;;python-testpath-0.4.4

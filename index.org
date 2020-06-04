@@ -1,0 +1,37 @@
+* About
+
+This channel was setup to fix some python packages etc in Guix, and
+can hopefully be added (by also modifiying some packages) to guix
+master in the future. The main point is to support both the jupyter
+package (as in successfully running the =jupyter-notebook= command)
+and the alpha nbdev-org-babel package.
+
+* Setup & Installation
+
+Add this to your =~/.config/guix/channels.scm=:
+
+#+begin_src guile
+(list (channel
+       (name 'guix)
+       (url "https://git.savannah.gnu.org/git/guix.git")
+       ;; 1 commit before the change for python-prompt-toolkit etc which breaks the jupyter package
+       (commit  "bcbd63407e933ce04aef72757387a0bacdb07e77")
+       ;;(branch  "master")
+       )
+      (channel
+       (name 'my-guix-packages)
+       (url "https://github.com/methuselah-0/my-guix-packages.git")
+       )
+      )
+#+end_src
+
+Run =guix pull= to update to those channel commits. The guix channel
+is pinned to a commit that is right before a commit that breaks
+jupyter etc (32ba87c14fd5e5b54d95211cd9a159d568ce7c67), and the python
+packages in this channels are modified to work with that specific
+commit. You may want to set my-guix-packages channel to commit
+3639aad52d642844910fdfdc80c6db16798048b4 as well. And finally, you may
+want to specify the commit cc23925f96a02b53aa5c9216e566c2dbb0b0c204
+for the bash-coding-utils channel dependency in the .guix-channel file
+in this repo to be sure that everything is set to exactly the setup in
+which these packages were tested to work.

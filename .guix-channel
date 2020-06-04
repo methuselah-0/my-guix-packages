@@ -2,4 +2,5 @@
 
 (channel
   (version 0)
-(news-file "news.scm"))
+  (name "my-guix-packages"))
+;;(news-file "news.scm"))

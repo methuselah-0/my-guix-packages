@@ -1,3 +1,4 @@
+;; doesnt work :S
 (channel-news
  (version 0)
  (entry (commit "b5a30661119fd7111abcaba457e71b6873ec939e")

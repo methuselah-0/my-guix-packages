@@ -292,38 +292,38 @@ tools for mocking system commands and recording calls to those.")
   (license #f))
 )
 ;; myjupyter is just like jupyter but uses a later nbdev-convert
-;; (define-public myjupyter
-;;   (package
-;;     (name "myjupyter")
-;;     (version "1.0.0")
-;;     (source
-;;      (origin
-;;        (method url-fetch)
-;;        (uri (pypi-uri "jupyter" version))
-;;        (sha256
-;;         (base32
-;;          "0pwf3pminkzyzgx5kcplvvbvwrrzd3baa7lmh96f647k30rlpp6r"))))
-;;     (build-system python-build-system)
-;;     (arguments '(#:tests? #f)) ; there are none.
-;;     (propagated-inputs
-;;      `(("python-ipykernel" ,python-ipykernel)
-;;        ("python-ipywidgets" ,python-ipywidgets)
-;;        ("python-jupyter-console" ,python-jupyter-console)
-;;        ("python-nbconvert" ,python-nbconvert-5.6.1)
-;;        ("python-notebook" ,python-notebook)
-;;        ("python-qtconsole" ,python-qtconsole)))
-;;     (native-search-paths
-;;      (list (search-path-specification
-;;             (variable "JUPYTER_PATH")
-;;             (files '("share/jupyter")))))
-;;     (home-page "https://jupyter.org")
-;;     (synopsis "Web application for interactive documents")
-;;     (description
-;;      "The Jupyter Notebook is a web application that allows you to create and
-;; share documents that contain live code, equations, visualizations and
-;; explanatory text.  Uses include: data cleaning and transformation, numerical
-;; simulation, statistical modeling, machine learning and much more.")
-;;     (license license:bsd-3)))
+(define-public jupyter-next
+  (package
+    (name "myjupyter")
+    (version "1.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "jupyter" version))
+       (sha256
+        (base32
+         "0pwf3pminkzyzgx5kcplvvbvwrrzd3baa7lmh96f647k30rlpp6r"))))
+    (build-system python-build-system)
+    (arguments '(#:tests? #f)) ; there are none.
+    (propagated-inputs
+     `(("python-ipykernel" ,python-ipykernel)
+       ("python-ipywidgets" ,python-ipywidgets)
+       ("python-jupyter-console" ,python-jupyter-console)
+       ("python-nbconvert" ,python-nbconvert-5.6.1)
+       ("python-notebook" ,python-notebook)
+       ("python-qtconsole" ,python-qtconsole)))
+    (native-search-paths
+     (list (search-path-specification
+            (variable "JUPYTER_PATH")
+            (files '("share/jupyter")))))
+    (home-page "https://jupyter.org")
+    (synopsis "Web application for interactive documents")
+    (description
+     "The Jupyter Notebook is a web application that allows you to create and
+share documents that contain live code, equations, visualizations and
+explanatory text.  Uses include: data cleaning and transformation, numerical
+simulation, statistical modeling, machine learning and much more.")
+    (license license:bsd-3)))
 
 ;;
 ;; everything below here is just to install trepan3k

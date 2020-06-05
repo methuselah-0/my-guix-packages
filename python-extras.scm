@@ -31,7 +31,7 @@
    (build-system python-build-system)
    (propagated-inputs
     `(("python-pyparsing" ,python-pyparsing)
-      ("bcu" ,bash-coding-utils.sh)
+      ("bash-coding-utils" ,bash-coding-utils.sh)
       ))
    (home-page "http://pydotplus.readthedocs.org/")
    (synopsis

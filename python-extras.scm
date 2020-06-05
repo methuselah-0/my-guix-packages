@@ -14,6 +14,7 @@
 #:use-module (guix build-system python)
 #:use-module (gnu packages graphviz)
 #:use-module (bash-coding-utils)
+#:use-module (python-extras-2)
 #:use-module ((guix licenses) #:prefix license:)
 )
 

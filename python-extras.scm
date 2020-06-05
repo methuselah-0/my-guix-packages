@@ -13,6 +13,7 @@
 #:use-module (gnu packages python-crypto) ;; python-certifi
 #:use-module (guix build-system python)
 #:use-module (gnu packages graphviz)
+#:use-module (bash-coding-utils)
 #:use-module ((guix licenses) #:prefix license:)
 )
 
@@ -29,7 +30,9 @@
        "1i05cnk3yh722fdyaq0asr7z9xf7v7ikbmnpxa8j6pdqx6g5xs4i"))))
    (build-system python-build-system)
    (propagated-inputs
-    `(("python-pyparsing" ,python-pyparsing)))
+    `(("python-pyparsing" ,python-pyparsing)
+      ("bcu" ,bash-coding-utils.sh)
+      ))
    (home-page "http://pydotplus.readthedocs.org/")
    (synopsis
     "Python interface to Graphviz's Dot language")

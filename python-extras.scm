@@ -850,6 +850,34 @@ simulation, statistical modeling, machine learning and much more.")
     (synopsis "An nbconvert orgmode-exporter")
     (description "An nbconvert orgmode-exporter")
     (license #f)))
+(define-public python-bash_kernel
+  (package
+   (name "python-bash-kernel")
+   (version "0.7.2")
+   (source
+    (origin
+     (method url-fetch)
+     (uri (pypi-uri "bash_kernel" version))
+     (sha256
+      (base32
+       "0w0nbr3iqqsgpk83rgd0f5b02462bkyj2n0h6i9dwyc1vpnq9350"))))
+   (build-system python-build-system)
+   (arguments '(#:tests? #f)) ; there are none.
+   ;; test failure is:
+   ;; /gnu/store/gmirjfdn99fg1x7r6jlw4mk5gkaypgs6-python-ipython-7.9.0/lib/python3.8/site-packages/IPython/paths.py:67: UserWarning: IPython parent '/homeless-shelter' is not a writable location, using a temp directory.
+   ;;   warn("IPython parent '{0}' is not a writable location,"
+   ;; error: [Errno 13] Permission denied: '/homeless-shelter'
+   ;; command "python" "-c" "import setuptools, tokenize;__file__='setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\\r\\n', '\\n');f.close();exec(compile(code, __file__, 'exec'))" "test" failed with status 1
+   (native-inputs `(("python-ipython" ,python-ipython)
+                    ("python-ipykernel" ,python-ipykernel)
+                    ))
+   (propagated-inputs
+    `(("python-pexpect" ,python-pexpect)))
+   (home-page
+    "https://github.com/takluyver/bash_kernel")
+   (synopsis "A bash kernel for Jupyter")
+   (description "A bash kernel for Jupyter")
+   (license #f)))
 ;;python-nbcorg
 ;;python-pandoc
 ;;python-pydotplus
@@ -862,3 +890,4 @@ simulation, statistical modeling, machine learning and much more.")
 ;; should load uncompyl6 which should load unpyc3
 ;;python-nbcorg
 ;;python-unpyc3
+python-bash_kernel

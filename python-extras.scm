@@ -15,6 +15,7 @@
 #:use-module (gnu packages graphviz)
 #:use-module (gnu packages moreutils)
 #:use-module (bash-coding-utils)
+#:use-module (gnu packages ruby)
 ;;#:use-module (bcu-channel python-extras-2)
 #:use-module ((guix licenses) #:prefix license:)
 )

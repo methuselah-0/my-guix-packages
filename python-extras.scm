@@ -16,6 +16,7 @@
 #:use-module (gnu packages moreutils)
 #:use-module (bash-coding-utils)
 #:use-module (gnu packages ruby)
+#:use-module (gnu packages libffi)
 ;;#:use-module (bcu-channel python-extras-2)
 #:use-module ((guix licenses) #:prefix license:)
 )

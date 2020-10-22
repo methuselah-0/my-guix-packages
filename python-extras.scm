@@ -13,6 +13,7 @@
 #:use-module (gnu packages python-crypto) ;; python-certifi
 #:use-module (guix build-system python)
 #:use-module (gnu packages graphviz)
+#:use-module (gnu packages moreutils)
 #:use-module (bash-coding-utils)
 ;;#:use-module (bcu-channel python-extras-2)
 #:use-module ((guix licenses) #:prefix license:)
@@ -221,6 +222,7 @@ convert an @code{.ipynb} notebook file into various static formats including:
                   (srfi srfi-1))
        #:phases
        (modify-phases %standard-phases
+                      ;; TODO: try replace 'install and use flit
          (delete 'install)
          (replace 'build
            (lambda* (#:key inputs outputs #:allow-other-keys)
@@ -243,62 +245,70 @@ tools for mocking system commands and recording calls to those.")
     (license license:expat)))
 
 (define-public python-nbdev-org-babel
-(package
-  (name "python-nbdev-org-babel")
-  (version "0.2.18")
-  (source
+  (package
+   (name "python-nbdev-org-babel")
+   (version "0.2.18")
+   (source
     (origin
-     (method git-fetch)     
+     (method git-fetch)
      (uri (git-reference
-	   (commit "6889ddc28a6c1298d760762aa6ea619311d00d8b")
+	   (commit "4f195e915eefe5cd4deec3c6aea27e4b61233f33")
 	   (url "https://github.com/methuselah-0/nbdev-org-babel.git")))
-     (sha256     
+     (sha256
       (base32
-       "1w8r0bljksamxl1z7djsphm947740l3iwg7ma5vmc4jwy35g3f2r"))))
-      ;;(method url-fetch)
-      ;;(uri (pypi-uri "nbdev" version))
-      ;;(sha256
-      ;; (base32
-      ;;  "1ya9q3b3fya03hhqi3y5cipcr534xky47n3y2y6rzv5xay0ipy6j"))))
-  (build-system python-build-system)
-  (arguments
-   `(#:tests? #f ; this package does not even have a setup.py
-     #:modules ((guix build python-build-system)
-                (guix build utils)
-                (srfi srfi-1))
-     #:phases
-     (modify-phases %standard-phases
-       ;;(delete 'install)
-       (replace 'build
-         (lambda* (#:key inputs outputs #:allow-other-keys)
-           (let* ((version (last
-                            (string-split (assoc-ref inputs "python") #\-)))
-                  (x.y (string-join (take (string-split version #\.) 2)
-                                    "."))
-                  (dir (string-append
-                        (assoc-ref outputs "out")
-                        "/lib/python" x.y "/site-packages")))
-             (mkdir-p (string-append dir "/nbdev"))
-             (copy-file "nbdev/nbdev_build_docs_from_org.sh" (string-append dir "/nbdev/nbdev_build_docs_from_org.sh"))))))))
-  (native-inputs
-   `(("python-defusedxml" ,python-defusedxml)))
-  ;; (inputs
-  ;;  `(("python-testpath" ,python-testpath)
-  ;;    ))
-  (propagated-inputs
-   `(("python-fastscript" ,python-fastscript)
-     ("python-nbconvert" ,python-nbconvert-5.6.1)
-     ("python-nbformat" ,python-nbformat)
-     ("python-packaging" ,python-packaging)
-     ("python-pyyaml" ,python-pyyaml)))
-  (home-page
-   "https://github.com/methuselah-0/nbdev-org-babel")
-  (synopsis
-   "Writing a jupyter notebooks library entirely in emacs org-babel")
-  (description
-   "Writing a jupyter notebooks library entirely in emacs org-babel")
-  (license #f))
-)
+       "0ayfxnw1s9rzs1qpqqyqwhf21xk6g8psffsqzfvvl0w5k1j88dqn"))))
+   ;;(method url-fetch)
+   ;;(uri (pypi-uri "nbdev" version))
+   ;;(sha256
+   ;; (base32
+   ;;  "1ya9q3b3fya03hhqi3y5cipcr534xky47n3y2y6rzv5xay0ipy6j"))))
+   (build-system python-build-system)
+   (arguments
+    `(#:tests? #f           ; this package does not even have a setup.py
+      #:modules ((guix build python-build-system)
+                 (guix build utils)
+                 (srfi srfi-1))
+      #:phases
+      (modify-phases %standard-phases
+                     ;;(delete 'install)
+                     (replace 'build
+                              (lambda* (#:key inputs outputs #:allow-other-keys)
+                                (let* ((version (last
+                                                 (string-split (assoc-ref inputs "python") #\-)))
+                                       (x.y (string-join (take (string-split version #\.) 2)
+                                                         "."))
+                                       (dir (string-append
+                                             (assoc-ref outputs "out")
+                                             "/lib/python" x.y "/site-packages")))
+                                  (mkdir-p (string-append dir "/nbdev"))
+                                  (copy-file "nbdev/nbdev_build_docs_from_org.sh" (string-append dir "/nbdev/nbdev_build_docs_from_org.sh"))))))))
+   (native-inputs
+    `(("python-defusedxml" ,python-defusedxml)))
+   ;; (inputs
+   ;;  `(("python-testpath" ,python-testpath)
+   ;;    ))
+   (propagated-inputs
+    `(("python-fastscript" ,python-fastscript)
+      ("python-nbconvert" ,python-nbconvert-5.6.1)
+      ("python-nbformat" ,python-nbformat)
+      ("python-packaging" ,python-packaging)
+      ("moreutils" ,moreutils)
+      ;; since we don't have python-testpath properly packaged, we need to add this stupid thing:
+      ("python-pip" ,python-pip)      
+      ;; to be able to run make docs_serve which starts the jekyll website you need bundler and jekyll, but instead we need to install them via ruby's gem
+      ;;("bundler" ,bundler)
+      ;;("jekyll" ,jekyll)
+      ("ruby" ,ruby)
+      ;; libffi is needed for jekyll that gets installed via bundler and Gemfile in the nbdev docs folder
+      ("libffi" ,libffi)
+      ("python-pyyaml" ,python-pyyaml)))
+   (home-page
+    "https://github.com/methuselah-0/nbdev-org-babel")
+   (synopsis
+    "Writing a jupyter notebooks library entirely in emacs org-babel")
+   (description
+    "Writing a jupyter notebooks library entirely in emacs org-babel")
+ (license #f)))
 
 ;; (define-public python-ipython
 ;;   (package
@@ -525,7 +535,7 @@ interactive computing.")
        ("python-jupyter-console" ,python-jupyter-console)
        ("python-nbconvert" ,python-nbconvert-5.6.1)
        ("python-notebook" ,python-notebook-next)
-       ("python-prompt-toolkit" ,python-prompt-toolkit)
+       ("python-prompt-toolkit" ,python-prompt-toolkit-2)
        ("python-qtconsole" ,python-qtconsole)))
     (native-search-paths
      (list (search-path-specification
@@ -883,11 +893,11 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-pydotplus
 ;;python-nbdev-org-babel
 ;;jupyter-next
-;;python-nbconvert
+;;python-nbconvert-5.6.1
 ;;python-defusedxml
 ;;python-testpath-0.4.4
 ;;python-trepan3k
 ;; should load uncompyl6 which should load unpyc3
 ;;python-nbcorg
 ;;python-unpyc3
-python-bash_kernel
+;;python-bash_kernel

@@ -6,9 +6,7 @@
 #:use-module (gnu packages check) ;; python-pytest
 #:use-module (guix build-system emacs)
 #:use-module (gnu packages graphviz)
-#:use-module ((guix licenses) #:prefix license:)
-
-)
+#:use-module ((guix licenses) #:prefix license:))
 
 (define-public emacs-flycheck-pycheckers
   (package

@@ -1,5 +1,5 @@
 (define-module (bash-coding-utils)
-;;  #:use-module (gnu packages)
+  #:use-module (gnu packages) ;; because of complaints in /var/log/cuirass/evaluations/1.gz
   ;; #:use-module (gnu packages algebra)
   #:use-module (gnu packages admin) ;; netcat
   #:use-module (gnu packages aspell)
@@ -9,6 +9,7 @@
   #:use-module (gnu packages bison)
   ;; #:use-module (gnu packages check)
   #:use-module (gnu packages compression)
+  #:use-module (gnu packages check)  ;; because of complaints in /var/log/cuirass/evaluations/1.gz
   #:use-module (gnu packages curl)
   #:use-module (gnu packages cyrus-sasl)
   #:use-module (gnu packages databases)
@@ -1025,10 +1026,11 @@ systems, web content management systems and web frameworks." )
       (inputs `(("emacs" ,emacs)
                 ("cu" ,coreutils)
                 ("bash" ,bash)))
-      ;;(propagated-inputs `(("guile" ,guile-2.2)))
+      (propagated-inputs `(("guile" ,guile-2.2)))
       (synopsis "csv to sxml and the other way around")
       (description "csv functions for guile")
       (license license:expat))))
+
 (define-public python-on-guile
   (let (;(commit "fc0d7a9d21c841c0f86c3d2640e3989e335efa56")
         (commit "226d331")
@@ -1276,27 +1278,28 @@ chunks can be expressions as well as simple tokens.")
     "Command-line YAML/XML processor - jq wrapper for YAML/XML documents")
   (license #f))
   )
+
 ;; (define-public python-coverage
-;; (package
-;;   (name "python-coverage")
-;;   (version "5.0.3")
-;;   (source
+;;   (package
+;;    (name "python-coverage")
+;;    (version "5.0.3")
+;;    (source
 ;;     (origin
-;;       (method url-fetch)
-;;       (uri (pypi-uri "coverage" version))
-;;       (sha256
-;;         (base32
-;;           "1vrg8panqw79pswg52ygbrff3wdnxarrd9qz6c64ah0c4h2cmbvp"))))
+;;      (method url-fetch)
+;;      (uri (pypi-uri "coverage" version))
+;;      (sha256
+;;       (base32
+;;        "1vrg8panqw79pswg52ygbrff3wdnxarrd9qz6c64ah0c4h2cmbvp"))))
 ;;   (build-system python-build-system)
 ;;   (arguments
-;;      `(#:tests? #f))                    ; PyPI tarball lacks tests
+;;    `(#:tests? #f))                    ; PyPI tarball lacks tests
 ;;   (home-page
-;;     "https://github.com/nedbat/coveragepy")
+;;    "https://github.com/nedbat/coveragepy")
 ;;   (synopsis "Code coverage measurement for Python")
 ;;   (description
-;;     "Code coverage measurement for Python")
-;;   (license license:asl2.0))
-;;   )
+;;    "Code coverage measurement for Python")
+;;   (license license:asl2.0)))
+
 ;;guile-persist
 ;;guile-stis-parser
 ;;python-on-guile

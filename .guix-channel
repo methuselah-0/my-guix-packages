@@ -4,10 +4,10 @@
   (version 0)
   (name 'my-guix-packages)
   (directory "/guix-channel")  
-  (dependencies
-   (channel
-    (name bcu-channel)
-    (url "https://gitlab.com/methuselah-0/bash-coding-utils.sh.git")))
+  ;; (dependencies
+  ;;  (channel
+  ;;   (name bcu-channel)
+  ;;   (url "https://gitlab.com/methuselah-0/bash-coding-utils.sh.git")))
 ;;(news-file "news.scm")    
   )
 

@@ -3,7 +3,7 @@
 (channel
   (version 0)
   (name 'my-guix-packages)
-  (directory "/guix-channel")  
+  (directory "/packages")
   ;; (dependencies
   ;;  (channel
   ;;   (name bcu-channel)

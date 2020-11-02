@@ -5,6 +5,7 @@
   #:use-module (guix build-system perl)
   #:use-module (gnu packages web) ;; perl-lwp-mediatypes, perl-uri
   #:use-module (gnu packages perl)
+  #:use-module (gnu packages) ;; since there were complaints in /var/log/cuirass/evaluations/1.gz
   #:use-module (gnu packages perl-check)
   #:use-module ((guix licenses) #:prefix license:))
 

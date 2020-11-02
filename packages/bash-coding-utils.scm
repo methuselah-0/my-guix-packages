@@ -1279,26 +1279,26 @@ chunks can be expressions as well as simple tokens.")
   (license #f))
   )
 
-;; (define-public python-coverage
-;;   (package
-;;    (name "python-coverage")
-;;    (version "5.0.3")
-;;    (source
-;;     (origin
-;;      (method url-fetch)
-;;      (uri (pypi-uri "coverage" version))
-;;      (sha256
-;;       (base32
-;;        "1vrg8panqw79pswg52ygbrff3wdnxarrd9qz6c64ah0c4h2cmbvp"))))
-;;   (build-system python-build-system)
-;;   (arguments
-;;    `(#:tests? #f))                    ; PyPI tarball lacks tests
-;;   (home-page
-;;    "https://github.com/nedbat/coveragepy")
-;;   (synopsis "Code coverage measurement for Python")
-;;   (description
-;;    "Code coverage measurement for Python")
-;;   (license license:asl2.0)))
+(define-public python-coverage
+  (package
+   (name "python-coverage")
+   (version "5.0.3")
+   (source
+    (origin
+     (method url-fetch)
+     (uri (pypi-uri "coverage" version))
+     (sha256
+      (base32
+       "1vrg8panqw79pswg52ygbrff3wdnxarrd9qz6c64ah0c4h2cmbvp"))))
+  (build-system python-build-system)
+  (arguments
+   `(#:tests? #f))                    ; PyPI tarball lacks tests
+  (home-page
+   "https://github.com/nedbat/coveragepy")
+  (synopsis "Code coverage measurement for Python")
+  (description
+   "Code coverage measurement for Python")
+  (license license:asl2.0)))
 
 ;;guile-persist
 ;;guile-stis-parser

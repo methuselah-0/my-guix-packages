@@ -1091,7 +1091,7 @@ from @code{tree-il}.")
   (let ((commit "da7180a94d2add0873002c9b57dd393111d9781f")
         (revision "3"))
     (package
-      (name "python-on-guile")
+      (name "python-on-guile3")
       (version (git-version "0.1.0" revision commit))
       (source (origin
                 (method git-fetch)

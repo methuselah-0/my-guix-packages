@@ -82,7 +82,7 @@
 (define-public ctypes.sh
   (let (;;(commit "9d43f1bc4958ac136786f8c3b82cd3aa50713f49")
         (commit "091e64421507c3502b38b1b88d78b12b4269e80e")
-	(revision "0.0.0"))
+	(revision "0.0.1"))
     (package
      (name "ctypes.sh")
      (version (git-version "1.2" revision commit))

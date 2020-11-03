@@ -80,18 +80,19 @@
   #:use-module ((srfi srfi-1) #:select (alist-delete)))
 
 (define-public ctypes.sh
-  (let ((commit "9d43f1bc4958ac136786f8c3b82cd3aa50713f49")
+  (let (;;(commit "9d43f1bc4958ac136786f8c3b82cd3aa50713f49")
+        (commit "091e64421507c3502b38b1b88d78b12b4269e80e")
 	(revision "0.0.0"))
     (package
      (name "ctypes.sh")
-     (version (git-version "1.1.1" revision commit))
+     (version (git-version "1.2" revision commit))
      (source (origin
 	      (method git-fetch)
 	      (uri (git-reference
 		    (commit commit)
 		    (url "https://github.com/taviso/ctypes.sh.git")))
 	      (sha256
-	       (base32 "111n1kg1fzms5hns5s24ika05dm00kbhrdvn17hnx7g4k01hd7n4"))))
+	       (base32 "1wafyfhwd7nf7xdici0djpwgykizaz7jlarn0r1b4spnpjx1zbx4"))))
      (build-system gnu-build-system)
      (arguments
       '(#:make-flags (list (let*
@@ -924,8 +925,8 @@ systems, web content management systems and web frameworks." )
       (propagated-inputs `(("bash-full" ,bash)
                            ;;("bindutils" ,bind:utils)
                            ("coreutils" ,coreutils)
-                           ;;("ctypes.sh" ,ctypes.sh)
-                           ("bash-ctypes" ,bash-ctypes)
+                           ("ctypes.sh" ,ctypes.sh)
+                           ;;("bash-ctypes" ,bash-ctypes)
                            ("curl" ,curl)
                            ("expect" ,expect)
                            ("gawk" ,gawk)
@@ -1310,3 +1311,5 @@ chunks can be expressions as well as simple tokens.")
 ;;myphp
 ;;guile-bash2.2
 ;;guile-base64
+;;ctypes.sh
+

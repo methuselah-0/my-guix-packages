@@ -144,7 +144,7 @@
      (synopsis "Cthulhu")
      (description "ctypes.sh is a bash plugin that provides a foreign function interface directly in your shell. In other words, it allows you to call routines in shared libraries from within bash. ctypes.sh makes it possible to use GTK+ natively in your shell scripts, or write a high-performance http daemon.")
      (home-page "https://github.com/taviso/ctypes.sh")
-     (license "MIT"))))
+     (license license:expat)))) ;; wrong license
 
 (define-public guile-bash2.2
   (let ((commit "678e06df1e9f786ba87b47b18fa5c041eb0e3e86")
@@ -1276,7 +1276,7 @@ chunks can be expressions as well as simple tokens.")
     "Command-line YAML/XML processor - jq wrapper for YAML/XML documents")
   (description
     "Command-line YAML/XML processor - jq wrapper for YAML/XML documents")
-  (license #f))
+  (license license:expat))
   )
 
 (define-public python-coverage

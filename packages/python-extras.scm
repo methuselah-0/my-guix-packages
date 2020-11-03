@@ -1,25 +1,25 @@
 (define-module (python-extras)
-#:use-module (guix packages)
-#:use-module (guix download)
-#:use-module (guix git-download)
-#:use-module (gnu packages python-xyz)
-;;#:use-module (gnu packages python) ;; python-testpath to figure out python version
-#:use-module (gnu packages check) ;; python-pytest
-#:use-module (gnu packages monitoring) ;; python-prometheus-client
-#:use-module (gnu packages xml) ;; python-defusedxml
-#:use-module (gnu packages python-web) ;; python-terminado
-#:use-module (gnu packages sphinx) ;; python-sphinx
-#:use-module (gnu packages textutils) ;; python-pandocfilters
-#:use-module (gnu packages python-crypto) ;; python-certifi
-#:use-module (guix build-system python)
-#:use-module (gnu packages graphviz)
-#:use-module (gnu packages moreutils)
-#:use-module (bash-coding-utils)
-#:use-module (gnu packages ruby)
-#:use-module (gnu packages libffi)
-;;#:use-module (bcu-channel python-extras-2)
-#:use-module ((guix licenses) #:prefix license:)
-)
+  #:use-module (gnu packages) ;; because of complaints in /var/log/cuirass/evaluations/1.gz
+  #:use-module (guix packages)
+  #:use-module (guix download)
+  #:use-module (guix git-download)
+  #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages python) ;; python-testpath to figure out python version, ;; because of complaints in /var/log/cuirass/evaluations/1.gz
+  #:use-module (gnu packages check) ;; python-pytest
+  #:use-module (gnu packages monitoring) ;; python-prometheus-client
+  #:use-module (gnu packages xml) ;; python-defusedxml
+  #:use-module (gnu packages python-web) ;; python-terminado
+  #:use-module (gnu packages sphinx) ;; python-sphinx
+  #:use-module (gnu packages textutils) ;; python-pandocfilters
+  #:use-module (gnu packages python-crypto) ;; python-certifi
+  #:use-module (guix build-system python)
+  #:use-module (gnu packages graphviz)
+  #:use-module (gnu packages moreutils)
+  #:use-module (bash-coding-utils)
+  #:use-module (gnu packages ruby)
+  #:use-module (gnu packages libffi)
+  ;;#:use-module (bcu-channel python-extras-2)
+  #:use-module ((guix licenses) #:prefix license:))
 
 (define-public python-pydotplus
   (package
@@ -40,7 +40,7 @@
     "Python interface to Graphviz's Dot language")
    (description
     "Python interface to Graphviz's Dot language")
-   (license #f)))
+   (license license:expat))) ;; wrong license
 
 (define-public python-nbcorg
   (package
@@ -60,7 +60,7 @@
    (home-page "https://github.com/ahrenberg/nbcorg")
    (synopsis "An nbconvert orgmode-exporter")
   (description "An nbconvert orgmode-exporter")
-  (license #f)))
+  (license license:expat)))
 (define-public python-pandoc
   (package
    (name "python-pandoc")
@@ -146,8 +146,8 @@
     "A fast way to turn your python function into a script")
   (description
     "A fast way to turn your python function into a script")
-  (license #f))
-)
+  (license license:expat)))
+
 (define-public python-nbconvert-5.6.1
   (package
     (name "python-nbconvert")
@@ -310,7 +310,7 @@ tools for mocking system commands and recording calls to those.")
     "Writing a jupyter notebooks library entirely in emacs org-babel")
    (description
     "Writing a jupyter notebooks library entirely in emacs org-babel")
- (license #f)))
+ (license license:expat)))
 
 ;; (define-public python-ipython
 ;;   (package
@@ -633,7 +633,7 @@ simulation, statistical modeling, machine learning and much more.")
       "Python cross-version byte-code decompiler")
     (description
       "Python cross-version byte-code decompiler")
-    (license #f)))
+    (license license:expat)))
 
 (define-public python-tracer
   (package
@@ -656,7 +656,7 @@ simulation, statistical modeling, machine learning and much more.")
     (synopsis "Centralized sys.settrace management")
     (description
       "Centralized sys.settrace management")
-    (license #f)))
+    (license license:expat)))
 
 (define-public python-spark-parser
   (package
@@ -702,7 +702,7 @@ simulation, statistical modeling, machine learning and much more.")
       "Python cross-version byte-code disassembler and marshal routines")
     (description
       "Python cross-version byte-code disassembler and marshal routines")
-    (license #f)))
+    (license license:expat)))
 
 (define-public python-pyficache
   (package
@@ -813,7 +813,7 @@ simulation, statistical modeling, machine learning and much more.")
       "GDB-like Python Debugger in the Trepan family")
     (description
       "GDB-like Python Debugger in the Trepan family")
-    (license #f)))
+    (license license:expat)))
 
 (define-public python-pandoc
   (package
@@ -861,7 +861,7 @@ simulation, statistical modeling, machine learning and much more.")
     (home-page "https://github.com/ahrenberg/nbcorg")
     (synopsis "An nbconvert orgmode-exporter")
     (description "An nbconvert orgmode-exporter")
-    (license #f)))
+    (license license:expat)))
 (define-public python-bash_kernel
   (package
    (name "python-bash-kernel")
@@ -889,7 +889,7 @@ simulation, statistical modeling, machine learning and much more.")
     "https://github.com/takluyver/bash_kernel")
    (synopsis "A bash kernel for Jupyter")
    (description "A bash kernel for Jupyter")
-   (license #f)))
+   (license license:expat)))
 ;;python-nbcorg
 ;;python-pandoc
 ;;python-pydotplus

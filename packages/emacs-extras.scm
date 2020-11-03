@@ -167,5 +167,5 @@ Note that these are implemented as modifying the values received by
 * `flake8_config_file' - the location of a project-specific configuration file
   for flake8
 ")
-   (license #f)))
+   (license license:expat))) ;; wrong license
 ;;emacs-flycheck-pycheckers

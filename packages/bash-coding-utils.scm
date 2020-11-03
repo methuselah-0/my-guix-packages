@@ -1250,34 +1250,34 @@ supports backtracking and a small logical framework. The idea is to build up
 chunks that are memoized and there is no clear scanner/parser separation,
 chunks can be expressions as well as simple tokens.")
       (license license:lgpl2.0+))))
-(define-public python-yq
-  (package
-  (name "python-yq")
-  (version "2.10.0")
-  (source
-    (origin
-      (method url-fetch)
-      (uri (pypi-uri "yq" version))
-      (sha256
-        (base32
-          "0ims5q3kfykbyxdfwc3lsrhbcnpgdl56p5rfhpp8vhzi503jrbxb"))))
-  (build-system python-build-system)
-  (propagated-inputs
-    `(("python-argcomplete" ,python-argcomplete)
-      ("python-pyyaml" ,python-pyyaml)
-      ("python-setuptools" ,python-setuptools)
-      ("python-xmltodict" ,python-xmltodict)))
-  (native-inputs
-    `(("python-coverage" ,python-coverage)
-      ("python-flake8" ,python-flake8)
-      ("python-wheel" ,python-wheel)))
-  (home-page "https://github.com/kislyuk/yq")
-  (synopsis
-    "Command-line YAML/XML processor - jq wrapper for YAML/XML documents")
-  (description
-    "Command-line YAML/XML processor - jq wrapper for YAML/XML documents")
-  (license license:expat))
-  )
+;; (define-public python-yq
+;;   (package
+;;   (name "python-yq")
+;;   (version "2.10.0")
+;;   (source
+;;     (origin
+;;       (method url-fetch)
+;;       (uri (pypi-uri "yq" version))
+;;       (sha256
+;;         (base32
+;;           "0ims5q3kfykbyxdfwc3lsrhbcnpgdl56p5rfhpp8vhzi503jrbxb"))))
+;;   (build-system python-build-system)
+;;   (propagated-inputs
+;;     `(("python-argcomplete" ,python-argcomplete)
+;;       ("python-pyyaml" ,python-pyyaml)
+;;       ("python-setuptools" ,python-setuptools)
+;;       ("python-xmltodict" ,python-xmltodict)))
+;;   (native-inputs
+;;     `(("python-coverage" ,python-coverage)
+;;       ("python-flake8" ,python-flake8)
+;;       ("python-wheel" ,python-wheel)))
+;;   (home-page "https://github.com/kislyuk/yq")
+;;   (synopsis
+;;     "Command-line YAML/XML processor - jq wrapper for YAML/XML documents")
+;;   (description
+;;     "Command-line YAML/XML processor - jq wrapper for YAML/XML documents")
+;;   (license license:expat))
+;;   )
 
 (define-public python-coverage
   (package

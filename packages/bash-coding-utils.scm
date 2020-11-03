@@ -833,11 +833,12 @@ systems, web content management systems and web frameworks." )
 	;;(commit "4cb80cb")
         ;;(commit "6519644")
         ;;(commit "f8d5f27")
-        (commit "7046374017733531b823ff9db063e583a3e469ef")
+        ;;(commit "7046374017733531b823ff9db063e583a3e469ef")
+        (commit "23052d110f0ced8f9813fecaf03801ab2a63de5c")
 	(revision "1"))
     (package
       (name "bash-coding-utils.sh")
-      (version "v0.1.3")
+      (version "v0.1.4")
       (home-page "https://gitlab.com/methuselah-0/bash-coding-utils.sh")      
       (source (origin
                 (method git-fetch)
@@ -853,7 +854,8 @@ systems, web content management systems and web frameworks." )
 		  ;;"0nf7dsf8gh270qv1pavbxqs2vi7l5vrmgv7w7rd1i93kmdkcqv47"
                   ;;"126r2mik2cdwx2z7a1cy0fbq9zphqgg2759ay1pimlmybbhl3zrk"
                   ;;"0plhdcwvk41hask2pw0qxh2h7iz5px51857p83qj67al9h68v1nz"
-                  "1slyhxy9z3iiz3hy6hiyls0cphgjn967vgy3dvx0fjnn99wi5kpm"
+                  ;;"1slyhxy9z3iiz3hy6hiyls0cphgjn967vgy3dvx0fjnn99wi5kpm"
+                  "07rr3z6v2q53vw1hng6f1q684v554g96a4vzlzcs4bms5vl094r4"
                   ))))
     (build-system gnu-build-system)
     (arguments

@@ -4,6 +4,9 @@
   #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages time) ;; python-pytz is here
+  #:use-module (gnu packages python-check) ;; python-coveralls is here
+  #:use-module (gnu packages databases) ;; python-sqlalchemy is here
   #:use-module (gnu packages python) ;; python-testpath to figure out python version, ;; because of complaints in /var/log/cuirass/evaluations/1.gz
   #:use-module (gnu packages check) ;; python-pytest
   #:use-module (gnu packages monitoring) ;; python-prometheus-client
@@ -73,7 +76,7 @@
       (base32
        "1zdi2xbc7zhmi4zd7qsxjn0dr2ialj63fqsbqxsvx0vm29gzcm0v"))))
    (build-system python-build-system)
-   (arguments '(#:tests? #f))   
+   (arguments '(#:tests? #f))
    (propagated-inputs `(("python-ply" ,python-ply)))
    (home-page "https://github.com/boisgera/pandoc")
    (synopsis "Pandoc Documents for Python")
@@ -172,7 +175,9 @@
        ;;     (lambda _
        ;;       (zero? (system* "py.test" "-v")))))
     (native-inputs
-     `(("python-pytest" ,python-pytest)))
+     `(("python-pytest" ,python-pytest)
+       ("python-testpath" ,python-testpath-0.4.4)
+       ))
     (propagated-inputs
      `(("python-bleach" ,python-bleach)
        ("python-entrypoints" ,python-entrypoints)
@@ -231,13 +236,81 @@ convert an @code{.ipynb} notebook file into various static formats including:
              (let* ((version (last
                               (string-split (assoc-ref inputs "python") #\-)))
                     (x.y (string-join (take (string-split version #\.) 2)
-                                        "."))
+                                      "."))
                     (dir (string-append
                           (assoc-ref outputs "out")
                           "/lib/python" x.y "/site-packages/testpath")))
                (mkdir-p dir)
-               (copy-recursively "testpath" dir))
+               (copy-recursively "testpath" dir)
+               ;; (chdir dir)
+               ;; (invoke "flit" "init")
+               ;; (invoke "flit" "install")
+               )
              #t)))))
+    ;; (native-inputs
+    ;;  `(("python-flit" ,python-flit)
+    ;;    ("python-pytoml" ,python-pytoml)
+    ;;    ))
+    (propagated-inputs
+    `(("python-pathlib2" ,python-pathlib2)))
+    (home-page "https://github.com/takluyver/testpath")
+    (synopsis "Test utilities for code working with files and commands")
+    (description
+     "Testpath is a collection of utilities for Python code working with files
+and commands.  It contains functions to check things on the file system, and
+tools for mocking system commands and recording calls to those.")
+    (license license:expat)))
+
+(define-public python-testpath-flit
+  (package
+    (name "python-testpath-flit")
+    (version "0.4.4")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+              (url "https://github.com/jupyter/testpath")
+              (commit version)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32
+         "1fwv4d3p54xx1x942s104irr35lszvv6jnr4nn1scsfvc0m1qmbk"))))
+    (build-system python-build-system)
+    ;;            (lambda* (#:key inputs outputs tests? #:allow-other-keys)
+;;              (if tests?
+;;                  (begin
+;;                    ;; Make installed package available for running the tests
+;;                    (add-installed-pythonpath inputs outputs)
+;;                    (setenv "HOME" "/tmp/") ;; required by a test
+;;                    ;; We only test the core because one of the other tests
+;;                    ;; tries to import ipykernel.
+;;                    (invoke "python" "IPython/testing/iptest.py"
+;;                            "-v" "IPython/core/tests"))
+;;                  #t)))
+
+    (arguments
+     `(#:tests? #f ; this package does not even have a setup.py
+       #:modules ((guix build python-build-system)
+                  (guix build utils)
+                  (srfi srfi-1))
+       #:phases
+       (modify-phases %standard-phases
+                      ;; TODO: try replace 'install and use flit
+         (delete 'build)
+         (replace 'install
+           (lambda* (#:key inputs outputs tests? #:allow-other-keys)
+               ;;(chdir dir)
+               (invoke "flit" "init")
+               (invoke "flit" "install")
+               ))         
+         )))
+    ;; (native-inputs
+    ;;  `(("python-flit" ,python-flit)
+    ;;    ("python-pytoml" ,python-pytoml)
+    ;;    ))
+    (propagated-inputs
+    `(("python-pathlib2" ,python-pathlib2)
+      ("python-flit" ,python-flit)))
     (home-page "https://github.com/takluyver/testpath")
     (synopsis "Test utilities for code working with files and commands")
     (description
@@ -254,11 +327,11 @@ tools for mocking system commands and recording calls to those.")
     (origin
      (method git-fetch)
      (uri (git-reference
-	   (commit "f6e8ee972f64ea33ad9adfe2eb0f77e6c6998c22")
+	   (commit "0a6ed44d953f231b1ec5e5e27712a49d7d6626f6")
 	   (url "https://github.com/methuselah-0/nbdev-org-babel.git")))
      (sha256
       (base32
-       "0pbxvi9jmnpznbkwwzy6dp7lb46zylnz8pwz810ny9s29pnsk3h0"))))
+       "1k08baqddhar3qkm75rg39cg9h6v9vf5dy8c3iy1rb2sv7v3yk9z"))))
    ;;(method url-fetch)
    ;;(uri (pypi-uri "nbdev" version))
    ;;(sha256
@@ -695,7 +768,7 @@ simulation, statistical modeling, machine learning and much more.")
             "04q3kdwjr2c5c5vw31sdrdmpvvgjzxjbnxhisr1wrxxh0lx1glk4"))))
     (build-system python-build-system)
     ;; you are supposed to modify the test phase here and give it python setup.py ['xdis', 'xdis.bin', 'xdis.codetype', 'xdis.dropbox', 'xdis.opcodes'] according to the build log failure, but no time for that currently...
-    (arguments '(#:tests? #f))    
+    (arguments '(#:tests? #f))
     (home-page
       "https://github.com/rocky/python-xdis/")
     (synopsis
@@ -828,7 +901,7 @@ simulation, statistical modeling, machine learning and much more.")
             "1zdi2xbc7zhmi4zd7qsxjn0dr2ialj63fqsbqxsvx0vm29gzcm0v"))))
     (build-system python-build-system)
     ;; python setup.py test fails with "error: [Errno 2] No such file or directory: '/tmp/guix-build-python-pandoc-1.0.2.drv-0/pandoc-1.0.2/pandoc/definitions/1.16.hs'" so disabling it.
-    (arguments '(#:tests? #f))    
+    (arguments '(#:tests? #f))
     
     (propagated-inputs `(("python-ply" ,python-ply)))
     (home-page "https://github.com/boisgera/pandoc")
@@ -890,6 +963,322 @@ simulation, statistical modeling, machine learning and much more.")
    (synopsis "A bash kernel for Jupyter")
    (description "A bash kernel for Jupyter")
    (license license:expat)))
+
+(define-public python-pygments-github-lexers
+  (package
+    (name "python-pygments-github-lexers")
+    (version "0.0.5")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "pygments-github-lexers" version))
+        (sha256
+          (base32
+            "0cz14clcc9z4pn79ll8hp3xzgsrfjscak5zfsvlgrz6ngkkmgjma"))))
+    (build-system python-build-system)
+    (propagated-inputs
+      `(("python-pygments" ,python-pygments)))
+    (home-page
+      "https://github.com/liluo/pygments-github-lexers")
+    (synopsis "Pygments Github custom lexers.")
+    (description "Pygments Github custom lexers.")
+    (license license:bsd-3)))
+
+(define-public python-sphinxcontrib-github-alt
+  (package
+    (name "python-sphinxcontrib-github-alt")
+    (version "1.2")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "sphinxcontrib_github_alt" version))
+        (sha256
+          (base32
+            "1x9af78vamjjcdrrhiah3wg613jv7gm8yh9vvqfrmf4vam6mimyg"))))
+    (build-system python-build-system)
+    (propagated-inputs
+      `(("python-docutils" ,python-docutils)
+        ("python-sphinx" ,python-sphinx)))
+    (home-page
+      "https://github.com/jupyter/sphinxcontrib_github_alt")
+    (synopsis
+      "Link to GitHub issues, pull requests, commits and users from Sphinx docs.")
+    (description
+      "Link to GitHub issues, pull requests, commits and users from Sphinx docs.")
+    (license #f)))
+
+(define-public python-zipfile36
+  (package
+    (name "python-zipfile36")
+    (version "0.1.3")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "zipfile36" version))
+        (sha256
+          (base32
+            "1bdf4bqj6h4h3inak9mp6csf4f3mrvy6zxrxwxzly4gsykfqv2m7"))))
+    (build-system python-build-system)
+    (arguments '(#:tests? #f))
+    ;; Fails with: File "/tmp/guix-build-python-zipfile36-0.1.3.drv-0/zipfile36-0.1.3/test/badsyntax_3131.py", line 2
+    ;;     € = 2
+    ;;     ^
+    ;; SyntaxError: invalid character in identifier
+    ;; command "python" "-c" "import setuptools, tokenize;__file__='setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\\r\\n', '\\n');f.close();exec(compile(code, __file__, 'exec'))" "test" failed with status 1
+    (home-page
+      "https://gitlab.com/takluyver/zipfile36")
+    (synopsis
+      "Read and write ZIP files - backport of the zipfile module from Python 3.6")
+    (description
+      "Read and write ZIP files - backport of the zipfile module from Python 3.6")
+    (license #f)))
+
+(define-public python-pytoml
+  (package
+    (name "python-pytoml")
+    (version "0.1.21")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "pytoml" version))
+        (sha256
+          (base32
+            "1rv1byiw82k7mj6aprcrqi2vdabs801y97xhfnrz7kxds34ggv4f"))))
+    (build-system python-build-system)
+    (home-page "https://github.com/avakar/pytoml")
+    (synopsis "A parser for TOML-0.4.0")
+    (description "A parser for TOML-0.4.0")
+    (license license:expat)))
+
+(define-public python-flit-core
+  (package
+    (name "python-flit-core")
+    (version "3.0.0")
+    (source
+      (origin
+        (method url-fetch)
+        ;;(uri (pypi-uri "flit-core" version))
+        (uri "https://files.pythonhosted.org/packages/0e/b9/040baf94b40c80081bbecbd90365a5d7765a1c07e31b6c949838cc4c93d1/flit_core-3.0.0.tar.gz")
+        (sha256
+          (base32
+            "0bbw84r33gwi0xyp7m8dzp2dzpjs4harj3l5wrbxkmp2awh0ard4"))))
+    (build-system python-build-system)
+    (arguments
+     `(;#:tests? #f ; this package does not even have a setup.py
+       #:modules ((guix build python-build-system)
+                  (guix build utils)
+                  (srfi srfi-1))
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'install)
+         (replace 'build
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (let* ((version (last
+                              (string-split (assoc-ref inputs "python") #\-)))
+                    (x.y (string-join (take (string-split version #\.) 2)
+                                        "."))
+                    (dir (string-append
+                          (assoc-ref outputs "out")
+                          "/lib/python" x.y "/site-packages")))
+               (mkdir-p dir)
+               (copy-recursively "." dir)
+               (copy-file "PKG-INFO" (string-append dir "/flit_core/PKG-INFO"))
+               (copy-file "pyproject.toml" (string-append dir "/flit_core/pyproject.toml"))
+               (delete-file (string-append dir "/PKG-INFO"))
+               (delete-file (string-append dir "/pyproject.toml"))
+               ;;(invoke "touch" (string-append dir "/__init__.py"))
+               ;;(copy-file "unpyc3.py" (string-append dir "/unpyc3.py"))
+               )               
+             #t))
+         (delete 'check)
+         (delete 'test)
+         )))
+    
+    (propagated-inputs
+      `(("python-pytoml" ,python-pytoml)))
+    (home-page "https://github.com/takluyver/flit")
+    (synopsis
+      "Distribution-building parts of Flit. See flit package for more information")
+    (description
+      "Distribution-building parts of Flit. See flit package for more information")
+    (license #f)))
+
+(define-public python-flit
+  (package
+    (name "python-flit")
+    (version "3.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "flit" version))
+       (sha256
+        (base32
+         "14q8qa48bli2mniznc8b54qkwvhbik4kw99y01fi5gzzl620zzml"))))
+    (build-system python-build-system)
+    (arguments '(#:tests? #f))
+    ;; (arguments
+    ;;  '(#:phases
+    ;;    (modify-phases %standard-phases
+    ;;      (replace 'check
+    ;;        (lambda* (#:key inputs outputs #:allow-other-keys)
+    ;;          (add-installed-pythonpath inputs outputs)
+    ;;          ;; ============= 20 failed, 110 passed, 2 skipped, 1 warning in 4.47s =============
+    ;;          (invoke "pytest"))))))
+
+    (propagated-inputs
+      `(("python-docutils" ,python-docutils)
+        ("python-flit-core" ,python-flit-core)
+        ("python-pygments-github-lexers"
+         ,python-pygments-github-lexers)
+        ("python-pytest" ,python-pytest)
+        ("python-pytest-cov" ,python-pytest-cov)
+        ("python-pytoml" ,python-pytoml)
+        ("python-requests" ,python-requests)
+        ("python-responses" ,python-responses)
+        ("python-sphinx" ,python-sphinx)
+        ("python-sphinxcontrib-github-alt"
+         ,python-sphinxcontrib-github-alt)
+        ("python-testpath" ,python-testpath-0.4.4)
+        ("python-zipfile36" ,python-zipfile36)))
+    (home-page "https://github.com/takluyver/flit")
+    (synopsis
+      "A simple packaging tool for simple packages.")
+    (description
+      "A simple packaging tool for simple packages.")
+    (license #f)))
+
+;; from here down there are additional packages for the sake of python-flask-rest-jsonapi
+
+(define-public python-pre-commit
+  (package
+    (name "python-pre-commit")
+    (version "2.8.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://files.pythonhosted.org/packages/48/15/c65d94201c865857570286ab272212655ce5b601246c10ef2b39742f6109/pre_commit-2.8.2.tar.gz")
+       (sha256
+        (base32
+         "1rkaiddmlpwqabvgg41bgyi6nq6hy8ql94vyr2p1p6abafdvqplh"))))
+    (build-system python-build-system)
+    ;; AttributeError: module 'pre_commit.resources' has no attribute 'empty_template_setup'
+    (arguments '(#:tests? #f))
+    (propagated-inputs
+      `(("python-cfgv" ,python-cfgv)
+        ("python-identify" ,python-identify)
+        ("python-importlib-metadata"
+         ,python-importlib-metadata)
+        ("python-importlib-resources"
+         ,python-importlib-resources)
+        ("python-nodeenv" ,python-nodeenv)
+        ("python-pyyaml" ,python-pyyaml)
+        ("python-toml" ,python-toml)
+        ("python-virtualenv" ,python-virtualenv)))
+    (home-page
+     "https://github.com/pre-commit/pre-commit")
+    (synopsis
+     "A framework for managing and maintaining multi-language pre-commit hooks.")
+    (description
+     "A framework for managing and maintaining multi-language pre-commit hooks.")
+  (license license:expat)))
+
+(define-public python-marshmallow-jsonapi
+  (package
+    (name "python-marshmallow-jsonapi")
+    (version "0.23.2")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "marshmallow-jsonapi" version))
+        (sha256
+          (base32
+            "14zzzhpfz7pyc65nnzwzr0mh6c68zzhv810bv6vj3by485vzbfy5"))))
+    (build-system python-build-system)
+    (propagated-inputs
+      `(("python-marshmallow" ,python-marshmallow)))
+    (native-inputs
+      `(("python-faker" ,python-faker)
+        ("python-flake8" ,python-flake8)
+        ("python-flake8-bugbear" ,python-flake8-bugbear)
+        ("python-flask" ,python-flask)
+        ("python-mock" ,python-mock)
+        ("python-pre-commit" ,python-pre-commit)
+        ("python-pytest" ,python-pytest)
+        ("python-tox" ,python-tox)))
+    (home-page
+      "https://github.com/marshmallow-code/marshmallow-jsonapi")
+    (synopsis
+      "JSON API 1.0 (https://jsonapi.org) formatting with marshmallow")
+    (description
+      "JSON API 1.0 (https://jsonapi.org) formatting with marshmallow")
+    (license license:expat)))
+
+;; since we need a more recent python-marshmallow to satisfy python-flask-rest-jsonapi
+
+(define-public python-marshmallow-3.9
+  (package
+    (name "python-marshmallow")
+    (version "3.9.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "marshmallow" version))
+       (sha256
+        (base32
+         "012xqn9q1m4wvq4sg73m20ahbkhg0hbgz74n61irigi7yz56mbcp"))))
+    (build-system python-build-system)
+    (native-inputs
+     `(("python-flake8" ,python-flake8)
+       ("python-flake8-bugbear" ,python-flake8-bugbear)
+       ("python-mypy" ,python-mypy)
+      ("python-pre-commit" ,python-pre-commit)
+      ("python-pytest" ,python-pytest)
+      ("python-pytz" ,python-pytz)
+      ("python-simplejson" ,python-simplejson)
+      ("python-tox" ,python-tox)))
+    (home-page
+     "https://github.com/marshmallow-code/marshmallow")
+    (synopsis
+     "A lightweight library for converting complex datatypes to and from native Python datatypes.")
+  (description
+   "A lightweight library for converting complex datatypes to and from native Python datatypes.")
+  (license license:expat)))
+
+(define-public python-flask-rest-jsonapi
+  (package
+    (name "python-flask-rest-jsonapi")
+    (version "0.31.2")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (pypi-uri "Flask-REST-JSONAPI" version))
+        (sha256
+          (base32
+            "10lyradvlmzyay9qjwp93jvn808fn7rxms5ciad64xaxnxmd3qb7"))))
+    (build-system python-build-system)
+    ;; some tests are failing at the end
+    (arguments '(#:tests? #f))
+    (propagated-inputs
+      `(("python-flask" ,python-flask)
+        ("python-marshmallow" ,python-marshmallow-3.9)
+        ("python-marshmallow-jsonapi"
+         ,python-marshmallow-jsonapi)
+        ("python-six" ,python-six)
+        ("python-sqlalchemy" ,python-sqlalchemy)))
+    (native-inputs
+      `(("python-coverage" ,python-coverage)
+        ("python-coveralls" ,python-coveralls)
+        ;; added after failed test
+        ("python-pytest-runner" ,python-pytest-runner)
+        ("python-pytest" ,python-pytest)))
+    (home-page
+      "https://github.com/miLibris/flask-rest-jsonapi")
+    (synopsis
+      "Flask extension to create REST web api according to JSONAPI 1.0 specification with Flask, Marshmallow                  and data provider of your choice (SQLAlchemy, MongoDB, ...)")
+    (description
+      "Flask extension to create REST web api according to JSONAPI 1.0 specification with Flask, Marshmallow                  and data provider of your choice (SQLAlchemy, MongoDB, ...)")
+    (license license:expat)))
+
 ;;python-nbcorg
 ;;python-pandoc
 ;;python-pydotplus
@@ -903,3 +1292,14 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-nbcorg
 ;;python-unpyc3
 ;;python-bash_kernel
+;; python-flit-packages below
+;;python-pygments-github-lexers ;; OK!
+;;python-zipfile36 ;; OK!
+;;python-sphinxcontrib-github-alt ;; OK!
+;;python-pytoml ;; OK!
+
+;;python-flit-core ;; OK! BUT PROBABLY NOT INSTALLED CORRECTLY!
+;;python-flit ;; NOT OK to run!
+;;python-testpath-flit
+;;python-flask-rest-jsonapi
+

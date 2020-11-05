@@ -1286,7 +1286,7 @@ simulation, statistical modeling, machine learning and much more.")
     (arguments '(#:tests? #f))
     (propagated-inputs
       `(("python-flask" ,python-flask)
-        ("python-marshmallow" ,python-marshmallow-3.9)
+        ("python-marshmallow" ,python-marshmallow)
         ("python-marshmallow-jsonapi"
          ,python-marshmallow-jsonapi)
         ("python-six" ,python-six)

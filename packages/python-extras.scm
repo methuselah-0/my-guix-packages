@@ -1214,8 +1214,34 @@ simulation, statistical modeling, machine learning and much more.")
     (license license:expat)))
 
 ;; since we need a more recent python-marshmallow to satisfy python-flask-rest-jsonapi
+;; to let python-flask-rest-jsonapi and python-marshmallow-jsonapi both be installed (need the same version of python-marshmallow-jsonapi)
 
-(define-public python-marshmallow-3.9
+;; (define-public python-marshmallow
+;;   (package
+;;     (name "python-marshmallow")
+;;     (version "3.0.0b14")
+;;     (source
+;;      (origin
+;;       (method url-fetch)
+;;       (uri (pypi-uri "marshmallow" version))
+;;       (sha256
+;;        (base32
+;;         "1digk3f5cfk7wmlka65mc7bzsd96pbsgcsvp6pimd5b4ff9zb5p3"))))
+;;     (build-system python-build-system)
+;;     (propagated-inputs
+;;      `(("python-dateutil" ,python-dateutil)
+;;        ("python-simplejson" ,python-simplejson)))
+;;     (native-inputs
+;;      `(("python-pytest" ,python-pytest)
+;;        ("python-pytz" ,python-pytz)))
+;;     (home-page "https://github.com/marshmallow-code/marshmallow")
+;;     (synopsis "Convert complex datatypes to and from native
+;; Python datatypes.")
+;;     (description "@code{marshmallow} provides a library for converting
+;; complex datatypes to and from native Python datatypes.")
+;;     (license license:expat)))
+
+(define-public python-marshmallow
   (package
     (name "python-marshmallow")
     (version "3.9.0")

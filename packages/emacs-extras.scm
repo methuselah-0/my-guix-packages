@@ -30,7 +30,7 @@
    (synopsis
     "multiple syntax checker for Python, using Flycheck")
    (description
-    "Copyright Marc Sherry <msherry@gmail.com>
+    "Copyright Marc Sherry <msherry at gmail dot com>
 
 This package provides a way to run multiple syntax checkers on Python code,
 in parallel.  The list of supported checkers includes:

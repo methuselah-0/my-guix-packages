@@ -323,20 +323,42 @@ tools for mocking system commands and recording calls to those.")
   (package
    (name "python-nbdev-org-babel")
    (version "0.2.18")
+   ;; (source (origin
+   ;;          (method url-fetch)
+   ;;          (uri (string-append "file://" (getenv "HOME") "/src/nbdev-org-babel"))          
+   ;;          (sha256
+   ;;           (base32
+   ;;            "7jm7324mbxljmn9hgapj66q7swyz5ai92blmr0jpcy0h80x6f26r"))))
    (source
     (origin
      (method git-fetch)
      (uri (git-reference
-	   (commit "0a6ed44d953f231b1ec5e5e27712a49d7d6626f6")
-	   (url "https://github.com/methuselah-0/nbdev-org-babel.git")))
+           ;;(commit "046543a71d600f93174a1d0f24b905f0ad2858fe")
+           (commit "571892671f5101ccfbd945dab1caf80538bc9da8")
+           (url "https://github.com/methuselah-0/nbdev-org-babel.git")))
      (sha256
       (base32
-       "1k08baqddhar3qkm75rg39cg9h6v9vf5dy8c3iy1rb2sv7v3yk9z"))))
-   ;;(method url-fetch)
-   ;;(uri (pypi-uri "nbdev" version))
-   ;;(sha256
-   ;; (base32
-   ;;  "1ya9q3b3fya03hhqi3y5cipcr534xky47n3y2y6rzv5xay0ipy6j"))))
+       ;;"044qfcryhjc5axrskibyp19cjlwlqzrnl59w048bh45w6bjvrpki"
+       "1qh4z408cn8w22fn44xp97mlib0r9h5sh3bxnk9445x7mkw0w44j"))))
+    
+    ;; (source
+    ;;  (origin
+    ;;   (method git-fetch)
+    ;;   (uri (git-reference
+    ;;         (commit "8dd94a02ece4098c324b335f1b73523894cce3f1")
+    ;;         (url (string-append "file://" (getenv "HOME") "/src/nbdev-org-babel"))))
+    
+    
+    ;;   (sha256
+    ;;    (base32
+    ;;     ;;"044qfcryhjc5axrskibyp19cjlwlqzrnl59w048bh45w6bjvrpki"
+    ;;     "144qfcryhjc5axrskibyp19cjlwlqzrnl59w048bh45w6bjvrpki"
+    ;;     ))))
+    ;;(method url-fetch)
+    ;;(uri (pypi-uri "nbdev" version))
+    ;;(sha256
+    ;; (base32
+    ;;  "1ya9q3b3fya03hhqi3y5cipcr534xky47n3y2y6rzv5xay0ipy6j"))))
    (build-system python-build-system)
    (arguments
     `(#:tests? #f           ; this package does not even have a setup.py
@@ -1304,7 +1326,36 @@ simulation, statistical modeling, machine learning and much more.")
     (description
       "Flask extension to create REST web api according to JSONAPI 1.0 specification with Flask, Marshmallow                  and data provider of your choice (SQLAlchemy, MongoDB, ...)")
     (license license:expat)))
-
+(define-public python-marshmallow-jsonapi
+(package
+  (name "python-marshmallow-jsonapi")
+  (version "0.23.2")
+  (source
+    (origin
+      (method url-fetch)
+      (uri (pypi-uri "marshmallow-jsonapi" version))
+      (sha256
+        (base32
+          "14zzzhpfz7pyc65nnzwzr0mh6c68zzhv810bv6vj3by485vzbfy5"))))
+  (build-system python-build-system)
+  (propagated-inputs
+    `(("python-marshmallow" ,python-marshmallow)))
+  (native-inputs
+    `(("python-faker" ,python-faker)
+      ("python-flake8" ,python-flake8)
+      ("python-flake8-bugbear" ,python-flake8-bugbear)
+      ("python-flask" ,python-flask)
+      ("python-mock" ,python-mock)
+      ("python-pre-commit" ,python-pre-commit)
+      ("python-pytest" ,python-pytest)
+      ("python-tox" ,python-tox)))
+  (home-page
+    "https://github.com/marshmallow-code/marshmallow-jsonapi")
+  (synopsis
+    "JSON API 1.0 (https://jsonapi.org) formatting with marshmallow")
+  (description
+    "JSON API 1.0 (https://jsonapi.org) formatting with marshmallow")
+  (license license:expat)))
 ;;python-nbcorg
 ;;python-pandoc
 ;;python-pydotplus
@@ -1328,4 +1379,4 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-flit ;; NOT OK to run!
 ;;python-testpath-flit
 ;;python-flask-rest-jsonapi
-
+;;python-marshmallow-jsonapi

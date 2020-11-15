@@ -334,12 +334,12 @@ tools for mocking system commands and recording calls to those.")
      (method git-fetch)
      (uri (git-reference
            ;;(commit "046543a71d600f93174a1d0f24b905f0ad2858fe")
-           (commit "571892671f5101ccfbd945dab1caf80538bc9da8")
+           (commit "6e1c97877e8f001be4e7ad619ad0e3f9a1bee860")
            (url "https://github.com/methuselah-0/nbdev-org-babel.git")))
      (sha256
       (base32
        ;;"044qfcryhjc5axrskibyp19cjlwlqzrnl59w048bh45w6bjvrpki"
-       "1qh4z408cn8w22fn44xp97mlib0r9h5sh3bxnk9445x7mkw0w44j"))))
+       "1pg9cjzvlxg7pinhx3pizxpb310zhd0j757ww0wfmvapsw9kci75"))))
     
     ;; (source
     ;;  (origin
@@ -1374,7 +1374,6 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-zipfile36 ;; OK!
 ;;python-sphinxcontrib-github-alt ;; OK!
 ;;python-pytoml ;; OK!
-
 ;;python-flit-core ;; OK! BUT PROBABLY NOT INSTALLED CORRECTLY!
 ;;python-flit ;; NOT OK to run!
 ;;python-testpath-flit

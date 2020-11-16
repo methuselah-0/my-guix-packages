@@ -1,5 +1,6 @@
 (define-module (python-extras)
   #:use-module (gnu packages) ;; because of complaints in /var/log/cuirass/evaluations/1.gz
+  #:use-module (gnu packages base) ;; because of findutils
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix git-download)
@@ -322,7 +323,7 @@ tools for mocking system commands and recording calls to those.")
 (define-public python-nbdev-org-babel
   (package
    (name "python-nbdev-org-babel")
-   (version "0.2.18")
+   (version "0.2.19")
    ;; (source (origin
    ;;          (method url-fetch)
    ;;          (uri (string-append "file://" (getenv "HOME") "/src/nbdev-org-babel"))          
@@ -334,12 +335,12 @@ tools for mocking system commands and recording calls to those.")
      (method git-fetch)
      (uri (git-reference
            ;;(commit "046543a71d600f93174a1d0f24b905f0ad2858fe")
-           (commit "6e1c97877e8f001be4e7ad619ad0e3f9a1bee860")
+           (commit "31936697e15ab2a40892cd8a3d7f7f470fa02387")
            (url "https://github.com/methuselah-0/nbdev-org-babel.git")))
      (sha256
       (base32
        ;;"044qfcryhjc5axrskibyp19cjlwlqzrnl59w048bh45w6bjvrpki"
-       "1pg9cjzvlxg7pinhx3pizxpb310zhd0j757ww0wfmvapsw9kci75"))))
+       "1p6kika32374qkryrz4gk6wm0a7n0mnclfbvc9bs0krhvhl6rfd7"))))
     
     ;; (source
     ;;  (origin

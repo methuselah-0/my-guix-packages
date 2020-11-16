@@ -390,6 +390,7 @@ tools for mocking system commands and recording calls to those.")
       ("python-nbformat" ,python-nbformat)
       ("python-packaging" ,python-packaging)
       ("moreutils" ,moreutils)
+      ("findutils" ,findutils)
       ;; since we don't have python-testpath properly packaged, we need to add this stupid thing:
       ("python-pip" ,python-pip)      
       ;; to be able to run make docs_serve which starts the jekyll website you need bundler and jekyll, but instead we need to install them via ruby's gem

@@ -335,12 +335,12 @@ tools for mocking system commands and recording calls to those.")
      (method git-fetch)
      (uri (git-reference
            ;;(commit "046543a71d600f93174a1d0f24b905f0ad2858fe")
-           (commit "31936697e15ab2a40892cd8a3d7f7f470fa02387")
+           (commit "5a75fff71bca9cc68e7474f1dd8c24db7709b9dc")
            (url "https://github.com/methuselah-0/nbdev-org-babel.git")))
      (sha256
       (base32
        ;;"044qfcryhjc5axrskibyp19cjlwlqzrnl59w048bh45w6bjvrpki"
-       "1p6kika32374qkryrz4gk6wm0a7n0mnclfbvc9bs0krhvhl6rfd7"))))
+       "1zvxvnd8bkjwf73d4vhinfx16dvqryw0ralpgrzz0lbj1iifdnw8"))))
     
     ;; (source
     ;;  (origin

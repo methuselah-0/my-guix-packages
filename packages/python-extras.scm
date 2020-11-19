@@ -1425,5 +1425,5 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-testpath-flit
 ;;python-flask-rest-jsonapi
 ;;python-marshmallow-jsonapi
-;;python-flask-combo-jsonapi
+python-flask-combo-jsonapi
 

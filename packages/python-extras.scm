@@ -1362,7 +1362,8 @@ simulation, statistical modeling, machine learning and much more.")
         ("python-coveralls" ,python-coveralls)
         ;; added after failed test
         ("python-pytest-runner" ,python-pytest-runner)
-        ("python-pytest" ,python-pytest)))
+        ("python-pytest" ,python-pytest)
+        ("python-simplejson" ,python-simplejson)))
     (home-page
       "https://github.com/AdCombo/flask-combo-jsonapi")
     (synopsis

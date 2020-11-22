@@ -323,7 +323,7 @@ tools for mocking system commands and recording calls to those.")
 (define-public python-nbdev-org-babel
   (package
    (name "python-nbdev-org-babel")
-   (version "0.2.19")
+   (version "0.2.20")
    ;; (source (origin
    ;;          (method url-fetch)
    ;;          (uri (string-append "file://" (getenv "HOME") "/src/nbdev-org-babel"))          
@@ -335,12 +335,12 @@ tools for mocking system commands and recording calls to those.")
      (method git-fetch)
      (uri (git-reference
            ;;(commit "046543a71d600f93174a1d0f24b905f0ad2858fe")
-           (commit "5a75fff71bca9cc68e7474f1dd8c24db7709b9dc")
+           (commit "ba69aea83de7784a1aa5536357c18fde6d4211cc")
            (url "https://github.com/methuselah-0/nbdev-org-babel.git")))
      (sha256
       (base32
        ;;"044qfcryhjc5axrskibyp19cjlwlqzrnl59w048bh45w6bjvrpki"
-       "1zvxvnd8bkjwf73d4vhinfx16dvqryw0ralpgrzz0lbj1iifdnw8"))))
+       "13zg9havyniglfqjdch90v78qfwdqxipynqlkfpl67wdfkk0saxd"))))
     
     ;; (source
     ;;  (origin
@@ -1342,11 +1342,12 @@ simulation, statistical modeling, machine learning and much more.")
         ;;     "12iylwwnli5gfxy05jng1s8w6plh2025wghbqbap88cdcabskm54"))))
        (method git-fetch)
        (uri (git-reference
-	     (commit "87ca872d0e18cbaadb0a86411cd7a296c43f7e88")
+	     ;;(commit "87ca872d0e18cbaadb0a86411cd7a296c43f7e88")
+             (commit "ba69aea83de7784a1aa5536357c18fde6d4211cc")
 	     (url "https://github.com/AdCombo/flask-combo-jsonapi.git")))
        (sha256
         (base32
-	 "0rbk0nrdkclq7ipbzjr7hvvhd6vpsn91zfgy5s9sz45qcyfgmmrf"))))
+	 "1rbk0nrdkclq7ipbzjr7hvvhd6vpsn91zfgy5s9sz45qcyfgmmrf"))))
     (build-system python-build-system)
     ;; some tests are failing at the end
     (arguments '(#:tests? #f))
@@ -1425,5 +1426,6 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-testpath-flit
 ;;python-flask-rest-jsonapi
 ;;python-marshmallow-jsonapi
-python-flask-combo-jsonapi
+;;python-flask-combo-jsonapi
+
 

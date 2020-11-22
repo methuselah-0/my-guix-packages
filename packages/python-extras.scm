@@ -334,13 +334,11 @@ tools for mocking system commands and recording calls to those.")
     (origin
      (method git-fetch)
      (uri (git-reference
-           ;;(commit "046543a71d600f93174a1d0f24b905f0ad2858fe")
-           (commit "ba69aea83de7784a1aa5536357c18fde6d4211cc")
+           (commit "457af27c142c668ce3bb97f35435e0ea8be88aca")
            (url "https://github.com/methuselah-0/nbdev-org-babel.git")))
      (sha256
       (base32
-       ;;"044qfcryhjc5axrskibyp19cjlwlqzrnl59w048bh45w6bjvrpki"
-       "13zg9havyniglfqjdch90v78qfwdqxipynqlkfpl67wdfkk0saxd"))))
+       "1322lyq17jkhh6jsg0kwzv83z5195vh8x9ib2pny1nh7isgjrqlr"))))
     
     ;; (source
     ;;  (origin
@@ -1427,5 +1425,3 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-flask-rest-jsonapi
 ;;python-marshmallow-jsonapi
 ;;python-flask-combo-jsonapi
-
-

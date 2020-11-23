@@ -1331,7 +1331,7 @@ simulation, statistical modeling, machine learning and much more.")
 (define-public python-flask-combo-jsonapi
   (package
     (name "python-flask-combo-jsonapi")
-    (version "1.0.1")
+    (version "1.0.0")
     (source
       (origin
         ;; (method url-fetch)
@@ -1435,4 +1435,3 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-flask-rest-jsonapi
 ;;python-marshmallow-jsonapi
 ;;python-flask-combo-jsonapi
-

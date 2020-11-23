@@ -1357,6 +1357,8 @@ simulation, statistical modeling, machine learning and much more.")
         ("python-marshmallow" ,python-marshmallow)
         ("python-marshmallow-jsonapi"
          ,python-marshmallow-jsonapi)
+        ("python-apispec" ,python-apispec-4.0)
+        ("python-simplejson" ,python-simplejson)        
         ("python-six" ,python-six)
         ("python-sqlalchemy" ,python-sqlalchemy)))
     (native-inputs
@@ -1364,9 +1366,7 @@ simulation, statistical modeling, machine learning and much more.")
         ("python-coveralls" ,python-coveralls)
         ;; added after failed test
         ("python-pytest-runner" ,python-pytest-runner)
-        ("python-pytest" ,python-pytest)
-        ("python-simplejson" ,python-simplejson)
-        ("python-apispec" ,python-apispec-4.0)))
+        ("python-pytest" ,python-pytest)))
     (home-page
       "https://github.com/AdCombo/flask-combo-jsonapi")
     (synopsis

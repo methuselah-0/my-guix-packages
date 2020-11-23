@@ -1415,7 +1415,7 @@ simulation, statistical modeling, machine learning and much more.")
       (uri (pypi-uri "marshmallow-jsonapi" version))
       (sha256
         (base32
-          "24zzzhpfz7pyc65nnzwzr0mh6c68zzhv810bv6vj3by485vzbfy5"))))
+          "0rfnagv76f0pwvdcc0604r78nphi7a7b6d5fjga2va522lydah27"))))
   (build-system python-build-system)
   (propagated-inputs
     `(("python-marshmallow" ,python-marshmallow)))
@@ -1678,4 +1678,4 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-marshmallow-jsonapi
 ;;python-flask-combo-jsonapi
 ;;python-apispec-4.0
-;;python-marshmallow-jsonapi
+;;python-marshmallow-jsonapi-22

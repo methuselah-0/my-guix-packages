@@ -1419,7 +1419,7 @@ simulation, statistical modeling, machine learning and much more.")
           "0rfnagv76f0pwvdcc0604r78nphi7a7b6d5fjga2va522lydah27"))))
   (build-system python-build-system)
   (propagated-inputs
-    `(("python-marshmallow" ,python-marshmallow)))
+    `(("python-marshmallow" ,python-marshmallow-3.2)))
   (native-inputs
     `(("python-faker" ,python-faker)
       ("python-flake8" ,python-flake8)

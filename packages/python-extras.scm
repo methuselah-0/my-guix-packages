@@ -1331,7 +1331,7 @@ simulation, statistical modeling, machine learning and much more.")
 (define-public python-flask-combo-jsonapi
   (package
     (name "python-flask-combo-jsonapi")
-    (version "1.0.0")
+    (version "1.0.1")
     (source
       (origin
         ;; (method url-fetch)
@@ -1341,12 +1341,14 @@ simulation, statistical modeling, machine learning and much more.")
         ;;     "12iylwwnli5gfxy05jng1s8w6plh2025wghbqbap88cdcabskm54"))))
        (method git-fetch)
        (uri (git-reference
-	     ;;(commit "87ca872d0e18cbaadb0a86411cd7a296c43f7e88")
-             (commit "ba69aea83de7784a1aa5536357c18fde6d4211cc")
-	     (url "https://github.com/AdCombo/flask-combo-jsonapi.git")))
+             ;;(commit "ba69aea83de7784a1aa5536357c18fde6d4211cc")
+             (commit "5f7abbc5f41ee64379631207fef047f8a76322fb")
+	     (url "https://github.com/methuselah-0/flask-combo-jsonapi.git")))
        (sha256
         (base32
-	 "1rbk0nrdkclq7ipbzjr7hvvhd6vpsn91zfgy5s9sz45qcyfgmmrf"))))
+	 ;;"1rbk0nrdkclq7ipbzjr7hvvhd6vpsn91zfgy5s9sz45qcyfgmmrf"
+         "0rbk0nrdkclq7ipbzjr7hvvhd6vpsn91zfgy5s9sz45qcyfgmmrf"
+         ))))
     (build-system python-build-system)
     ;; some tests are failing at the end
     (arguments '(#:tests? #f))
@@ -1426,3 +1428,4 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-flask-rest-jsonapi
 ;;python-marshmallow-jsonapi
 ;;python-flask-combo-jsonapi
+

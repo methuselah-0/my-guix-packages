@@ -1366,7 +1366,7 @@ simulation, statistical modeling, machine learning and much more.")
         ("python-pytest-runner" ,python-pytest-runner)
         ("python-pytest" ,python-pytest)
         ("python-simplejson" ,python-simplejson)
-        ("python-apispec" ,python-apispec)))
+        ("python-apispec" ,python-apispec-2.0)))
     (home-page
       "https://github.com/AdCombo/flask-combo-jsonapi")
     (synopsis
@@ -1405,6 +1405,12 @@ simulation, statistical modeling, machine learning and much more.")
   (description
     "JSON API 1.0 (https://jsonapi.org) formatting with marshmallow")
   (license license:expat)))
+(define-public python-apispec-2.0
+  (package
+   (inherit python-apispec)
+   (name "python-apispec")
+   (version "2.0.2")
+   ))
 ;;python-nbcorg
 ;;python-pandoc
 ;;python-pydotplus
@@ -1429,3 +1435,4 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-flask-rest-jsonapi
 ;;python-marshmallow-jsonapi
 ;;python-flask-combo-jsonapi
+

@@ -1293,6 +1293,36 @@ simulation, statistical modeling, machine learning and much more.")
    "A lightweight library for converting complex datatypes to and from native Python datatypes.")
   (license license:expat)))
 
+;; python-flask-combo-jsonapi needs ==3.2.1
+(define-public python-marshmallow-3.2
+  (package
+    (name "python-marshmallow")
+    (version "3.2.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "marshmallow" version))
+       (sha256
+        (base32
+         "1w18klwj0z9bqxj252qpj1hz8l46nl27sbc89rkajc7mln73wbws"))))
+    (build-system python-build-system)
+    (native-inputs
+     `(("python-flake8" ,python-flake8)
+       ("python-flake8-bugbear" ,python-flake8-bugbear)
+       ("python-mypy" ,python-mypy)
+      ("python-pre-commit" ,python-pre-commit)
+      ("python-pytest" ,python-pytest)
+      ("python-pytz" ,python-pytz)
+      ("python-simplejson" ,python-simplejson)
+      ("python-tox" ,python-tox)))
+    (home-page
+     "https://github.com/marshmallow-code/marshmallow")
+    (synopsis
+     "A lightweight library for converting complex datatypes to and from native Python datatypes.")
+  (description
+   "A lightweight library for converting complex datatypes to and from native Python datatypes.")
+  (license license:expat)))
+
 (define-public python-flask-rest-jsonapi
   (package
     (name "python-flask-rest-jsonapi")
@@ -1354,7 +1384,7 @@ simulation, statistical modeling, machine learning and much more.")
     (arguments '(#:tests? #f))
     (propagated-inputs
       `(("python-flask" ,python-flask)
-        ("python-marshmallow" ,python-marshmallow)
+        ("python-marshmallow" ,python-marshmallow-3.2)
         ("python-marshmallow-jsonapi"
          ,python-marshmallow-jsonapi-22)
         ("python-apispec" ,python-apispec-4.0)
@@ -1405,6 +1435,7 @@ simulation, statistical modeling, machine learning and much more.")
   (description
     "JSON API 1.0 (https://jsonapi.org) formatting with marshmallow")
   (license license:expat)))
+;; python-flask-combo-jsonapi requires marshmallow-jsonapi==0.22.0
 (define-public python-marshmallow-jsonapi-22
 (package
   (name "python-marshmallow-jsonapi")
@@ -1679,3 +1710,4 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-flask-combo-jsonapi
 ;;python-apispec-4.0
 ;;python-marshmallow-jsonapi-22
+;;python-marshmallow-3.2

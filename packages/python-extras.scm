@@ -1365,7 +1365,8 @@ simulation, statistical modeling, machine learning and much more.")
         ;; added after failed test
         ("python-pytest-runner" ,python-pytest-runner)
         ("python-pytest" ,python-pytest)
-        ("python-simplejson" ,python-simplejson)))
+        ("python-simplejson" ,python-simplejson)
+        ("python-apispec" ,python-apispec)))
     (home-page
       "https://github.com/AdCombo/flask-combo-jsonapi")
     (synopsis
@@ -1428,4 +1429,3 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-flask-rest-jsonapi
 ;;python-marshmallow-jsonapi
 ;;python-flask-combo-jsonapi
-

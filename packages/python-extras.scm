@@ -1218,7 +1218,7 @@ simulation, statistical modeling, machine learning and much more.")
             "14zzzhpfz7pyc65nnzwzr0mh6c68zzhv810bv6vj3by485vzbfy5"))))
     (build-system python-build-system)
     (propagated-inputs
-      `(("python-marshmallow" ,python-marshmallow)))
+      `(("python-marshmallow" ,python-marshmallow-3.2)))
     (native-inputs
       `(("python-faker" ,python-faker)
         ("python-flake8" ,python-flake8)
@@ -1339,7 +1339,7 @@ simulation, statistical modeling, machine learning and much more.")
     (arguments '(#:tests? #f))
     (propagated-inputs
       `(("python-flask" ,python-flask)
-        ("python-marshmallow" ,python-marshmallow)
+        ("python-marshmallow" ,python-marshmallow-3.2)
         ("python-marshmallow-jsonapi"
          ,python-marshmallow-jsonapi)
         ("python-six" ,python-six)
@@ -1405,36 +1405,6 @@ simulation, statistical modeling, machine learning and much more.")
       "Flask extension to create REST web api according to JSONAPI 1.0 specification with Flask, Marshmallow and data provider of your choice (SQLAlchemy, MongoDB, ...)")
     (license license:expat)))
 
-(define-public python-marshmallow-jsonapi
-(package
-  (name "python-marshmallow-jsonapi")
-  (version "0.23.2")
-  (source
-    (origin
-      (method url-fetch)
-      (uri (pypi-uri "marshmallow-jsonapi" version))
-      (sha256
-        (base32
-          "14zzzhpfz7pyc65nnzwzr0mh6c68zzhv810bv6vj3by485vzbfy5"))))
-  (build-system python-build-system)
-  (propagated-inputs
-    `(("python-marshmallow" ,python-marshmallow)))
-  (native-inputs
-    `(("python-faker" ,python-faker)
-      ("python-flake8" ,python-flake8)
-      ("python-flake8-bugbear" ,python-flake8-bugbear)
-      ("python-flask" ,python-flask)
-      ("python-mock" ,python-mock)
-      ("python-pre-commit" ,python-pre-commit)
-      ("python-pytest" ,python-pytest)
-      ("python-tox" ,python-tox)))
-  (home-page
-    "https://github.com/marshmallow-code/marshmallow-jsonapi")
-  (synopsis
-    "JSON API 1.0 (https://jsonapi.org) formatting with marshmallow")
-  (description
-    "JSON API 1.0 (https://jsonapi.org) formatting with marshmallow")
-  (license license:expat)))
 ;; python-flask-combo-jsonapi requires marshmallow-jsonapi==0.22.0
 (define-public python-marshmallow-jsonapi-22
 (package

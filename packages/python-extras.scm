@@ -1356,7 +1356,7 @@ simulation, statistical modeling, machine learning and much more.")
       `(("python-flask" ,python-flask)
         ("python-marshmallow" ,python-marshmallow)
         ("python-marshmallow-jsonapi"
-         ,python-marshmallow-jsonapi)
+         ,python-marshmallow-jsonapi-22)
         ("python-apispec" ,python-apispec-4.0)
         ("python-simplejson" ,python-simplejson)        
         ("python-six" ,python-six)
@@ -1386,6 +1386,36 @@ simulation, statistical modeling, machine learning and much more.")
       (sha256
         (base32
           "14zzzhpfz7pyc65nnzwzr0mh6c68zzhv810bv6vj3by485vzbfy5"))))
+  (build-system python-build-system)
+  (propagated-inputs
+    `(("python-marshmallow" ,python-marshmallow)))
+  (native-inputs
+    `(("python-faker" ,python-faker)
+      ("python-flake8" ,python-flake8)
+      ("python-flake8-bugbear" ,python-flake8-bugbear)
+      ("python-flask" ,python-flask)
+      ("python-mock" ,python-mock)
+      ("python-pre-commit" ,python-pre-commit)
+      ("python-pytest" ,python-pytest)
+      ("python-tox" ,python-tox)))
+  (home-page
+    "https://github.com/marshmallow-code/marshmallow-jsonapi")
+  (synopsis
+    "JSON API 1.0 (https://jsonapi.org) formatting with marshmallow")
+  (description
+    "JSON API 1.0 (https://jsonapi.org) formatting with marshmallow")
+  (license license:expat)))
+(define-public python-marshmallow-jsonapi-22
+(package
+  (name "python-marshmallow-jsonapi")
+  (version "0.22.0")
+  (source
+    (origin
+      (method url-fetch)
+      (uri (pypi-uri "marshmallow-jsonapi" version))
+      (sha256
+        (base32
+          "24zzzhpfz7pyc65nnzwzr0mh6c68zzhv810bv6vj3by485vzbfy5"))))
   (build-system python-build-system)
   (propagated-inputs
     `(("python-marshmallow" ,python-marshmallow)))
@@ -1648,3 +1678,4 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-marshmallow-jsonapi
 ;;python-flask-combo-jsonapi
 ;;python-apispec-4.0
+;;python-marshmallow-jsonapi

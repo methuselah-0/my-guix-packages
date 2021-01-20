@@ -338,7 +338,6 @@ tools for mocking system commands and recording calls to those.")
            (url "https://github.com/methuselah-0/nbdev-org-babel.git")))
      (sha256
       (base32
-;;       "1322lyq17jkhh6jsg0kwzv83z5195vh8x9ib2pny1nh7isgjrqlr"
        "0krdpc6zbdljriw6s80g08fywy0d1nq8wi3q07v3qs0b6rfz68n4"
        ))))
     ;; (source
@@ -1361,7 +1360,7 @@ simulation, statistical modeling, machine learning and much more.")
 (define-public python-flask-combo-jsonapi
   (package
     (name "python-flask-combo-jsonapi")
-    (version "1.0.0")
+    (version "1.0.5")
     (source
       (origin
         ;; (method url-fetch)
@@ -1372,12 +1371,12 @@ simulation, statistical modeling, machine learning and much more.")
        (method git-fetch)
        (uri (git-reference
              ;;(commit "ba69aea83de7784a1aa5536357c18fde6d4211cc")
-             (commit "5f7abbc5f41ee64379631207fef047f8a76322fb")
+             (commit "35a5e35de8c94fd5d9d24492c8b00f6cb2ea5e4a")
 	     (url "https://github.com/methuselah-0/flask-combo-jsonapi.git")))
        (sha256
         (base32
 	 ;;"1rbk0nrdkclq7ipbzjr7hvvhd6vpsn91zfgy5s9sz45qcyfgmmrf"
-         "0rbk0nrdkclq7ipbzjr7hvvhd6vpsn91zfgy5s9sz45qcyfgmmrf"
+         "1cchnhb50fciic4kgipdrc201c8l38wf5066lkdjd3mk25awvf26"
          ))))
     (build-system python-build-system)
     ;; some tests are failing at the end

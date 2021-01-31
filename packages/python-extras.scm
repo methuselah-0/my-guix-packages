@@ -5,6 +5,7 @@
   #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages python-build)
   #:use-module (gnu packages time) ;; python-pytz is here
   #:use-module (gnu packages python-check) ;; python-coveralls is here
   #:use-module (gnu packages databases) ;; python-sqlalchemy is here

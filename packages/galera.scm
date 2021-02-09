@@ -274,16 +274,16 @@
 	     (sha256
 	      (base32 "0h7s670pcasq8wzprhyxqfca2cghi62b8xz2kikb2a86wd453qil"))))             
     (build-system cmake-build-system)
-    (arguments
-     `(#:tests? #f
-       #:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'adjust-output-references
-           (lambda _
-             (substitute* "CMakeLists.txt"
-               (("add_subdirectory\\(wsrep/tests\\)") ""))
-             (delete-file-recursively "wsrep/tests")
-             )))))
+    ;; (arguments
+    ;;  `(#:tests? #f
+    ;;    #:phases
+    ;;    (modify-phases %standard-phases
+    ;;      (add-after 'unpack 'adjust-output-references
+    ;;        (lambda _
+    ;;          (substitute* "CMakeLists.txt"
+    ;;            (("add_subdirectory\\(wsrep/tests\\)") ""))
+    ;;          (delete-file-recursively "wsrep/tests")
+    ;;          )))))
     (native-inputs
      `(("check" ,check)
        ("boost" ,boost)))

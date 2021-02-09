@@ -1654,6 +1654,32 @@ simulation, statistical modeling, machine learning and much more.")
     (description
       "A pluggable API specification generator. Currently supports the OpenAPI Specification (f.k.a. the Swagger specification).")
     (license license:expat)))
+(define-public python-mysqlclient
+  (package
+    (name "python-mysqlclient")
+    (version "2.0.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "mysqlclient" version))
+       (sha256
+        (base32
+         "0cn4lw40z1piqab27r4sb9x9y8z67v6mcv71xyp5n5cg01yfmszn"))))
+    (build-system python-build-system)
+    (arguments '(#:tests? #f))          ;XXX: requires a live database
+    (inputs
+     `(("mysql-dev" ,mariadb "dev")))
+    (home-page "https://github.com/PyMySQL/mysqlclient-python")
+    (synopsis "MySQLdb is an interface to the popular MySQL database server for Python")
+    (description "MySQLdb is an interface to the popular MySQL database server
+for Python.  The design goals are:
+@enumerate
+@item Compliance with Python database API version 2.0 [PEP-0249],
+@item Thread-safety,
+@item Thread-friendliness (threads will not block each other).
+@end enumerate")
+    (license license:gpl2)))
+
 ;;python-nbcorg
 ;;python-pandoc
 ;;python-pydotplus
@@ -1681,3 +1707,4 @@ simulation, statistical modeling, machine learning and much more.")
 ;;python-apispec-4.0
 ;;python-marshmallow-jsonapi-22
 ;;python-marshmallow-3.2
+;; python-mysqlclient

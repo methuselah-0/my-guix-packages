@@ -287,8 +287,8 @@ and then run @command{scm \"$(pwd)\"/example.scm}.")
   (let (
 	;;(commit "8556ab01664ec56f858481b2445c17f33e3e995f")
 	;;(commit "ab2d683")
-        (commit "6b83df7")
-	(revision "1"))
+        (commit "2b0bd4c")
+	(revision "2"))
     (package
       (name "guile-bash-parallel")
       (version "v0.0.7")
@@ -302,7 +302,7 @@ and then run @command{scm \"$(pwd)\"/example.scm}.")
                  (base32
                   ;;"0dxfpi73m4l034vqf0xjkhfskyv9ip4kb439gw4829d0499fssad"))))
 		  ;;"0afnsb4y3v8vpxa9x0nm0hp7ggyb1lik4lyvf3kw6qa7v27123gh"
-                  "0jl9chgfslsclx1gh3m71b4ybqc52sknn7qlvjqy4knklmgbwjch"
+                  "1wxfsqjy871nk4sgcrpxclr2n7l4c2r54hyd42fjx65gx4di1jnd"
                   ))))
       ;;		    (url "https://github.com/guildhall/guile-csv.git")))
       ;;	      (sha256
@@ -1314,4 +1314,3 @@ chunks can be expressions as well as simple tokens.")
 ;;guile-bash2.2
 ;;guile-base64
 ;;ctypes.sh
-

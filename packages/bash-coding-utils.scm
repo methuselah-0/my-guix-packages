@@ -834,8 +834,8 @@ systems, web content management systems and web frameworks." )
         ;;(commit "6519644")
         ;;(commit "f8d5f27")
         ;;(commit "7046374017733531b823ff9db063e583a3e469ef")
-        (commit "daf6453583dc6ee923865f6d4b954b6eff26fafa")
-	(revision "1"))
+        (commit "1644ff5")
+	(revision "2"))
     (package
       (name "bash-coding-utils.sh")
       (version "v0.1.6")
@@ -855,7 +855,7 @@ systems, web content management systems and web frameworks." )
                   ;;"126r2mik2cdwx2z7a1cy0fbq9zphqgg2759ay1pimlmybbhl3zrk"
                   ;;"0plhdcwvk41hask2pw0qxh2h7iz5px51857p83qj67al9h68v1nz"
                   ;;"1slyhxy9z3iiz3hy6hiyls0cphgjn967vgy3dvx0fjnn99wi5kpm"
-                  "19668lv1h2qcrawwnn61qh6lq6vpdalbmxa0hyf5jcvnvig1swd9"
+                  "1a1zrr2w1iw3hkk0i54j8fmp1j1zvlhqmw7q6rpxxsh4bhfi6d65"
                   ))))
     (build-system gnu-build-system)
     (arguments

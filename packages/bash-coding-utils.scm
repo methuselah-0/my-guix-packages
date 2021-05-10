@@ -416,7 +416,7 @@ and then run @command{scm \"$(pwd)\"/example.scm}.")
     (let ((commit ;;"6c7a378117ad7c5300b99161b4a7ce4e2df61bc6"
            "670e0edb625e9690b2b025a3c3be439a9cca1f7e"
            )
-	(revision "0.0.0"))
+	(revision "1"))
       (package
        (name "libxml2-xpath0")
        (version (git-version "1.1.1" revision commit))
@@ -429,7 +429,7 @@ and then run @command{scm \"$(pwd)\"/example.scm}.")
                       ))
 	        (sha256
 	         ;;(base32 "1w4npcwyywypxfiggjqgw6l8yh0jasah8k96fv5xg0h3l4nvp4wx")
-                 (base32 "2jaibpm3ac7lz8bgp45j4ipv1vkvy1nfjvgb8dx0sp1jf69cb9mp")
+                 (base32 "12dj4vszkkhyiyackvpg24ywrnjnr0ri7fyvx61gbisd35gggw49")
                  )))
        (build-system gnu-build-system)
        (outputs '("out" "static"))
@@ -1337,4 +1337,4 @@ chunks can be expressions as well as simple tokens.")
 ;;guile-bash2.2
 ;;guile-base64
 ;;ctypes.sh
-;;libxml2-xpath0
+;; libxml2-xpath0

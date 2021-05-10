@@ -147,9 +147,27 @@
      (home-page "https://github.com/taviso/ctypes.sh")
      (license license:expat)))) ;; wrong license
 
+(define-public guile3.0-bash
+  (package
+    (inherit guile-bash)
+    (name "guile3.0-bash")
+    (inputs
+     `(("guile" ,guile-3.0-latest)
+       ,@(assoc-remove! (package-inputs guile-bash) "guile")))
+    (arguments
+     `(#:tests? #f
+       #:phases (modify-phases %standard-phases
+                  (add-after 'install 'install-guile
+                    (lambda* (#:key inputs outputs #:allow-other-keys)
+                      (copy-recursively
+                       (string-append (assoc-ref outputs "out")
+                                      (assoc-ref inputs "guile") "/share")
+                       (string-append (assoc-ref outputs "out") "/share"))
+                      #t)))
+       ,@(package-arguments guile-bash)))))
+
 (define-public guile-bash2.2
   (let ((commit "678e06df1e9f786ba87b47b18fa5c041eb0e3e86")
-	;;(commit "23a8cc4")
         (revision "1"))
     (package
       (name "guile-bash-2.2")
@@ -160,7 +178,6 @@
                 (method git-fetch)
                 (uri (git-reference
                       (commit commit)
-		      ;;                      (url "git://localhost/guile-bash")))
 		      (url "https://gitlab.com/methuselah-0/guile-bash.git")))
                 (sha256
                  (base32
@@ -396,7 +413,9 @@ and then run @command{scm \"$(pwd)\"/example.scm}.")
 
 
 (define-public libxml2-xpath0
-    (let ((commit "6c7a378117ad7c5300b99161b4a7ce4e2df61bc6")
+    (let ((commit ;;"6c7a378117ad7c5300b99161b4a7ce4e2df61bc6"
+           "670e0edb625e9690b2b025a3c3be439a9cca1f7e"
+           )
 	(revision "0.0.0"))
       (package
        (name "libxml2-xpath0")
@@ -405,9 +424,13 @@ and then run @command{scm \"$(pwd)\"/example.scm}.")
 	        (method git-fetch)
 	        (uri (git-reference
 		      (commit commit)
-		      (url "https://gitlab.gnome.org/cykerway/libxml2.git")))
+		      ;;(url "https://gitlab.gnome.org/cykerway/libxml2.git")
+                      (url "https://gitlab.gnome.org/methuselah-0/libxml2.git")
+                      ))
 	        (sha256
-	         (base32 "1w4npcwyywypxfiggjqgw6l8yh0jasah8k96fv5xg0h3l4nvp4wx"))))
+	         ;;(base32 "1w4npcwyywypxfiggjqgw6l8yh0jasah8k96fv5xg0h3l4nvp4wx")
+                 (base32 "2jaibpm3ac7lz8bgp45j4ipv1vkvy1nfjvgb8dx0sp1jf69cb9mp")
+                 )))
        (build-system gnu-build-system)
        (outputs '("out" "static"))
        (arguments
@@ -1314,3 +1337,4 @@ chunks can be expressions as well as simple tokens.")
 ;;guile-bash2.2
 ;;guile-base64
 ;;ctypes.sh
+;;libxml2-xpath0

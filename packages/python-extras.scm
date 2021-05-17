@@ -1609,7 +1609,7 @@ simulation, statistical modeling, machine learning and much more.")
         ("python-flake8-docstrings"
          ,python-flake8-docstrings)
         ("python-flake8-quotes" ,python-flake8-quotes)
-        ("python-pep8-naming" ,python-pep8-naming)
+        ;;("python-pep8-naming" ,python-pep8-naming)
         ;; to fix tests we add python-pytest-runner, however it still doesn't work so disabling tests.
         ("python-pytest-runner" ,python-pytest-runner)
         ("python-pytest" ,python-pytest)
@@ -1708,3 +1708,4 @@ for Python.  The design goals are:
 ;;python-marshmallow-jsonapi-22
 ;;python-marshmallow-3.2
 ;; python-mysqlclient
+;;python-prance

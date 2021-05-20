@@ -79,226 +79,226 @@
   ;; #:use-module (ice-9 match)
   #:use-module ((srfi srfi-1) #:select (alist-delete)))
 
-(define-public ctypes.sh
-  (let (;;(commit "9d43f1bc4958ac136786f8c3b82cd3aa50713f49")
-        (commit "091e64421507c3502b38b1b88d78b12b4269e80e")
-	(revision "0.0.1"))
-    (package
-     (name "ctypes.sh")
-     (version (git-version "1.2" revision commit))
-     (source (origin
-	      (method git-fetch)
-	      (uri (git-reference
-		    (commit commit)
-		    (url "https://github.com/taviso/ctypes.sh.git")))
-	      (sha256
-	       (base32 "1wafyfhwd7nf7xdici0djpwgykizaz7jlarn0r1b4spnpjx1zbx4"))))
-     (build-system gnu-build-system)
-     (arguments
-      '(#:make-flags (list (let*
-	 		       ((output (assoc-ref %outputs "out")))
-	 		     (string-append "PREFIX=" output)))
-        #:phases (modify-phases
-		  %standard-phases
-		  ;;(delete 'configure)
-		  ;;(delete 'check)
-		  (add-after 'unpack 'autogen
-			     (lambda _
-			       (let*
-				   ((bash (assoc-ref %build-inputs "bash")))
-				 (chmod "configure" #o777)
-				 (invoke "bash" "autogen.sh"))))
-		  (replace 'patch-source-shebangs
-			   (lambda _
-			     (let*
-				 ((bash (assoc-ref %build-inputs "bash")))
-			       (for-each make-file-writable (find-files "." ".*"))
-			       (substitute* (find-files "." ".*\\.sh")
-					    (("#!/bin/bash")
-					     (string-append "#!" bash "/bin/bash\n"))))))
-		  (replace 'configure
-			   (lambda _
-			     (let*
-				 ((bash (string-append (assoc-ref %build-inputs "bash") "/bin/bash"))
-				  (source (assoc-ref %build-inputs "source"))
-				  (output (assoc-ref %outputs "out")))
-			       (setenv "SHELL" bash)
-			       (setenv "CONFIG_SHELL" bash)
-			       (invoke "sh" "configure" (string-append "--prefix=" output)))))
-		  (replace 'install
-		  	   (lambda _
-		  	     (let*
-				 ((output (assoc-ref %outputs "out"))
-				  (bash (string-append (assoc-ref %build-inputs "bash") "/bin/bash"))
-	 		          (install-dir (string-append "PREFIX=" output)))
-			       (setenv "PREFIX" output)
-			       (invoke "make" install-dir "install")))))))
-     (native-inputs `(("pkg-config" ,pkg-config)
-		      ("autoconf" ,autoconf)
-		      ("zlib" ,zlib)
-		      ("automake" ,automake)
-		      ("m4" ,m4)
-		      ("bash" ,bash)
-		      ("libtool" ,libtool)))
-     (propagated-inputs `(("libffi" ,libffi)
-			  ("bash" ,bash)))
-     (synopsis "Cthulhu")
-     (description "ctypes.sh is a bash plugin that provides a foreign function interface directly in your shell. In other words, it allows you to call routines in shared libraries from within bash. ctypes.sh makes it possible to use GTK+ natively in your shell scripts, or write a high-performance http daemon.")
-     (home-page "https://github.com/taviso/ctypes.sh")
-     (license license:expat)))) ;; wrong license
+;; (define-public ctypes.sh
+;;   (let (;;(commit "9d43f1bc4958ac136786f8c3b82cd3aa50713f49")
+;;         (commit "091e64421507c3502b38b1b88d78b12b4269e80e")
+;; 	(revision "0.0.1"))
+;;     (package
+;;      (name "ctypes.sh")
+;;      (version (git-version "1.2" revision commit))
+;;      (source (origin
+;; 	      (method git-fetch)
+;; 	      (uri (git-reference
+;; 		    (commit commit)
+;; 		    (url "https://github.com/taviso/ctypes.sh.git")))
+;; 	      (sha256
+;; 	       (base32 "1wafyfhwd7nf7xdici0djpwgykizaz7jlarn0r1b4spnpjx1zbx4"))))
+;;      (build-system gnu-build-system)
+;;      (arguments
+;;       '(#:make-flags (list (let*
+;; 	 		       ((output (assoc-ref %outputs "out")))
+;; 	 		     (string-append "PREFIX=" output)))
+;;         #:phases (modify-phases
+;; 		  %standard-phases
+;; 		  ;;(delete 'configure)
+;; 		  ;;(delete 'check)
+;; 		  (add-after 'unpack 'autogen
+;; 			     (lambda _
+;; 			       (let*
+;; 				   ((bash (assoc-ref %build-inputs "bash")))
+;; 				 (chmod "configure" #o777)
+;; 				 (invoke "bash" "autogen.sh"))))
+;; 		  (replace 'patch-source-shebangs
+;; 			   (lambda _
+;; 			     (let*
+;; 				 ((bash (assoc-ref %build-inputs "bash")))
+;; 			       (for-each make-file-writable (find-files "." ".*"))
+;; 			       (substitute* (find-files "." ".*\\.sh")
+;; 					    (("#!/bin/bash")
+;; 					     (string-append "#!" bash "/bin/bash\n"))))))
+;; 		  (replace 'configure
+;; 			   (lambda _
+;; 			     (let*
+;; 				 ((bash (string-append (assoc-ref %build-inputs "bash") "/bin/bash"))
+;; 				  (source (assoc-ref %build-inputs "source"))
+;; 				  (output (assoc-ref %outputs "out")))
+;; 			       (setenv "SHELL" bash)
+;; 			       (setenv "CONFIG_SHELL" bash)
+;; 			       (invoke "sh" "configure" (string-append "--prefix=" output)))))
+;; 		  (replace 'install
+;; 		  	   (lambda _
+;; 		  	     (let*
+;; 				 ((output (assoc-ref %outputs "out"))
+;; 				  (bash (string-append (assoc-ref %build-inputs "bash") "/bin/bash"))
+;; 	 		          (install-dir (string-append "PREFIX=" output)))
+;; 			       (setenv "PREFIX" output)
+;; 			       (invoke "make" install-dir "install")))))))
+;;      (native-inputs `(("pkg-config" ,pkg-config)
+;; 		      ("autoconf" ,autoconf)
+;; 		      ("zlib" ,zlib)
+;; 		      ("automake" ,automake)
+;; 		      ("m4" ,m4)
+;; 		      ("bash" ,bash)
+;; 		      ("libtool" ,libtool)))
+;;      (propagated-inputs `(("libffi" ,libffi)
+;; 			  ("bash" ,bash)))
+;;      (synopsis "Cthulhu")
+;;      (description "ctypes.sh is a bash plugin that provides a foreign function interface directly in your shell. In other words, it allows you to call routines in shared libraries from within bash. ctypes.sh makes it possible to use GTK+ natively in your shell scripts, or write a high-performance http daemon.")
+;;      (home-page "https://github.com/taviso/ctypes.sh")
+;;      (license license:expat)))) ;; wrong license
 
-(define-public guile3.0-bash
-  (package
-    (inherit guile-bash)
-    (name "guile3.0-bash")
-    (inputs
-     `(("guile" ,guile-3.0-latest)
-       ,@(assoc-remove! (package-inputs guile-bash) "guile")))
-    (arguments
-     `(#:tests? #f
-       #:phases (modify-phases %standard-phases
-                  (add-after 'install 'install-guile
-                    (lambda* (#:key inputs outputs #:allow-other-keys)
-                      (copy-recursively
-                       (string-append (assoc-ref outputs "out")
-                                      (assoc-ref inputs "guile") "/share")
-                       (string-append (assoc-ref outputs "out") "/share"))
-                      #t)))
-       ,@(package-arguments guile-bash)))))
+;; (define-public guile3.0-bash
+;;   (package
+;;     (inherit guile-bash)
+;;     (name "guile3.0-bash")
+;;     (inputs
+;;      `(("guile" ,guile-3.0-latest)
+;;        ,@(assoc-remove! (package-inputs guile-bash) "guile")))
+;;     (arguments
+;;      `(#:tests? #f
+;;        #:phases (modify-phases %standard-phases
+;;                   (add-after 'install 'install-guile
+;;                     (lambda* (#:key inputs outputs #:allow-other-keys)
+;;                       (copy-recursively
+;;                        (string-append (assoc-ref outputs "out")
+;;                                       (assoc-ref inputs "guile") "/share")
+;;                        (string-append (assoc-ref outputs "out") "/share"))
+;;                       #t)))
+;;        ,@(package-arguments guile-bash)))))
 
-(define-public guile-bash2.2
-  (let ((commit "678e06df1e9f786ba87b47b18fa5c041eb0e3e86")
-        (revision "1"))
-    (package
-      (name "guile-bash-2.2")
-      (version (string-append "0.1.6-" revision "." (string-take commit 7)))
-      (home-page
-       "https://gitlab.com/methuselah-0/guile-bash")
-      (source (origin
-                (method git-fetch)
-                (uri (git-reference
-                      (commit commit)
-		      (url "https://gitlab.com/methuselah-0/guile-bash.git")))
-                (sha256
-                 (base32
-                  "1dipzbyy3jlc3d40v5vbf4a9vlw6fyv4b03hfvj94iy3papji5sn"))
-                (file-name (string-append name "-" version "-checkout"))))
-      (build-system gnu-build-system)
-      (arguments
-       '(#:configure-flags
-         ;; Add -I to match 'bash.pc' of Bash 4.4.
-         (list (string-append "CPPFLAGS=-I"
-                              (assoc-ref %build-inputs "bash:include")
-                              "/include/bash/include")
+;; (define-public guile-bash2.2
+;;   (let ((commit "678e06df1e9f786ba87b47b18fa5c041eb0e3e86")
+;;         (revision "1"))
+;;     (package
+;;       (name "guile-bash-2.2")
+;;       (version (string-append "0.1.6-" revision "." (string-take commit 7)))
+;;       (home-page
+;;        "https://gitlab.com/methuselah-0/guile-bash")
+;;       (source (origin
+;;                 (method git-fetch)
+;;                 (uri (git-reference
+;;                       (commit commit)
+;; 		      (url "https://gitlab.com/methuselah-0/guile-bash.git")))
+;;                 (sha256
+;;                  (base32
+;;                   "1dipzbyy3jlc3d40v5vbf4a9vlw6fyv4b03hfvj94iy3papji5sn"))
+;;                 (file-name (string-append name "-" version "-checkout"))))
+;;       (build-system gnu-build-system)
+;;       (arguments
+;;        '(#:configure-flags
+;;          ;; Add -I to match 'bash.pc' of Bash 4.4.
+;;          (list (string-append "CPPFLAGS=-I"
+;;                               (assoc-ref %build-inputs "bash:include")
+;;                               "/include/bash/include")
 
-               ;; The '.a' file is useless.
-               "--disable-static"
+;;                ;; The '.a' file is useless.
+;;                "--disable-static"
 
-               ;; Install 'lib/bash' as Bash 4.4 expects.
-               (string-append "--libdir=" (assoc-ref %outputs "out")
-                              "/lib/bash"))))
-      (native-inputs `(("pkg-config" ,pkg-config)
-                       ("autoconf" ,autoconf-wrapper)
-                       ("automake" ,automake)
-                       ("libtool" ,libtool)
-                       ;; Gettext brings 'AC_LIB_LINKFLAGS_FROM_LIBS'.
-                       ("gettext" ,gettext-minimal)
+;;                ;; Install 'lib/bash' as Bash 4.4 expects.
+;;                (string-append "--libdir=" (assoc-ref %outputs "out")
+;;                               "/lib/bash"))))
+;;       (native-inputs `(("pkg-config" ,pkg-config)
+;;                        ("autoconf" ,autoconf-wrapper)
+;;                        ("automake" ,automake)
+;;                        ("libtool" ,libtool)
+;;                        ;; Gettext brings 'AC_LIB_LINKFLAGS_FROM_LIBS'.
+;;                        ("gettext" ,gettext-minimal)
 
-                       ;; Bash with loadable module support, for the test
-                       ;; suite.
-                       ("bash-full" ,bash)))
-      (inputs `(("guile" ,guile-2.2)
-                ("bash:include" ,bash "include")))
-      (synopsis "Extend Bash using Guile")
-      (description
-       "Guile-Bash provides a shared library and set of Guile modules,
-allowing you to extend Bash in Scheme.  Scheme interfaces allow you to access
-the following aspects of Bash:
+;;                        ;; Bash with loadable module support, for the test
+;;                        ;; suite.
+;;                        ("bash-full" ,bash)))
+;;       (inputs `(("guile" ,guile-2.2)
+;;                 ("bash:include" ,bash "include")))
+;;       (synopsis "Extend Bash using Guile")
+;;       (description
+;;        "Guile-Bash provides a shared library and set of Guile modules,
+;; allowing you to extend Bash in Scheme.  Scheme interfaces allow you to access
+;; the following aspects of Bash:
 
-@itemize
-@item aliases;
-@item setting and getting Bash variables;
-@item creating dynamic variables;
-@item creating Bash functions with a Scheme implementation;
-@item reader macro for output capturing;
-@item reader macro for evaluating raw Bash commands.
-@end itemize
+;; @itemize
+;; @item aliases;
+;; @item setting and getting Bash variables;
+;; @item creating dynamic variables;
+;; @item creating Bash functions with a Scheme implementation;
+;; @item reader macro for output capturing;
+;; @item reader macro for evaluating raw Bash commands.
+;; @end itemize
 
-To enable it, run:
+;; To enable it, run:
 
-@example
-enable -f ~/.guix-profile/lib/bash/libguile-bash.so scm
-@end example
+;; @example
+;; enable -f ~/.guix-profile/lib/bash/libguile-bash.so scm
+;; @end example
 
-and then run @command{scm \"$(pwd)\"/example.scm}.")
-      (license license:gpl3+))))
+;; and then run @command{scm \"$(pwd)\"/example.scm}.")
+;;       (license license:gpl3+))))
 
-(define-public guile-bash2.0
-    (let ((commit "49099fe6a592aa3b8001e826b939869fe5811785")
-        (revision "0"))
-    (package
-      (name "guile-bash-2.0")
-      (version (string-append "0.1.6-" revision "." (string-take commit 7)))
-      (home-page
-       "https://gitlab.com/methuselah-0/guile-bash")
-      (source (origin
-                (method git-fetch)
-                (uri (git-reference
-                      (commit commit)
-		      (url "https://gitlab.com/methuselah-0/guile-bash.git")))
-                (sha256
-                 (base32
-                  "1cwyf7sd0chrfmfipkvaph5gf70hck6fj36sxcc4ncin49xlxv0l"))
-                (file-name (string-append name "-" version "-checkout"))))
-      (build-system gnu-build-system)
-      (arguments
-       '(#:configure-flags
-         ;; Add -I to match 'bash.pc' of Bash 4.4.
-         (list (string-append "CPPFLAGS=-I"
-                              (assoc-ref %build-inputs "bash:include")
-                              "/include/bash/include")
+;; (define-public guile-bash2.0
+;;     (let ((commit "49099fe6a592aa3b8001e826b939869fe5811785")
+;;         (revision "0"))
+;;     (package
+;;       (name "guile-bash-2.0")
+;;       (version (string-append "0.1.6-" revision "." (string-take commit 7)))
+;;       (home-page
+;;        "https://gitlab.com/methuselah-0/guile-bash")
+;;       (source (origin
+;;                 (method git-fetch)
+;;                 (uri (git-reference
+;;                       (commit commit)
+;; 		      (url "https://gitlab.com/methuselah-0/guile-bash.git")))
+;;                 (sha256
+;;                  (base32
+;;                   "1cwyf7sd0chrfmfipkvaph5gf70hck6fj36sxcc4ncin49xlxv0l"))
+;;                 (file-name (string-append name "-" version "-checkout"))))
+;;       (build-system gnu-build-system)
+;;       (arguments
+;;        '(#:configure-flags
+;;          ;; Add -I to match 'bash.pc' of Bash 4.4.
+;;          (list (string-append "CPPFLAGS=-I"
+;;                               (assoc-ref %build-inputs "bash:include")
+;;                               "/include/bash/include")
 
-               ;; The '.a' file is useless.
-               "--disable-static"
+;;                ;; The '.a' file is useless.
+;;                "--disable-static"
 
-               ;; Install 'lib/bash' as Bash 4.4 expects.
-               (string-append "--libdir=" (assoc-ref %outputs "out")
-                              "/lib/bash"))))
-      (native-inputs `(("pkg-config" ,pkg-config)
-                       ("autoconf" ,autoconf-wrapper)
-                       ("automake" ,automake)
-                       ("libtool" ,libtool)
-                       ;; Gettext brings 'AC_LIB_LINKFLAGS_FROM_LIBS'.
-                       ("gettext" ,gettext-minimal)
+;;                ;; Install 'lib/bash' as Bash 4.4 expects.
+;;                (string-append "--libdir=" (assoc-ref %outputs "out")
+;;                               "/lib/bash"))))
+;;       (native-inputs `(("pkg-config" ,pkg-config)
+;;                        ("autoconf" ,autoconf-wrapper)
+;;                        ("automake" ,automake)
+;;                        ("libtool" ,libtool)
+;;                        ;; Gettext brings 'AC_LIB_LINKFLAGS_FROM_LIBS'.
+;;                        ("gettext" ,gettext-minimal)
 
-                       ;; Bash with loadable module support, for the test
-                       ;; suite.
-                       ("bash-full" ,bash)))
-      (inputs `(("guile" ,guile-2.0)
-                ("bash:include" ,bash "include")))
-      (synopsis "Extend Bash using Guile")
-      (description
-       "Guile-Bash provides a shared library and set of Guile modules,
-allowing you to extend Bash in Scheme.  Scheme interfaces allow you to access
-the following aspects of Bash:
+;;                        ;; Bash with loadable module support, for the test
+;;                        ;; suite.
+;;                        ("bash-full" ,bash)))
+;;       (inputs `(("guile" ,guile-2.0)
+;;                 ("bash:include" ,bash "include")))
+;;       (synopsis "Extend Bash using Guile")
+;;       (description
+;;        "Guile-Bash provides a shared library and set of Guile modules,
+;; allowing you to extend Bash in Scheme.  Scheme interfaces allow you to access
+;; the following aspects of Bash:
 
-@itemize
-@item aliases;
-@item setting and getting Bash variables;
-@item creating dynamic variables;
-@item creating Bash functions with a Scheme implementation;
-@item reader macro for output capturing;
-@item reader macro for evaluating raw Bash commands.
-@end itemize
+;; @itemize
+;; @item aliases;
+;; @item setting and getting Bash variables;
+;; @item creating dynamic variables;
+;; @item creating Bash functions with a Scheme implementation;
+;; @item reader macro for output capturing;
+;; @item reader macro for evaluating raw Bash commands.
+;; @end itemize
 
-To enable it, run:
+;; To enable it, run:
 
-@example
-enable -f ~/.guix-profile/lib/bash/libguile-bash.so scm
-@end example
+;; @example
+;; enable -f ~/.guix-profile/lib/bash/libguile-bash.so scm
+;; @end example
 
-and then run @command{scm \"$(pwd)\"/example.scm}.")
-      (license license:gpl3+))))
+;; and then run @command{scm \"$(pwd)\"/example.scm}.")
+;;       (license license:gpl3+))))
 
 (define-public guile-bash-parallel
   (let (

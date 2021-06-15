@@ -304,11 +304,11 @@
   (let (
 	;;(commit "8556ab01664ec56f858481b2445c17f33e3e995f")
 	;;(commit "ab2d683")
-        (commit "6d13c37")
-	(revision "3"))
+        (commit "4efed13")
+	(revision "0"))
     (package
       (name "guile-bash-parallel")
-      (version "v0.0.7")
+      (version "v0.0.8")
       (home-page "https://gitlab.com/methuselah-0/guile-bash-parallel.git")
       (source (origin
                 (method git-fetch)
@@ -319,7 +319,7 @@
                  (base32
                   ;;"0dxfpi73m4l034vqf0xjkhfskyv9ip4kb439gw4829d0499fssad"))))
 		  ;;"0afnsb4y3v8vpxa9x0nm0hp7ggyb1lik4lyvf3kw6qa7v27123gh"
-                  "0n0x0nbpjsl8brpy7ajf2qpqlflvhqqryq451vflawaiaacpavml"
+                  "1c6pz14v2skbcvzi5hx6sa37640iml5b8p0awic6q7m9nl51gk0x"
                   ))))
       ;;		    (url "https://github.com/guildhall/guile-csv.git")))
       ;;	      (sha256
@@ -900,4 +900,4 @@ chunks can be expressions as well as simple tokens.")
 ;;guile-bash2.2
 ;;guile-base64
 ;;ctypes.sh
-;; libxml2-xpath0
+;;libxml2-xpath0

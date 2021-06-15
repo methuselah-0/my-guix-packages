@@ -412,18 +412,11 @@
       (license license:expat))))    
 
 (define-public bash-coding-utils.sh
-  (let (;;(commit "5ead530")
-	;;(commit "a4cb5d8a")
-	;;(commit "2aed113")
-	;;(commit "4cb80cb")
-        ;;(commit "6519644")
-        ;;(commit "f8d5f27")
-        ;;(commit "7046374017733531b823ff9db063e583a3e469ef")
-        (commit "1644ff5")
+  (let ((commit "31538fe")
 	(revision "0"))
     (package
       (name "bash-coding-utils.sh")
-      (version "v0.1.7")
+      (version "v0.1.8")
       (home-page "https://gitlab.com/methuselah-0/bash-coding-utils.sh")      
       (source (origin
                 (method git-fetch)
@@ -434,13 +427,7 @@
 		      (recursive? #t)))
                 (sha256
                  (base32
-                  ;;"07yq0jsxnic00m3b3p91sq2h5s21wmfqqsbs68wvp4hin620j6a6"))))
-		  ;;"00dvvln5ch2dn9mam88k48mkjlqgli29rp9bmag5y0xwra7kpg7f"))))
-		  ;;"0nf7dsf8gh270qv1pavbxqs2vi7l5vrmgv7w7rd1i93kmdkcqv47"
-                  ;;"126r2mik2cdwx2z7a1cy0fbq9zphqgg2759ay1pimlmybbhl3zrk"
-                  ;;"0plhdcwvk41hask2pw0qxh2h7iz5px51857p83qj67al9h68v1nz"
-                  ;;"1slyhxy9z3iiz3hy6hiyls0cphgjn967vgy3dvx0fjnn99wi5kpm"
-                  "1a1zrr2w1iw3hkk0i54j8fmp1j1zvlhqmw7q6rpxxsh4bhfi6d65"
+                  "13hc1hgrjr373qr6ig0r0ac0k4bs0slrgjb30wcfqypysamghpsg"
                   ))))
     (build-system gnu-build-system)
     (arguments

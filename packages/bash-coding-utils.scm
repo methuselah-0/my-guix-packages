@@ -1,98 +1,74 @@
 (define-module (bash-coding-utils)
-  #:use-module (gnu packages) ;; because of complaints in /var/log/cuirass/evaluations/1.gz
-  ;; #:use-module (gnu packages algebra)
   #:use-module (gnu packages admin) ;; netcat
   #:use-module (gnu packages aspell)
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages bison)
-  ;; #:use-module (gnu packages check)
   #:use-module (gnu packages compression)
-  #:use-module (gnu packages check)  ;; because of complaints in /var/log/cuirass/evaluations/1.gz
   #:use-module (gnu packages curl)
   #:use-module (gnu packages cyrus-sasl)
   #:use-module (gnu packages databases)
   #:use-module (gnu packages dbm) ;; after upgrade to latest master
-  ;; #:use-module (gnu packages disk)
-  ;; #:use-module (gnu packages ed)
+  #:use-module (gnu packages dns)
+  #:use-module (gnu packages ed)
   #:use-module (gnu packages emacs) ;; for orgmk package
   ;; #:use-module (gnu packages emacs-xyz)
   #:use-module (gnu packages fontutils)
   #:use-module (gnu packages gawk)
   #:use-module (gnu packages gd)  
   #:use-module (gnu packages gettext)
-  ;;  #:use-module (gnu packages gl) ;; this gives mesa which depends on llvm which doesnt build atm.
   #:use-module (gnu packages glib)  
-  ;; #:use-module (gnu packages gnome)
   #:use-module (gnu packages gnupg)  
-  ;; #:use-module (gnu packages gperf)
    #:use-module (gnu packages guile)
    #:use-module (gnu packages guile-xyz)
-  ;; #:use-module (gnu packages hurd)
   #:use-module (gnu packages image)
-  ;; #:use-module (gnu packages java)  
   #:use-module (gnu packages libffi)
-  ;; #:use-module (gnu packages libunistring)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages m4)
-  ;; #:use-module (gnu packages man)
-  ;; #:use-module (gnu packages maths)
   #:use-module (gnu packages multiprecision)
-  ;; #:use-module (gnu packages ncurses)
   #:use-module (gnu packages networking) ;; socat, ipcalc
   #:use-module (gnu packages openldap)  
   #:use-module (gnu packages pcre)  
   #:use-module (gnu packages perl)
-  ;; #:use-module (gnu packages perl-check)
   #:use-module (gnu packages php)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages readline)
-  ;; #:use-module (gnu packages sdl)
-  ;; #:use-module (gnu packages slang)
   #:use-module (gnu packages sqlite) ;; after upgrade to latest master
-  ;; #:use-module (gnu packages texinfo)
   #:use-module (gnu packages textutils)  
   #:use-module (gnu packages tls)
   #:use-module (gnu packages tcl)
-  ;; #:use-module (gnu packages version-control)
   #:use-module (gnu packages web)  
-  ;; #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xml)  
   #:use-module (gnu packages xorg)
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix git-download)
-  ;; #:use-module (guix build-system ant)
-  ;; #:use-module (guix build-system cmake)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system guile)
   #:use-module (guix build-system python)
-  ;; #:use-module (guix build-system guile)  
-  ;; #:use-module (guix build-system perl)
-;;  #:use-module (guix build-system python)
-  ;;#:use-module (guix build-system trivial)
+  #:use-module (guix build python-build-system)
+  #:use-module (guix build-system trivial)
   #:use-module ((guix licenses) #:prefix license:)  
-  ;; #:use-module (guix utils)
-  ;; #:use-module (ice-9 match)
+  #:use-module (guix utils)
   #:use-module ((srfi srfi-1) #:select (alist-delete)))
 
+;; not needed anymore, since bash-ctypes is in guix master.
 ;; (define-public ctypes.sh
-;;   (let (;;(commit "9d43f1bc4958ac136786f8c3b82cd3aa50713f49")
-;;         (commit "091e64421507c3502b38b1b88d78b12b4269e80e")
-;; 	(revision "0.0.1"))
+;;   (let ((commit "9d43f1bc4958ac136786f8c3b82cd3aa50713f49")
+;; 	(revision "0.0.0"))
 ;;     (package
 ;;      (name "ctypes.sh")
-;;      (version (git-version "1.2" revision commit))
+;;      (version (git-version "1.1.1" revision commit))
 ;;      (source (origin
 ;; 	      (method git-fetch)
 ;; 	      (uri (git-reference
 ;; 		    (commit commit)
 ;; 		    (url "https://github.com/taviso/ctypes.sh.git")))
 ;; 	      (sha256
-;; 	       (base32 "1wafyfhwd7nf7xdici0djpwgykizaz7jlarn0r1b4spnpjx1zbx4"))))
+;; 	       (base32 "111n1kg1fzms5hns5s24ika05dm00kbhrdvn17hnx7g4k01hd7n4"))))
 ;;      (build-system gnu-build-system)
 ;;      (arguments
 ;;       '(#:make-flags (list (let*
@@ -145,394 +121,65 @@
 ;;      (synopsis "Cthulhu")
 ;;      (description "ctypes.sh is a bash plugin that provides a foreign function interface directly in your shell. In other words, it allows you to call routines in shared libraries from within bash. ctypes.sh makes it possible to use GTK+ natively in your shell scripts, or write a high-performance http daemon.")
 ;;      (home-page "https://github.com/taviso/ctypes.sh")
-;;      (license license:expat)))) ;; wrong license
+;;      (license "MIT"))))
 
-;; (define-public guile3.0-bash
-;;   (package
-;;     (inherit guile-bash)
-;;     (name "guile3.0-bash")
-;;     (inputs
-;;      `(("guile" ,guile-3.0-latest)
-;;        ,@(assoc-remove! (package-inputs guile-bash) "guile")))
-;;     (arguments
-;;      `(#:tests? #f
-;;        #:phases (modify-phases %standard-phases
-;;                   (add-after 'install 'install-guile
-;;                     (lambda* (#:key inputs outputs #:allow-other-keys)
-;;                       (copy-recursively
-;;                        (string-append (assoc-ref outputs "out")
-;;                                       (assoc-ref inputs "guile") "/share")
-;;                        (string-append (assoc-ref outputs "out") "/share"))
-;;                       #t)))
-;;        ,@(package-arguments guile-bash)))))
-
-;; (define-public guile-bash2.2
-;;   (let ((commit "678e06df1e9f786ba87b47b18fa5c041eb0e3e86")
-;;         (revision "1"))
+;; not needed here anymore, as it's in a submodule and has been superseded by bcu__parallel / bashp.
+;; (define-public guile-bash-parallel
+;;   (let (
+;; 	;;(commit "8556ab01664ec56f858481b2445c17f33e3e995f")
+;; 	;;(commit "ab2d683")
+;;         (commit "6d13c37")
+;; 	(revision "3"))
 ;;     (package
-;;       (name "guile-bash-2.2")
-;;       (version (string-append "0.1.6-" revision "." (string-take commit 7)))
-;;       (home-page
-;;        "https://gitlab.com/methuselah-0/guile-bash")
+;;       (name "guile-bash-parallel")
+;;       (version "v0.0.7")
+;;       (home-page "https://gitlab.com/methuselah-0/guile-bash-parallel.git")
 ;;       (source (origin
 ;;                 (method git-fetch)
 ;;                 (uri (git-reference
 ;;                       (commit commit)
-;; 		      (url "https://gitlab.com/methuselah-0/guile-bash.git")))
+;;                       (url "https://gitlab.com/methuselah-0/guile-bash-parallel.git")))
 ;;                 (sha256
 ;;                  (base32
-;;                   "1dipzbyy3jlc3d40v5vbf4a9vlw6fyv4b03hfvj94iy3papji5sn"))
-;;                 (file-name (string-append name "-" version "-checkout"))))
+;;                   ;;"0dxfpi73m4l034vqf0xjkhfskyv9ip4kb439gw4829d0499fssad"))))
+;; 		  ;;"0afnsb4y3v8vpxa9x0nm0hp7ggyb1lik4lyvf3kw6qa7v27123gh"
+;;                   "0wxfsqjy871nk4sgcrpxclr2n7l4c2r54hyd42fjx65gx4di1jnd"
+;;                   ))))
+;;       ;;		    (url "https://github.com/guildhall/guile-csv.git")))
+;;       ;;	      (sha256
+;;       ;;	       (base32 "0wl9nkqvsl61jlx5r2yd27irvgg2lx108j0a17zry70gsv223i4n"))))
 ;;       (build-system gnu-build-system)
 ;;       (arguments
-;;        '(#:configure-flags
-;;          ;; Add -I to match 'bash.pc' of Bash 4.4.
-;;          (list (string-append "CPPFLAGS=-I"
-;;                               (assoc-ref %build-inputs "bash:include")
-;;                               "/include/bash/include")
-
-;;                ;; The '.a' file is useless.
-;;                "--disable-static"
-
-;;                ;; Install 'lib/bash' as Bash 4.4 expects.
-;;                (string-append "--libdir=" (assoc-ref %outputs "out")
-;;                               "/lib/bash"))))
-;;       (native-inputs `(("pkg-config" ,pkg-config)
-;;                        ("autoconf" ,autoconf-wrapper)
-;;                        ("automake" ,automake)
-;;                        ("libtool" ,libtool)
-;;                        ;; Gettext brings 'AC_LIB_LINKFLAGS_FROM_LIBS'.
-;;                        ("gettext" ,gettext-minimal)
-
-;;                        ;; Bash with loadable module support, for the test
-;;                        ;; suite.
-;;                        ("bash-full" ,bash)))
-;;       (inputs `(("guile" ,guile-2.2)
-;;                 ("bash:include" ,bash "include")))
-;;       (synopsis "Extend Bash using Guile")
-;;       (description
-;;        "Guile-Bash provides a shared library and set of Guile modules,
-;; allowing you to extend Bash in Scheme.  Scheme interfaces allow you to access
-;; the following aspects of Bash:
-
-;; @itemize
-;; @item aliases;
-;; @item setting and getting Bash variables;
-;; @item creating dynamic variables;
-;; @item creating Bash functions with a Scheme implementation;
-;; @item reader macro for output capturing;
-;; @item reader macro for evaluating raw Bash commands.
-;; @end itemize
-
-;; To enable it, run:
-
-;; @example
-;; enable -f ~/.guix-profile/lib/bash/libguile-bash.so scm
-;; @end example
-
-;; and then run @command{scm \"$(pwd)\"/example.scm}.")
+;;        '(#:phases (modify-phases
+;;                       %standard-phases
+;;                     (delete 'configure)
+;;                     (delete 'make)
+;;                     (delete 'build)
+;;                     (delete 'check)
+;;                     (replace 'install
+;;                       (lambda* _
+;;                         (let* ((out (assoc-ref %outputs "out"))
+;;                                ;;(csvmod (string-append (assoc-ref %build-inputs "source") "/csv/csv.scm"))
+;;                                (share (string-append out "/share/guile/site/2.2")))
+;;                           (mkdir-p share)
+;;                           (copy-file "parallel.scm" (string-append share "/parallel.scm"))
+;;                           (copy-file "mapfork.sh" (string-append share "/mapfork.sh"))
+;;                           )))
+;;                     )))
+;;       (inputs `(("guile" ,guile-3.0)
+;;                 ("bash" ,bash)))
+;;       ;;(propagated-inputs `(("guile" ,guile-2.2)))
+;;       (synopsis "Run bash commands in parallel from guile and read back all their output")
+;;       (description "guile-bash-parallel is a lightweight way to define and run system commands in parallel. It allows you to read back to your guile-script the stdout, stderr and return code of bash commands as well as giving you an easy way to template the command argument patterns")
 ;;       (license license:gpl3+))))
 
-;; (define-public guile-bash2.0
-;;     (let ((commit "49099fe6a592aa3b8001e826b939869fe5811785")
-;;         (revision "0"))
-;;     (package
-;;       (name "guile-bash-2.0")
-;;       (version (string-append "0.1.6-" revision "." (string-take commit 7)))
-;;       (home-page
-;;        "https://gitlab.com/methuselah-0/guile-bash")
-;;       (source (origin
-;;                 (method git-fetch)
-;;                 (uri (git-reference
-;;                       (commit commit)
-;; 		      (url "https://gitlab.com/methuselah-0/guile-bash.git")))
-;;                 (sha256
-;;                  (base32
-;;                   "1cwyf7sd0chrfmfipkvaph5gf70hck6fj36sxcc4ncin49xlxv0l"))
-;;                 (file-name (string-append name "-" version "-checkout"))))
-;;       (build-system gnu-build-system)
-;;       (arguments
-;;        '(#:configure-flags
-;;          ;; Add -I to match 'bash.pc' of Bash 4.4.
-;;          (list (string-append "CPPFLAGS=-I"
-;;                               (assoc-ref %build-inputs "bash:include")
-;;                               "/include/bash/include")
-
-;;                ;; The '.a' file is useless.
-;;                "--disable-static"
-
-;;                ;; Install 'lib/bash' as Bash 4.4 expects.
-;;                (string-append "--libdir=" (assoc-ref %outputs "out")
-;;                               "/lib/bash"))))
-;;       (native-inputs `(("pkg-config" ,pkg-config)
-;;                        ("autoconf" ,autoconf-wrapper)
-;;                        ("automake" ,automake)
-;;                        ("libtool" ,libtool)
-;;                        ;; Gettext brings 'AC_LIB_LINKFLAGS_FROM_LIBS'.
-;;                        ("gettext" ,gettext-minimal)
-
-;;                        ;; Bash with loadable module support, for the test
-;;                        ;; suite.
-;;                        ("bash-full" ,bash)))
-;;       (inputs `(("guile" ,guile-2.0)
-;;                 ("bash:include" ,bash "include")))
-;;       (synopsis "Extend Bash using Guile")
-;;       (description
-;;        "Guile-Bash provides a shared library and set of Guile modules,
-;; allowing you to extend Bash in Scheme.  Scheme interfaces allow you to access
-;; the following aspects of Bash:
-
-;; @itemize
-;; @item aliases;
-;; @item setting and getting Bash variables;
-;; @item creating dynamic variables;
-;; @item creating Bash functions with a Scheme implementation;
-;; @item reader macro for output capturing;
-;; @item reader macro for evaluating raw Bash commands.
-;; @end itemize
-
-;; To enable it, run:
-
-;; @example
-;; enable -f ~/.guix-profile/lib/bash/libguile-bash.so scm
-;; @end example
-
-;; and then run @command{scm \"$(pwd)\"/example.scm}.")
-;;       (license license:gpl3+))))
-
-(define-public guile-bash-parallel
-  (let (
-	;;(commit "8556ab01664ec56f858481b2445c17f33e3e995f")
-	;;(commit "ab2d683")
-        (commit "4efed13")
-	(revision "0"))
-    (package
-      (name "guile-bash-parallel")
-      (version "v0.0.8")
-      (home-page "https://gitlab.com/methuselah-0/guile-bash-parallel.git")
-      (source (origin
-                (method git-fetch)
-                (uri (git-reference
-                      (commit commit)
-                      (url "https://gitlab.com/methuselah-0/guile-bash-parallel.git")))
-                (sha256
-                 (base32
-                  ;;"0dxfpi73m4l034vqf0xjkhfskyv9ip4kb439gw4829d0499fssad"))))
-		  ;;"0afnsb4y3v8vpxa9x0nm0hp7ggyb1lik4lyvf3kw6qa7v27123gh"
-                  "1c6pz14v2skbcvzi5hx6sa37640iml5b8p0awic6q7m9nl51gk0x"
-                  ))))
-      ;;		    (url "https://github.com/guildhall/guile-csv.git")))
-      ;;	      (sha256
-      ;;	       (base32 "0wl9nkqvsl61jlx5r2yd27irvgg2lx108j0a17zry70gsv223i4n"))))
-      (build-system gnu-build-system)
-      (arguments
-       '(#:phases (modify-phases
-                      %standard-phases
-                    (delete 'configure)
-                    (delete 'make)
-                    (delete 'build)
-                    (delete 'check)
-                    (replace 'install
-                      (lambda* _
-                        (let* ((out (assoc-ref %outputs "out"))
-                               ;;(csvmod (string-append (assoc-ref %build-inputs "source") "/csv/csv.scm"))
-                               (share (string-append out "/share/guile/site/3.0")))
-                          (mkdir-p share)
-                          (copy-file "parallel.scm" (string-append share "/parallel.scm"))
-                          (copy-file "mapfork.sh" (string-append share "/mapfork.sh"))
-                          )))
-                    )))
-      (inputs `(("guile" ,guile-3.0)
-                ("bash" ,bash)))
-      ;;(propagated-inputs `(("guile" ,guile-2.2)))
-      (synopsis "Run bash commands in parallel from guile and read back all their output")
-      (description "guile-bash-parallel is a lightweight way to define and run system commands in parallel. It allows you to read back to your guile-script the stdout, stderr and return code of bash commands as well as giving you an easy way to template the command argument patterns")
-      (license license:gpl3+))))
-
-(define-public guile-csv
-  (let ((commit "8a5849537aa74c46ff6db1465a6dde90726e5492")
-	(revision "1"))
-    (package
-      (name "guile-csv")
-      (version "v0.0.5")
-      (home-page "https://github.com/guildhall/guile-csv.git")      
-      (source (origin
-                (method git-fetch)
-                (uri (git-reference
-                      (commit commit)
-                      (url "https://github.com/guildhall/guile-csv.git")))
-                (sha256
-                 (base32
-                  "0gkp4g9lh8a3la8k6d4syivjq1hr846l5zk87fzzfcc1sdiw8n5k"))))
-      ;;		    (url "https://github.com/guildhall/guile-csv.git")))
-      ;;	      (sha256
-      ;;	       (base32 "0wl9nkqvsl61jlx5r2yd27irvgg2lx108j0a17zry70gsv223i4n"))))
-      (build-system gnu-build-system)	
-      (arguments
-       '(#:phases (modify-phases
-                      %standard-phases
-                    (delete 'configure)
-                    (delete 'make)
-                    (delete 'check)
-                    (replace 'install
-                      (lambda* _
-                        (let* ((out (assoc-ref %outputs "out"))
-                               (csvmod (string-append (assoc-ref %build-inputs "source") "/csv/csv.scm"))
-                               (share (string-append out "/share/guile/site/2.2/csv")))
-                          (mkdir-p share)
-                          (copy-file csvmod (string-append share "/csv.scm"))
-                          )))
-                    )))
-      ;;(inputs `(("guile" ,guile-2.2)))
-      ;;(propagated-inputs `(("guile" ,guile-2.2)))
-      (synopsis "csv to sxml and the other way around")
-      (description "csv functions for guile")
-      (license license:expat))))
-
-(define-public guile-base64
-  (let ((commit "5ea24cb187739a53c932bf2531886a70b813e7b0")
-	(revision "1"))
-    (package
-      (name "guile-base64")
-      (version "v0.0.1")
-      (home-page "https://gitlab.com/methuselah-0/guile-base64.git")      
-      (source (origin
-                (method git-fetch)
-                (uri (git-reference
-                      (commit commit)
-                      (url "https://gitlab.com/methuselah-0/guile-base64.git")))
-                (sha256
-                 (base32
-                  "06h03ksyr12hsrxrx0gk2rpiwn4q9yxam68yzby45j4hxjq59hp5"))))
-      (build-system guile-build-system)	
-      (native-inputs `(("guile" ,guile-2.2)))
-      ;;(propagated-inputs `(("guile" ,guile-2.2)))      
-      (synopsis "Encode and decode strings to and from base64 encoding")
-      (description "Encode and decode strings to and from base64 encoding")
-      (license license:expat))))    
-
-(define-public bash-coding-utils.sh
-  (let ((commit "31538fe")
-	(revision "0"))
-    (package
-      (name "bash-coding-utils.sh")
-      (version "v0.1.8")
-      (home-page "https://gitlab.com/methuselah-0/bash-coding-utils.sh")      
-      (source (origin
-                (method git-fetch)
-                (uri (git-reference
-                      (commit commit)
-                      (url "https://gitlab.com/methuselah-0/bash-coding-utils.sh.git")
-		      ;; recursive needed for the guile-bash-parallel submodule
-		      (recursive? #t)))
-                (sha256
-                 (base32
-                  "13hc1hgrjr373qr6ig0r0ac0k4bs0slrgjb30wcfqypysamghpsg"
-                  ))))
-    (build-system gnu-build-system)
-    (arguments
-     '(#:phases (modify-phases
-                    %standard-phases
-                    (delete 'configure)
-                    (delete 'check)
-                    (delete 'build)
-                    (delete 'patch-shebangs)
-		    (replace 'install
-                             (lambda _
-                               (let*
-                                   ((bin-dir  (string-append %output "/bin"))
-                                    (src-dir  (string-append %output "/bin/src"))
-                                    (gbp-dir  (string-append %output "/bin/submodules/guile-bash-parallel"))
-                                    (oht-dir  (string-append %output "/bin/submodules/org-html-themes"))
-                                    (pyd-dir  (string-append %output "/bin/submodules/pydaemon"))
-                                    (sm-dir  (string-append %output "/bin/submodules"))
-                                    (bin-file (string-append bin-dir "/bcu.sh"))
-                                    (bash-full (assoc-ref %build-inputs "bash-full"))
-                                    (guile (assoc-ref %build-inputs "guile"))
-                                    )
-				 (for-each make-file-writable (find-files "." ".*\\.(sh|scm)"))
-				 (substitute* (find-files "." ".*\\.sh")
-					      (("#!.*")
-					       (string-append "#!" bash-full "/bin/bash\n")))
-				 (substitute* (find-files "." ".*\\.scm")
-					      (("#!.*")
-					       (string-append "#!" guile "/bin/guile \\\n")))
-                                 (substitute* (find-files "." ".*\\.py")
-					      (("#!.*")
-					       (string-append "#!" python "/bin/python \\\n")))
-                                                                 
-                                 (mkdir-p bin-dir)
-                                 (mkdir-p src-dir)
-                                 (copy-file "bcu.sh" bin-file)
-                                 (copy-recursively "src" src-dir)
-				 ;; (chdir (assoc-ref %build-inputs "source"))
-				 ;; (invoke "git" "submodule" "update" "--init" "--remote" "guile-bash-parallel")
-                                 (mkdir-p oht-dir)
-                                 (mkdir-p gbp-dir)
-                                 (mkdir-p pyd-dir)
-                                 (copy-recursively "submodules/guile-bash-parallel" gbp-dir)
-                                 (copy-recursively "submodules/org-html-themes" oht-dir)
-                                 (copy-recursively "submodules/pydaemon" pyd-dir)
-                                 (chmod bin-file #o700)))))))
-
-      ;; (build-system trivial-build-system)
-      ;; (arguments
-      ;;  `(#:modules ((guix build utils))
-      ;;    #:builder
-      ;;    (begin (use-modules (guix build utils))
-      ;;           (let* ((outbin (string-append (assoc-ref %outputs "out") "/bin"))
-      ;;                  (bcu (string-append (assoc-ref %build-inputs "source") "/bcu.sh"))
-      ;;                  (src (string-append (assoc-ref %build-inputs "source") "/src")))
-      ;;             (mkdir-p outbin)
-      ;;             (copy-file bcu (string-append outbin "/bcu.sh"))
-      ;;             (copy-recursively src (string-append outbin "/"))))))
-      
-                   ;; 'install
-                   ;;   (lambda _
-                   ;;     (let*
-                   ;;         ((bin-dir  (string-append %output "/bin"))
-                   ;;          (bin-file (string-append bin-dir "/prips")))
-                   ;;       (mkdir-p bin-dir)
-                   ;;       (copy-file "prips" bin-file)
-                   ;;       (chmod bin-file #o700))))))
-      ;;(inputs `(("git" ,git-minimal)))
-      (propagated-inputs `(("bash-full" ,bash)
-                           ;;("bindutils" ,bind:utils)
-                           ("coreutils" ,coreutils)
-                           ;;("ctypes.sh" ,ctypes.sh)
-                           ("bash-ctypes" ,bash-ctypes)
-                           ("curl" ,curl)
-                           ("expect" ,expect)
-                           ("gawk" ,gawk)
-                           ("grep" ,grep)
-                           ("guile" ,guile-3.0-latest)
-                           ("guile-daemon" ,guile-daemon)
-                           ("guile-bash" ,guile-bash)
-                           ("guile-base64" ,guile-base64)
-                           ("guile-csv" ,guile-csv)
-                           ("guile-bash-parallel" ,guile-bash-parallel)
-                           ("ipcalc" ,ipcalc)
-                           ("jq" ,jq)
-                           ("libxml2-xpath0" ,libxml2-xpath0)
-                           ;;("myphp" ,myphp)
-                           ("php" ,php)
-                           ("netcat" ,netcat) ;; for pydaemon
-                           ;;("orgmk" ,orgmk) ;; considered an optional dependency
-                           ("pcre/bin" ,pcre "bin")
-                           ("prips" ,prips)
-                           ("python" ,python)
-                           ("python-yq" ,python-yq)
-                           ("python-lxml" ,python-lxml)
-                           ("python-netaddr" ,python-netaddr)
-                           ("python-elementpath" ,python-elementpath)
-                           ("python-on-guile" ,python-on-guile)
-                           ("python-pip" ,python-pip)
-                           ("sed" ,sed)
-                           ("socat" ,socat) ;; for pydaemon
-                           ))
-      (synopsis "Prototype your program in Bash ")
-      (description "Prototype your program in Bash using great tools for JSON, XML and an FFI for Bash that let's you call C functions.")
-      (license license:expat))))
+;;     (license (list
+;;               (license:non-copyleft "file://LICENSE")       ; The PHP license.
+;;               (license:non-copyleft "file://Zend/LICENSE")  ; The Zend license.
+;;               license:lgpl2.1                               ; ext/mbstring/libmbfl
+;;               license:lgpl2.1+                              ; ext/bcmath/libbcmath
+;;               license:bsd-2                                 ; ext/fileinfo/libmagic
+;;               license:expat))))                              ; ext/date/lib
 
 (define-public orgmk
   (let ((commit "8eb40637e8b2b5452b3d3d8d82b8836f2b60f5ef")
@@ -563,8 +210,6 @@
                      (lambda* _
                         (let* ((out (assoc-ref %outputs "out"))
                                (out-bin (string-append out "/bin"))
-                               ;;(csvmod (string-append (assoc-ref %build-inputs "source") "/csv/csv.scm"))
-                               ;;(share (string-append out "/share/guile/site/2.2/csv")))
                                (bash (string-append (assoc-ref %build-inputs "bash") "/bin/bash"))
                                (cat (string-append (assoc-ref %build-inputs "cu") "/bin/cat"))
                                (src (string-append (assoc-ref %build-inputs "source")))
@@ -603,9 +248,8 @@
       (inputs `(("emacs" ,emacs)
                 ("cu" ,coreutils)
                 ("bash" ,bash)))
-      (propagated-inputs `(("guile" ,guile-2.2)))
-      (synopsis "csv to sxml and the other way around")
-      (description "csv functions for guile")
+      (synopsis "export html and the rest from org-files via cli")
+      (description "export html and the rest from org-files via cli")
       (license license:expat))))
 
 (define-public python-on-guile
@@ -668,7 +312,7 @@ from @code{tree-il}.")
   (let ((commit "da7180a94d2add0873002c9b57dd393111d9781f")
         (revision "3"))
     (package
-      (name "python-on-guile3")
+      (name "python-on-guile")
       (version (git-version "0.1.0" revision commit))
       (source (origin
                 (method git-fetch)
@@ -827,64 +471,144 @@ supports backtracking and a small logical framework. The idea is to build up
 chunks that are memoized and there is no clear scanner/parser separation,
 chunks can be expressions as well as simple tokens.")
       (license license:lgpl2.0+))))
-;; (define-public python-yq
-;;   (package
-;;   (name "python-yq")
-;;   (version "2.10.0")
-;;   (source
-;;     (origin
-;;       (method url-fetch)
-;;       (uri (pypi-uri "yq" version))
-;;       (sha256
-;;         (base32
-;;           "0ims5q3kfykbyxdfwc3lsrhbcnpgdl56p5rfhpp8vhzi503jrbxb"))))
-;;   (build-system python-build-system)
-;;   (propagated-inputs
-;;     `(("python-argcomplete" ,python-argcomplete)
-;;       ("python-pyyaml" ,python-pyyaml)
-;;       ("python-setuptools" ,python-setuptools)
-;;       ("python-xmltodict" ,python-xmltodict)))
-;;   (native-inputs
-;;     `(("python-coverage" ,python-coverage)
-;;       ("python-flake8" ,python-flake8)
-;;       ("python-wheel" ,python-wheel)))
-;;   (home-page "https://github.com/kislyuk/yq")
-;;   (synopsis
-;;     "Command-line YAML/XML processor - jq wrapper for YAML/XML documents")
-;;   (description
-;;     "Command-line YAML/XML processor - jq wrapper for YAML/XML documents")
-;;   (license license:expat))
-;;   )
 
-(define-public python-coverage
-  (package
-   (name "python-coverage")
-   (version "5.0.3")
-   (source
-    (origin
-     (method url-fetch)
-     (uri (pypi-uri "coverage" version))
-     (sha256
-      (base32
-       "1vrg8panqw79pswg52ygbrff3wdnxarrd9qz6c64ah0c4h2cmbvp"))))
-  (build-system python-build-system)
-  (arguments
-   `(#:tests? #f))                    ; PyPI tarball lacks tests
-  (home-page
-   "https://github.com/nedbat/coveragepy")
-  (synopsis "Code coverage measurement for Python")
-  (description
-   "Code coverage measurement for Python")
-  (license license:asl2.0)))
+(define-public bash-bcu
+  (let ((commit "7046374017733531b823ff9db063e583a3e469ef")
+	(revision "2")
+        (pyver (version-major+minor (package-version python))))
+    (package
+      (name "bash-bcu")
+      (version "v0.1.5")
+      (home-page "https://gitlab.com/methuselah-0/bash-coding-utils.sh")      
+      (source (origin
+                (method git-fetch)
+                (uri (git-reference
+                      (commit commit)
+                      (url "https://gitlab.com/methuselah-0/bash-coding-utils.sh.git")
+		      (recursive? #t)))
+                (sha256
+                 (base32
+                  "1slyhxy9z3iiz3hy6hiyls0cphgjn967vgy3dvx0fjnn99wi5kpm"
+                  ))))
+      (inputs `(("bash-full" ,bash)
+                ("bindutils" ,isc-bind "utils")
+                ("coreutils" ,coreutils)
+                ("ctypes.sh" ,bash-ctypes)
+                ("curl" ,curl)
+                ("ed" ,ed)
+                ("expect" ,expect)
+                ("gawk" ,gawk)
+                ("grep" ,grep)
+                ("guile" ,guile-3.0)
+                ("guile-bash" ,guile-bash)
+                ("guile-daemon" ,guile-daemon)
+                ("ipcalc" ,ipcalc)
+                ("jq" ,jq)
+                ("libxml2-xpath0" ,libxml2-xpath0)
+                ("netcat" ,netcat) ;; for pydaemon
+                ("nmap" ,nmap)
+                ("orgmk" ,orgmk)         
+                ("pcre/bin" ,pcre "bin")
+                ("perl" ,perl)
+                ("php" ,php)
+                ("prips" ,prips)
+                ("python" ,python)
+                ("python-elementpath" ,python-elementpath)
+                ("python-lxml" ,python-lxml)
+                ("python-netaddr" ,python-netaddr)
+                ;;("python-on-guile" ,python-on-guile)
+                ("python-yq" ,python-yq)
+                ("sed" ,sed)
+                ("socat" ,socat)           ;; for pydaemon
+                ("util-linux" ,util-linux) ;; flock command
+                ;;("inetutils" ,inetutils) ;; ping command, but not the setuid verion
+                ))
+      (arguments
+       `(#:modules ((guix build utils))
+         #:builder
+         (begin
+           (use-modules (guix build utils))
+           (let* ((bashfull (assoc-ref %build-inputs "bash-full"))
+                  (guile-bash (assoc-ref %build-inputs "guile-bash"))
+                  (out (assoc-ref %outputs "out"))
+                  (bin (string-append out "/bin"))
+                  (libexec (string-append out "/libexec/bcu")))
+             ;; Everything but bcu.sh itself is only accessed internally by bcu.
+             (mkdir-p libexec)
+             (copy-recursively (assoc-ref %build-inputs "source") libexec)
+             ;; Create a bcu.sh wrapping script manually.
+             (mkdir-p bin)
+             (let* ((binfile (string-append bin "/bcu.sh"))
+                    (bcu-port (open-file binfile "a"))
+                    ;; Some python libraries needs added to PYTHONPATH
+                    (pylibsline (string-append (assoc-ref %build-inputs "python-elementpath") "/lib"
+                                               ":" (assoc-ref %build-inputs "python-lxml") "/lib"
+                                               ":" (assoc-ref %build-inputs "python-netaddr") "/lib"
+                                               ":" (assoc-ref %build-inputs "python") "/lib/python" ,pyver))
+                    (pathline (string-append bashfull "/bin"
+                                             ":" (assoc-ref %build-inputs "bindutils") "/bin"
+                                             ":" (assoc-ref %build-inputs "coreutils") "/bin"
+                                             ":" (assoc-ref %build-inputs "ctypes.sh") "/bin"
+                                             ":" (assoc-ref %build-inputs "curl") "/bin"
+                                             ":" (assoc-ref %build-inputs "ed") "/bin"
+                                             ":" (assoc-ref %build-inputs "expect") "/bin"
+                                             ":" (assoc-ref %build-inputs "gawk") "/bin"
+                                             ":" (assoc-ref %build-inputs "grep") "/bin"
+                                             ":" (assoc-ref %build-inputs "guile") "/bin"
+                                             ":" (assoc-ref %build-inputs "ipcalc") "/bin"
+                                             ":" (assoc-ref %build-inputs "jq") "/bin"
+                                             ":" (assoc-ref %build-inputs "libxml2-xpath0") "/bin"
+                                             ":" (assoc-ref %build-inputs "netcat") "/bin"
+                                             ":" (assoc-ref %build-inputs "nmap") "/bin"
+                                             ":" (assoc-ref %build-inputs "orgmk") "/bin"
+                                             ":" (assoc-ref %build-inputs "pcre/bin") "/bin"
+                                             ":" (assoc-ref %build-inputs "perl") "/bin"
+                                             ":" (assoc-ref %build-inputs "php") "/bin"
+                                             ":" (assoc-ref %build-inputs "prips") "/bin"
+                                             ":" (assoc-ref %build-inputs "python") "/bin"
+                                             ":" (assoc-ref %build-inputs "python-yq") "/bin"
+                                             ":" (assoc-ref %build-inputs "sed") "/bin"
+                                             ":" (assoc-ref %build-inputs "socat") "/bin"
+                                             ":" (assoc-ref %build-inputs "util-linux") "/bin")))
+               (display (string-append "#!" bashfull "/bin/bash\n") bcu-port)
+               (display (string-append "[[ \"$_BCU_SH_LOADED\" == YES ]] || { \nexport PATH=\""
+                                       pathline "${PATH:-:}${PATH}\"\nexport PYTHONPATH=\""
+                                       pylibsline "${PYTHONPATH:-:}${PYTHONPATH}\"\n}\n") bcu-port)
+               (display (string-append "source " libexec "/bcu.sh\n") bcu-port)
+               (close-port bcu-port)
+               (chmod binfile #o555)
+               (setenv "PATH" (string-append pathline ":" (getenv "PATH"))))
+             (for-each (lambda (file)
+                         (substitute* file
+	                   (("~/\\.guix-profile/lib/bash/libguile-bash\\.so")
+		            (string-append guile-bash "/lib/bash/libguile-bash.so"))))
+                       (find-files out ".*\\.sh"))
+             (for-each (lambda (file)
+                         (patch-shebang file))
+                       (find-files out ".*\\.sh"))
+             ;; \"$GUIX_PROFILE\"/lib/bash/libguile-bash.so
+             ;; (substitute* (find-files "." ".*\\.sh")
+	     ;;   (("\"$GUIX_PROFILE\"/lib/bash/libguile-bash\\.so")
+	     ;;    (string-append guile-bash "/lib/bash/libguile-bash.so")))
 
+             ;; (lambda _
+             ;;   (substitute* (find-files ".")
+	     ;;     (;;("/\\.guix-profile/lib/bash/libguile-bash\\.so")
+             ;;      ("libguile-bash")
+	     ;;      (string-append guile-bash "/lib/bash/libguile-bash.so")))
+             ;;   #t)
+             ))))
+      (build-system trivial-build-system)
+      (synopsis "Prototype your program in Bash")
+      (description "Bash-bcu contains bash functions and wrappers that can be commonly used when writing a quick implementation of a new program. It helps you work with JSON, XML, parallelization and installs the most commonly used \"helper\" programs used in Bash scripting. Just run @command{. bcu.sh}, type @ccommand{bcu__}, hit @command{TAB} to see available functions and give any of them the @command{ --help} flag to see how to use it, or run @command{bcu__docs} for the full html documentation.")
+      (license license:gpl3))))
 ;;guile-persist
 ;;guile-stis-parser
 ;;python-on-guile
-;;orgmk
-;;bash-coding-utils.sh
 ;;guile-bash-parallel
 ;;myphp
 ;;guile-bash2.2
 ;;guile-base64
-;;ctypes.sh
-;;libxml2-xpath0
+;;orgmk
+;;bash-coding-utils.sh
+bash-bcu

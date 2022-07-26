@@ -178,8 +178,9 @@
        ;;       (zero? (system* "py.test" "-v")))))
     (native-inputs
      `(("python-pytest" ,python-pytest)
-       ("python-testpath" ,python-testpath-0.4.4)
+       ("python-testpath" ,python-testpath)
        ))
+    (inputs `(("python-testpath" ,python-testpath)))
     (propagated-inputs
      `(("python-bleach" ,python-bleach)
        ("python-entrypoints" ,python-entrypoints)
@@ -189,7 +190,7 @@
        ("python-mistune" ,python-mistune)
        ("python-nbformat" ,python-nbformat)
        ("python-pygments" ,python-pygments)
-       ("python-testpath" ,python-testpath-0.4.4)
+       ("python-testpath" ,python-testpath)
        ("python-pandocfilters" ,python-pandocfilters)
        ("python-traitlets" ,python-traitlets)))
     (home-page "http://jupyter.org")
@@ -1715,4 +1716,3 @@ for Python.  The design goals are:
 ;;python-prance
 ;;python-xdis
 ;;python-uncompyle6
-

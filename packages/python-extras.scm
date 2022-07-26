@@ -515,7 +515,7 @@ tools for mocking system commands and recording calls to those.")
     (propagated-inputs
      `(("python-ipython" ,python-ipython)
        ("python-traitlets" ,python-traitlets)
-       ("python-testpath" ,python-testpath-0.4.4)
+       ("python-testpath" ,python-testpath)
        ("python-widgetsnbextension" ,python-widgetsnbextension-next)))
     (native-inputs
      `(("python-nose" ,python-nose)
@@ -549,7 +549,7 @@ in the data.")
     (arguments '(#:tests? #f))
     (propagated-inputs
      `(("python-ipykernel" ,python-ipykernel)
-       ("python-testpath" ,python-testpath-0.4.4)
+       ("python-testpath" ,python-testpath)
        ("python-notebook" ,python-notebook-next)))
     (native-inputs
      `(("python-certifi" ,python-certifi)
@@ -919,19 +919,19 @@ simulation, statistical modeling, machine learning and much more.")
 (define-public python-pandoc
   (package
     (name "python-pandoc")
-    (version "1.0.2")
+    (version "2.2")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "pandoc" version))
         (sha256
           (base32
-            "1zdi2xbc7zhmi4zd7qsxjn0dr2ialj63fqsbqxsvx0vm29gzcm0v"))))
+            "07kfzq2f35lnmnqz8mjcqa3m296r5a8i8fng2q7h2q975wjywqyh"))))
     (build-system python-build-system)
     ;; python setup.py test fails with "error: [Errno 2] No such file or directory: '/tmp/guix-build-python-pandoc-1.0.2.drv-0/pandoc-1.0.2/pandoc/definitions/1.16.hs'" so disabling it.
     (arguments '(#:tests? #f))
     
-    (propagated-inputs `(("python-ply" ,python-ply)))
+    (propagated-inputs `(("python-ply" ,python-ply)("python-plumbum" ,python-plumbum)))
     (home-page "https://github.com/boisgera/pandoc")
     (synopsis "Pandoc Documents for Python")
     (description "Pandoc Documents for Python")
@@ -957,7 +957,7 @@ simulation, statistical modeling, machine learning and much more.")
        ))
     (propagated-inputs
       `(("python-nbconvert" ,python-nbconvert-5.6.1)
-        ("python-testpath" ,python-testpath-0.4.4)
+        ("python-testpath" ,python-testpath)
         ("python-pandoc" ,python-pandoc)))
     (home-page "https://github.com/ahrenberg/nbcorg")
     (synopsis "An nbconvert orgmode-exporter")
@@ -1166,7 +1166,7 @@ simulation, statistical modeling, machine learning and much more.")
         ("python-sphinx" ,python-sphinx)
         ("python-sphinxcontrib-github-alt"
          ,python-sphinxcontrib-github-alt)
-        ("python-testpath" ,python-testpath-0.4.4)
+        ("python-testpath" ,python-testpath)
         ("python-zipfile36" ,python-zipfile36)))
     (home-page "https://github.com/takluyver/flit")
     (synopsis

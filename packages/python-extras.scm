@@ -792,6 +792,8 @@ simulation, statistical modeling, machine learning and much more.")
     (build-system python-build-system)
     ;; you are supposed to modify the test phase here and give it python setup.py ['xdis', 'xdis.bin', 'xdis.codetype', 'xdis.dropbox', 'xdis.opcodes'] according to the build log failure, but no time for that currently...
     (arguments '(#:tests? #f))
+    (inputs
+     `(("click" ,python-click)))
     (home-page
       "https://github.com/rocky/python-xdis/")
     (synopsis
@@ -1709,3 +1711,4 @@ for Python.  The design goals are:
 ;;python-marshmallow-3.2
 ;; python-mysqlclient
 ;;python-prance
+;;python-xdis

@@ -892,18 +892,40 @@ simulation, statistical modeling, machine learning and much more.")
       "Format a simple (i.e. not nested) list into aligned columns.")
     (license license:expat)))
 
+(define-public python-term-background
+  (package
+    (name "python-term-background")
+    (version "1.0.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "https://github.com/rocky/shell-term-background/archive/refs/tags/" version ".tar.gz"))
+       (sha256
+        (base32 "1a3pchxwqv23b78m58abkb47z9bh769pw3kvcmwf04f3zbg83465"))))
+    (build-system python-build-system)
+    (home-page
+     "http://github.com/rocky/shell-term-background")
+    (synopsis
+      "Check if terminal has light or dark background")
+    (description
+      "Check if terminal has light or dark background")
+    (license license:gpl2)
+    )
+  )
+
 (define-public python-trepan3k
   (package
     (name "python-trepan3k")
-    (version "1.0.2")
+    (version "1.2.8")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "trepan3k" version))
         (sha256
           (base32
-            "04zvqf4f6r6hjyifaypvssd5rwhcb3a2x3zay9igpvxs1npcsfqv"))))
+            "15868c3z7l5x8nlq84979i87szscg99d23k53vm4r6wljc598ryy"))))
     (build-system python-build-system)
+    (arguments `(#:tests? #f))
         (native-inputs
      `(("python-click" ,python-click)
 ;;       ("python-nose" ,python-nose)
@@ -918,6 +940,7 @@ simulation, statistical modeling, machine learning and much more.")
         ("python-spark-parser" ,python-spark-parser)
         ("python-tracer" ,python-tracer)
         ("python-uncompyle6" ,python-uncompyle6)
+        ("python-term-background" ,python-term-background)
         ("python-xdis" ,python-xdis)))
     (home-page
       "http://github.com/rocky/python3-trepan/")
@@ -1704,7 +1727,7 @@ for Python.  The design goals are:
 ;;python-nbconvert-5.6.1
 ;;python-defusedxml
 ;;python-testpath-0.4.4
-;;python-trepan3k
+python-trepan3k
 ;; should load uncompyl6 which should load unpyc3
 ;;python-nbcorg
 ;;python-unpyc3

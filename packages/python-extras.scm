@@ -808,21 +808,32 @@ simulation, statistical modeling, machine learning and much more.")
 (define-public python-pyficache
   (package
     (name "python-pyficache")
-    (version "2.0.1")
+    (version "2.3.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "pyficache" version))
         (sha256
           (base32
-            "0fmpd3yl8fa3n0683kqc0shnbjcvlkh1fz6p9dryb6vga3ws4qls"))))
+            "0m33nsznbad21z330pdxwqjsby9w5ykih8bwfj369vs47w9331xc"))))
     (build-system python-build-system)
+
+     (arguments '(#:tests? #f))
+     ;; `(;; network tests so disabling
+     ;;   #:phases
+     ;;   (modify-phases %standard-phases
+     ;;     (add-before 'check 'set-home
+     ;;       (lambda* (#:key inputs outputs #:allow-other-keys)
+     ;;         (setenv "HOME" "/tmp"))
+     ;;       ) ) ) )
     (native-inputs
      `(("python-nose" ,python-nose)
        ))    
     (propagated-inputs
       `(("python-pygments" ,python-pygments)
-        ("python-xdis" ,python-xdis)))
+        ("python-xdis" ,python-xdis)
+        ("python-xdis" ,python-six)
+        ("python-click" ,python-click)))
     (home-page
       "http://github.com/rocky/python-filecache")
     (synopsis
@@ -1716,3 +1727,4 @@ for Python.  The design goals are:
 ;;python-prance
 ;;python-xdis
 ;;python-uncompyle6
+;;python-pyficache

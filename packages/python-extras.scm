@@ -598,6 +598,7 @@ notebooks.")
        ("python-nbconvert" ,python-nbconvert-5.6.1)
        ("python-prometheus-client" ,python-prometheus-client)
        ("python-send2trash" ,python-send2trash)
+       ("python-ipykernel" ,python-ipykernel)       
        ("python-terminado" ,python-terminado)))
     (native-inputs
      `(("python-nose" ,python-nose)
@@ -1727,7 +1728,7 @@ for Python.  The design goals are:
 ;;python-nbconvert-5.6.1
 ;;python-defusedxml
 ;;python-testpath-0.4.4
-python-trepan3k
+;;python-trepan3k
 ;; should load uncompyl6 which should load unpyc3
 ;;python-nbcorg
 ;;python-unpyc3
@@ -1751,3 +1752,4 @@ python-trepan3k
 ;;python-xdis
 ;;python-uncompyle6
 ;;python-pyficache
+;;python-notebook-next

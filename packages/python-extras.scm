@@ -704,14 +704,14 @@ simulation, statistical modeling, machine learning and much more.")
 (define-public python-uncompyle6
   (package
     (name "python-uncompyle6")
-    (version "3.7.0")
+    (version "3.8.0")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "uncompyle6" version))
         (sha256
           (base32
-            "0d014bdmiyg6x170xyysv6c87p13b17vhafbgfhjvf6niv95s3fb"))))
+            "053hh6mmllzwl7ndlf8fkiizr3yp6h4j4zhqg0z1zz3dixhk61k2"))))
     (build-system python-build-system)
     ;; according to CircleCI definition tests are done in a special (and doesnt even work as of 2020-06-04 anyway)
     (arguments '(#:tests? #f))
@@ -719,6 +719,7 @@ simulation, statistical modeling, machine learning and much more.")
      `(("python-click" ,python-click)
        ("python-nose" ,python-nose)
        ("python-unpyc3" ,python-unpyc3)
+       ("six" ,python-six)
        ))
     (propagated-inputs
      `(("python-spark-parser" ,python-spark-parser)
@@ -781,19 +782,20 @@ simulation, statistical modeling, machine learning and much more.")
 (define-public python-xdis
   (package
     (name "python-xdis")
-    (version "4.6.1")
+    (version "6.0.4")
     (source
       (origin
         (method url-fetch)
         (uri (pypi-uri "xdis" version))
         (sha256
           (base32
-            "04q3kdwjr2c5c5vw31sdrdmpvvgjzxjbnxhisr1wrxxh0lx1glk4"))))
+            "1f7zmr1dzfsw2gdzvnb8qfd2if2h7yjxnvfzbcgk7a0fz8y4bi8v"))))
     (build-system python-build-system)
     ;; you are supposed to modify the test phase here and give it python setup.py ['xdis', 'xdis.bin', 'xdis.codetype', 'xdis.dropbox', 'xdis.opcodes'] according to the build log failure, but no time for that currently...
     (arguments '(#:tests? #f))
     (inputs
-     `(("click" ,python-click)))
+     `(("click" ,python-click)
+       ("six" ,python-six)))
     (home-page
       "https://github.com/rocky/python-xdis/")
     (synopsis
@@ -1712,3 +1714,5 @@ for Python.  The design goals are:
 ;; python-mysqlclient
 ;;python-prance
 ;;python-xdis
+;;python-uncompyle6
+

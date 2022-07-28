@@ -1783,9 +1783,10 @@ style and key ordering are kept, so you can diff the source.")
   (build-system python-build-system)
   ;; network tests fail
   (arguments '(#:tests? #f))
-  (propagated-inputs (list python-chardet python-click-7 python-openapi-spec-validator python-requests python-ruamel.yaml-next
+  (propagated-inputs (list python-chardet python-openapi-spec-validator python-requests python-ruamel.yaml-next
                            python-semver-2.13 python-six))
   (native-inputs (list python-bumpversion
+                       python-click-7
                        python-pytest
                        python-pytest-cov
                        python-sphinx
@@ -1932,4 +1933,3 @@ for Python.  The design goals are:
 ;;python-nbdev-org-babel
 ;;python-openapi-spec-validator
 ;;python-prance
-

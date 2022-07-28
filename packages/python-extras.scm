@@ -14,6 +14,7 @@
   #:use-module (gnu packages monitoring) ;; python-prometheus-client
   #:use-module (gnu packages xml) ;; python-defusedxml
   #:use-module (gnu packages python-web) ;; python-terminado
+  #:use-module (gnu packages serialization) ;; python-sphinx  
   #:use-module (gnu packages sphinx) ;; python-sphinx
   #:use-module (gnu packages textutils) ;; python-pandocfilters
   #:use-module (gnu packages python-crypto) ;; python-certifi

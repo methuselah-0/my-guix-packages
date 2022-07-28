@@ -185,6 +185,7 @@
      `(("python-bleach" ,python-bleach)
        ("python-entrypoints" ,python-entrypoints)
        ("python-defusedxml" ,python-defusedxml)
+       ("python-ipython-genutils" ,python-ipython-genutils)       
        ("python-jinja2" ,python-jinja2)
        ("python-jupyter-core" ,python-jupyter-core)
        ("python-mistune" ,python-mistune)

@@ -1573,7 +1573,7 @@ simulation, statistical modeling, machine learning and much more.")
     (description "Flake8 lint for quotes.")
     (license license:expat)))
 
-(define-public python-flak8-polyfill
+(define-public python-flake8-polyfill
   (package
     (name "python-flake8-polyfill")
     (version "1.0.2")

@@ -1609,6 +1609,54 @@ simulation, statistical modeling, machine learning and much more.")
 plugins that intend to support Flake8 2.x and 3.x simultaneously.")
     (license license:expat)))
 
+;; (define-public python2-vobject
+;;   (package
+;;     (inherit (package-with-python2
+;;               (strip-python2-variant python-vobject)))
+;;     (native-inputs `(("python2-setuptools" ,python2-setuptools)))))
+;; (define-public python2-vobject
+;;   (package-with-python2 python-vobject))
+
+;; (define-public python2-dateutil
+;;   (package
+;;     (name "python2-dateutil")
+;;     (version "2.8.2")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (pypi-uri "python-dateutil" version))
+;;        (sha256
+;;         (base32
+;;          "11iy7m4bp2lgfkcl0r6xzf34bvk7ppjmsyn2ygfikbi72v6cl8q1"))))
+;;     (build-system python-build-system)
+;;     (arguments
+;;      `(#:python ,python-2
+;;        #:phases (modify-phases %standard-phases
+;;                   (replace 'check
+;;                     (lambda _
+;;                       ;; Delete tests that depend on "freezegun" to avoid a
+;;                       ;; circular dependency.
+;;                       (delete-file "dateutil/test/test_utils.py")
+;;                       (delete-file "dateutil/test/test_rrule.py")
+
+;;                       ;; XXX: Fails to get timezone from /etc/localtime.
+;;                       (delete-file "dateutil/test/test_tz.py")
+
+;;                       (invoke "pytest" "-vv"))))))
+;;     (native-inputs
+;;      (list python2-pytest python2-pytest-cov python2-setuptools-scm))
+;;     (propagated-inputs
+;;      (list python2-six))
+;;     (home-page "https://dateutil.readthedocs.io/en/stable/")
+;;     (synopsis "Extensions to the standard datetime module")
+;;     (description
+;;      "The dateutil module provides powerful extensions to the standard
+;; datetime module, available in Python 2.3+.")
+;;     ;; The license was changed from the three-clause BSD license to a dual
+;;     ;; Apache 2.0/BSD-3 variant at 2017-12-01.  Some code is only available as
+;;     ;; BSD-3 still; but all new code is dual licensed (the user can choose).
+;;     (license (list license:bsd-3 license:asl2.0))))
+
 (define-public python-pep8-naming
   (package
     (name "python-pep8-naming")
@@ -1676,7 +1724,7 @@ plugins that intend to support Flake8 2.x and 3.x simultaneously.")
     (arguments '(#:tests? #f))
     (propagated-inputs
       `(("python-chardet" ,python-chardet)
-        ("python-pyyaml" ,python-pyyaml)
+        ("python-pyyaml" ,python-pyyaml-5)
         ("python-requests" ,python-requests)
         ("python-semver" ,python-semver-2.13)
         ("python-six" ,python-six)))
@@ -1791,4 +1839,5 @@ for Python.  The design goals are:
 ;;python-pyficache
 ;;python-notebook-next
 ;;python-pep8-naming
-
+;;python2-vobject
+;;python2-dateutil

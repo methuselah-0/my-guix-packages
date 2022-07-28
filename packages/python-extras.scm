@@ -155,7 +155,7 @@
 
 (define-public python-jinja2-3.0
   (package
-    (name "python-jinja2")
+    (name "python-jinja2-old")
     (version "3.0.3")
     (source
      (origin

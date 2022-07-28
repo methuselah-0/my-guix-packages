@@ -153,6 +153,35 @@
     "A fast way to turn your python function into a script")
   (license license:expat)))
 
+(define-public python-jinja2-3.0
+  (package
+    (name "python-jinja2")
+    (version "3.0.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "Jinja2" version))
+       (sha256
+        (base32
+         "1mvwr02s86zck5wsmd9wjxxb9iaqr17hdi5xza9vkwv8rmrv46v1"))))
+    (build-system python-build-system)
+    (arguments
+     '(#:phases (modify-phases %standard-phases
+                  (replace 'check
+                    (lambda* (#:key tests? #:allow-other-keys)
+                      (if tests?
+                          (invoke "pytest" "-vv")
+                          (format #t "test suite not run~%")))))))
+    (native-inputs (list python-pytest))
+    (propagated-inputs (list python-markupsafe))
+    (home-page "https://jinja.palletsprojects.com/")
+    (synopsis "Python template engine")
+    (description
+     "Jinja2 is a small but fast and easy to use stand-alone template engine
+written in pure Python.")
+    (license license:bsd-3))
+  )
+
 (define-public python-nbconvert-5.6.1
   (package
     (name "python-nbconvert")
@@ -186,7 +215,7 @@
        ("python-entrypoints" ,python-entrypoints)
        ("python-defusedxml" ,python-defusedxml)
        ("python-ipython-genutils" ,python-ipython-genutils)       
-       ("python-jinja2" ,python-jinja2)
+       ("python-jinja2" ,python-jinja2-3.0)
        ("python-jupyter-core" ,python-jupyter-core)
        ("python-mistune" ,python-mistune)
        ("python-nbformat" ,python-nbformat)
@@ -1842,3 +1871,5 @@ for Python.  The design goals are:
 ;;python-pep8-naming
 ;;python2-vobject
 ;;python2-dateutil
+;;python-jinja2-3.0
+

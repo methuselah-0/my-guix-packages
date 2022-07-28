@@ -9,6 +9,7 @@
   #:use-module (gnu packages time) ;; python-pytz is here
   #:use-module (gnu packages python-check) ;; python-coveralls is here
   #:use-module (gnu packages databases) ;; python-sqlalchemy is here
+  #:use-module (gnu packages flex)
   #:use-module (gnu packages python) ;; python-testpath to figure out python version, ;; because of complaints in /var/log/cuirass/evaluations/1.gz
   #:use-module (gnu packages check) ;; python-pytest
   #:use-module (gnu packages monitoring) ;; python-prometheus-client
@@ -1740,6 +1741,35 @@ plugins that intend to support Flake8 2.x and 3.x simultaneously.")
     "Python helper for Semantic Versioning (http://semver.org/)")
   (license license:bsd-3)))
 
+(define-public python-ruamel.yaml-next
+  (package
+    (name "python-ruamel.yaml-next")
+    (version "0.17.10")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "ruamel.yaml" version))
+       (sha256
+        (base32
+         "0rwywdbmy20qwssccydpaval2vq36825fiva374zf3vavkbchsqh"))))
+    (build-system python-build-system)
+    (native-inputs
+     (list python-pytest))
+    (propagated-inputs
+     (list python-ruamel.yaml.clib))
+    (arguments
+     `(;; TODO: Tests require packaging "ruamel.std.pathlib".
+       #:tests? #f))
+    (home-page "https://sourceforge.net/projects/ruamel-yaml/")
+    (synopsis "YAML 1.2 parser/emitter")
+    (description
+     "This package provides YAML parser/emitter that supports roundtrip
+preservation of comments, seq/map flow style, and map key order.  It
+is a derivative of Kirill Simonov's PyYAML 3.11.  It supports YAML 1.2
+and has round-trip loaders and dumpers.  It supports comments.  Block
+style and key ordering are kept, so you can diff the source.")
+    (license license:expat)))
+
 (define-public python-prance
   (package
   (name "python-prance")
@@ -1751,8 +1781,10 @@ plugins that intend to support Flake8 2.x and 3.x simultaneously.")
              (base32
               "03mhsjl3fd7r77r522l6ph8s3cb723lr9c7k8mk47hqli3pzw1nf"))))
   (build-system python-build-system)
-  (propagated-inputs (list python-chardet python-requests python-ruamel.yaml
-                           python-semver python-six))
+  ;; network tests fail
+  (arguments '(#:tests? #f))
+  (propagated-inputs (list python-chardet python-click-7 python-openapi-spec-validator python-requests python-ruamel.yaml-next
+                           python-semver-2.13 python-six))
   (native-inputs (list python-bumpversion
                        python-pytest
                        python-pytest-cov
@@ -1897,4 +1929,4 @@ for Python.  The design goals are:
 ;;python2-vobject
 ;;python2-dateutil
 ;;python-jinja2-3.0
-
+;;python-prance

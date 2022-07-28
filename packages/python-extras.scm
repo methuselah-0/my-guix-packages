@@ -1741,44 +1741,68 @@ plugins that intend to support Flake8 2.x and 3.x simultaneously.")
 
 (define-public python-prance
   (package
-    (name "python-prance")
-    (version "0.19.0")
-    (source
-      (origin
-        (method url-fetch)
-        (uri (pypi-uri "prance" version))
-        (sha256
-          (base32
-            "0ffpfny3z8v3g0drirm27qafafbbvbc4h5k8v7yiwirnh0vn9v46"))))
-    (build-system python-build-system)
-    (arguments '(#:tests? #f))
-    (propagated-inputs
-      `(("python-chardet" ,python-chardet)
-        ("python-pyyaml" ,python-pyyaml-5)
-        ("python-requests" ,python-requests)
-        ("python-semver" ,python-semver-2.13)
-        ("python-six" ,python-six)))
-    (native-inputs
-      `(("python-bumpversion" ,python-bumpversion)
-        ("python-flake8" ,python-flake8)
-        ("python-flake8-docstrings"
-         ,python-flake8-docstrings)
-        ("python-flake8-quotes" ,python-flake8-quotes)
-        ;;("python-pep8-naming" ,python-pep8-naming)
-        ;; to fix tests we add python-pytest-runner, however it still doesn't work so disabling tests.
-        ("python-pytest-runner" ,python-pytest-runner)
-        ("python-pytest" ,python-pytest)
-        ("python-pytest-cov" ,python-pytest-cov)
-        ("python-sphinx" ,python-sphinx)
-        ("python-towncrier" ,python-towncrier)
-        ("python-tox" ,python-tox)))
-    (home-page
-      "https://github.com/jfinkhaeuser/prance")
-    (synopsis
-      "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser")
-    (description
-      "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser")
-    (license #f)))
+  (name "python-prance")
+  (version "0.21.8.0")
+  (source (origin
+            (method url-fetch)
+            (uri (pypi-uri "prance" version))
+            (sha256
+             (base32
+              "03mhsjl3fd7r77r522l6ph8s3cb723lr9c7k8mk47hqli3pzw1nf"))))
+  (build-system python-build-system)
+  (propagated-inputs (list python-chardet python-requests python-ruamel.yaml
+                           python-semver python-six))
+  (native-inputs (list python-bumpversion
+                       python-pytest
+                       python-pytest-cov
+                       python-sphinx
+                       python-towncrier
+                       python-tox))
+  (home-page "https://github.com/RonnyPfannschmidt/prance")
+  (synopsis "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser")
+  (description "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser")
+  (license #f)))
+
+;; (define-public python-prance
+;;   (package
+;;     (name "python-prance")
+;;     (version "0.19.0")
+;;     (source
+;;       (origin
+;;         (method url-fetch)
+;;         (uri (pypi-uri "prance" version))
+;;         (sha256
+;;           (base32
+;;             "0ffpfny3z8v3g0drirm27qafafbbvbc4h5k8v7yiwirnh0vn9v46"))))
+;;     (build-system python-build-system)
+;;     (arguments '(#:tests? #f))
+;;     (propagated-inputs
+;;       `(("python-chardet" ,python-chardet)
+;;         ("python-pyyaml" ,python-pyyaml-5)
+;;         ("python-requests" ,python-requests)
+;;         ("python-semver" ,python-semver-2.13)
+;;         ("python-six" ,python-six)))
+;;     (native-inputs
+;;       `(("python-bumpversion" ,python-bumpversion)
+;;         ("python-flake8" ,python-flake8)
+;;         ("python-flake8-docstrings"
+;;          ,python-flake8-docstrings)
+;;         ("python-flake8-quotes" ,python-flake8-quotes)
+;;         ;;("python-pep8-naming" ,python-pep8-naming)
+;;         ;; to fix tests we add python-pytest-runner, however it still doesn't work so disabling tests.
+;;         ("python-pytest-runner" ,python-pytest-runner)
+;;         ("python-pytest" ,python-pytest)
+;;         ("python-pytest-cov" ,python-pytest-cov)
+;;         ("python-sphinx" ,python-sphinx)
+;;         ("python-towncrier" ,python-towncrier)
+;;         ("python-tox" ,python-tox)))
+;;     (home-page
+;;       "https://github.com/jfinkhaeuser/prance")
+;;     (synopsis
+;;       "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser")
+;;     (description
+;;       "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser")
+;;     (license #f)))
 
 (define-public python-apispec
   (package

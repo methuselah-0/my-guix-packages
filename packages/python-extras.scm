@@ -866,7 +866,7 @@ simulation, statistical modeling, machine learning and much more.")
       `(("python-pygments" ,python-pygments)
         ("python-xdis" ,python-xdis)
         ("python-xdis" ,python-six)
-        ("python-click" ,python-click)))
+        ("python-click" ,python-click-7)))
     (home-page
       "http://github.com/rocky/python-filecache")
     (synopsis
@@ -960,7 +960,7 @@ simulation, statistical modeling, machine learning and much more.")
     (build-system python-build-system)
     (arguments `(#:tests? #f))
         (native-inputs
-     `(("python-click" ,python-click)
+     `(("python-click" ,python-click-7)
 ;;       ("python-nose" ,python-nose)
 ;;       ("python-unpyc3" ,python-unpyc3)
        ))

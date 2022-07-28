@@ -432,7 +432,7 @@ tools for mocking system commands and recording calls to those.")
       ("ruby" ,ruby)
       ;; libffi is needed for jekyll that gets installed via bundler and Gemfile in the nbdev docs folder
       ("libffi" ,libffi)
-      ("python-pyyaml" ,python-pyyaml-5)))
+      ("python-pyyaml" ,python-pyyaml)))
    (home-page
     "https://github.com/methuselah-0/nbdev-org-babel")
    (synopsis
@@ -1895,7 +1895,6 @@ for Python.  The design goals are:
 ;;python-nbcorg
 ;;python-pandoc
 ;;python-pydotplus
-;;python-nbdev-org-babel
 ;;jupyter-next
 ;;python-nbconvert-5.6.1
 ;;python-defusedxml
@@ -1929,4 +1928,8 @@ for Python.  The design goals are:
 ;;python2-vobject
 ;;python2-dateutil
 ;;python-jinja2-3.0
+
+;;python-nbdev-org-babel
+;;python-openapi-spec-validator
 ;;python-prance
+

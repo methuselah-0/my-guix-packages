@@ -635,7 +635,7 @@ interactive computing.")
        ("python-jupyter-console" ,python-jupyter-console)
        ("python-nbconvert" ,python-nbconvert-5.6.1)
        ("python-notebook" ,python-notebook-next)
-       ("python-prompt-toolkit" ,python-prompt-toolkit-2)
+       ("python-prompt-toolkit" ,python-prompt-toolkit)
        ("python-qtconsole" ,python-qtconsole)))
     (native-search-paths
      (list (search-path-specification

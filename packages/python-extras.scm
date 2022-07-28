@@ -400,7 +400,7 @@ tools for mocking system commands and recording calls to those.")
       ("ruby" ,ruby)
       ;; libffi is needed for jekyll that gets installed via bundler and Gemfile in the nbdev docs folder
       ("libffi" ,libffi)
-      ("python-pyyaml" ,python-pyyaml)))
+      ("python-pyyaml" ,python-pyyaml-5)))
    (home-page
     "https://github.com/methuselah-0/nbdev-org-babel")
    (synopsis

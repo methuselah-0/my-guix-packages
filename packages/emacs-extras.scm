@@ -11,17 +11,16 @@
 (define-public emacs-flycheck-pycheckers
   (package
    (name "emacs-flycheck-pycheckers")
-   (version "20200428.40")
+   (version "0.15")
    (source
     (origin
-     (method url-fetch)
-     (uri (string-append
-           "https://melpa.org/packages/flycheck-pycheckers-"
-           version
-           ".tar"))
+     (method git-fetch)
+     (uri (git-reference
+	    (commit "56965c0ef5d45bcef90093360718c6967ce4ef39")
+	    (url "https://github.com/msherry/flycheck-pycheckers.git")))
      (sha256
       (base32
-       "08ww2vn73p09qkr67pdvwj58vgrljfkzph1ppqlppjwb4y8x93a2"))))
+       "0dfsqgvmnikza9g3wjq1sclflr640wkh37b3lm9g7r74wrrk8waz"))))
    (build-system emacs-build-system)
    (propagated-inputs
     `(("emacs-flycheck" ,emacs-flycheck)))
@@ -168,4 +167,3 @@ Note that these are implemented as modifying the values received by
   for flake8
 ")
    (license license:expat))) ;; wrong license
-;;emacs-flycheck-pycheckers

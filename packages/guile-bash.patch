@@ -1,0 +1,42 @@
+From a124921666a16cb4e93f59a653f98b99c78eb2ca Mon Sep 17 00:00:00 2001
+From: David Larsson <david.larsson@selfhosted.xyz>
+Date: Thu, 11 Nov 2021 14:07:04 +0100
+Subject: [PATCH] Enable reading arguments from bash via stdin
+
+* lisp/gnu/bash.scm(define-bash-function): read from stdin
+to SCM_ARGS array when it is open, and separate args by null
+instead of newline if -z option is passed as $1.
+---
+ lisp/gnu/bash.scm | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/lisp/gnu/bash.scm b/lisp/gnu/bash.scm
+index 199ebc0..e9dcea5 100644
+--- a/lisp/gnu/bash.scm
++++ b/lisp/gnu/bash.scm
+@@ -326,10 +326,18 @@
+       (hashq-set! *funcs* symbol thunk)
+       (unsafe-format/eval
+        "function ~a {
+-            SCM_ARGS=($@)    ;
+-            local retval=$~a ;
+-            unset SCM_ARGS   ;
+-            return $retval   ;
++            local -a Input SCM_ARGS                                          ;
++            [[ ! -t 0 ]] && mapfile -d '' Input                              ;
++            if [[ -n \"${Input[@]}\" ]]; then
++                if [[ \"$1\" == -z ]]; then
++                    local -a SCM_ARGS=\"(${Input[*]@Q})\"                    ;
++                else
++                    mapfile -t SCM_ARGS < <(printf '%s' \"${Input[@]}\"); fi ;
++            else
++                SCM_ARGS=(\"$@\"); fi                                        ;
++            local retval=$~a                                                 ;
++            unset SCM_ARGS                                                   ;
++            return $retval                                                   ;
+        }"
+        symbol special-varname))))
+ 
+-- 
+2.31.0
+

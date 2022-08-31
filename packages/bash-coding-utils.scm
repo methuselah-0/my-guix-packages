@@ -1,5 +1,13 @@
 (define-module (bash-coding-utils)
   #:use-module (gnu packages admin) ;; netcat
+  #:use-module (gnu packages bootstrap)
+  #:use-module (gnu packages elf)
+  #:use-module (gnu packages file)
+  #:use-module (gnu packages freedesktop)
+  #:use-module (gnu packages gtk)
+  #:use-module (gnu packages lsof)
+  #:use-module (gnu packages ncurses)
+
   #:use-module (gnu packages aspell)
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages base)
@@ -43,9 +51,20 @@
   #:use-module (gnu packages web)  
   #:use-module (gnu packages xml)  
   #:use-module (gnu packages xorg)
+
+  #:use-module (guix utils)
+  #:use-module (guix gexp)
+  #:use-module (guix monads)
+  #:use-module (guix store)
+
+  #:use-module (srfi srfi-1)
+  #:use-module (srfi srfi-26)
+  #:use-module (ice-9 format)
+
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix git-download)
+  #:use-module (guix build-system copy)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system guile)
   #:use-module (guix build-system python)
@@ -472,6 +491,444 @@ chunks that are memoized and there is no clear scanner/parser separation,
 chunks can be expressions as well as simple tokens.")
       (license license:lgpl2.0+))))
 
+(define-public guile-bash-for-bash-coding-utils
+  (let ((commit "1eabc563ca5692b3e08d84f1f0e6fd2283284469")
+        (revision "0"))
+    (package
+      (inherit guile2.0-bash)
+      (version (string-append "0.1.6-" revision "." (string-take commit 7)))
+      (home-page (package-home-page guile2.0-bash))
+      (name "guile-bash-for-bash-coding-utils")
+      (source (origin
+                (method git-fetch)
+                (uri (git-reference
+                      (commit commit)
+                      (url home-page)))
+                (sha256
+                 (base32
+                  "097vny990wp2qpjij6a5a5gwc6fxzg5wk56inhy18iki5v6pif1p"))
+                (file-name (string-append name "-" version "-checkout"))
+                (patches (list (string-append (dirname (current-filename)) "/guile-bash.patch")))))
+      (inputs
+       `(("guile" ,guile-3.0-latest)
+         ,@(assoc-remove! (package-inputs guile2.0-bash) "guile")))
+      (propagated-inputs (list bash))
+      (arguments
+       `(#:tests? #f
+         #:phases (modify-phases %standard-phases
+                    (add-after 'install 'install-guile
+                      (lambda* (#:key inputs outputs #:allow-other-keys)
+                        (copy-recursively
+                         (string-append (assoc-ref outputs "out")
+                                        (assoc-ref inputs "guile") "/share")
+                         (string-append (assoc-ref outputs "out") "/share"))
+                      #t)))
+         ,@(package-arguments guile2.0-bash))))))
+
+(define org-html-themes/methuselah-0
+  ;; XXX Bundles jquery and several other .js ‘libraries’ — problem?
+  ;; XXX A form of https://github.com/fniessen/org-html-themes but not
+  ;; drop-in compatible (using that would break the BCU docs).
+  ;; ‘Ideally’ we'd re-render them but uugh.
+  (let ((commit "8fff1d4c0879537b81f94d157a8c36485c790ee5")
+        (revision "0"))
+    (package
+      (name "org-html-themes")
+      (version (git-version "0.0.0" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (commit commit)
+               (url "https://gitlab.com/methuselah-0/org-html-themes.git")))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32 "1hddgfdry8r65a5zqm1pc0rgicv78ls6giavfr5g0rzx428i1j45"))))
+      (build-system copy-build-system)
+      (home-page "https://github.com/fniessen/org-html-themes") ; XXX
+      (synopsis "Export Org mode files to HTML")
+      (description
+       "The Org-HMTL framework provides cross-browser themes for exporting Org
+documents to cross-browser HTML mark-up.")
+      (license license:cc-by-sa3.0))))
+
+(define-public pydaemon
+  (let ((commit "dae2798a2c1caa56025c6da69c0d464f70d9c79a")
+        (revision "0"))
+    (package
+      (name "pydaemon")
+      (version (git-version "0.0.0" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (commit commit)
+               (url "https://gitlab.com/methuselah-0/pydaemon.git")))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32 "1cbg48ljyjqw1vxcb0sqhg9cxx0vgs6ggsdg8yvj441s6gakp2sh"))))
+      (build-system trivial-build-system)
+
+      (inputs (list coreutils netcat python socat util-linux))
+      (arguments
+       (list #:modules '((guix build utils))
+             #:builder
+             #~(begin
+                 (use-modules (guix build utils))
+                   (with-directory-excursion #$(package-source this-package)
+                     (mkdir-p (string-append (assoc-ref %outputs "out") "/bin"))
+                     (copy-file "pydaemon.py"
+                                (string-append (assoc-ref %outputs "out") "/bin/pydaemon.py"))
+                     (copy-file "py-net-daemon.py"
+                                (string-append (assoc-ref %outputs "out") "/bin/py-net-daemon.py"))
+                     (copy-file "pydaemon.sh"
+                                (string-append (assoc-ref %outputs "out") "/bin/pydaemon.sh"))
+
+                     (substitute* (find-files (string-append #$output "/bin") "\\.sh$")
+                       (("(flock) " library _)
+                        (string-append #$(this-package-input "util-linux") "/bin/" library))
+                       (("(socat) " library _)
+                        (string-append #$(this-package-input "socat") "/bin/" library))
+                       (("(nc) " library _)
+                        (string-append #$(this-package-input "netcat") "/bin/" library))
+                       (("( )(mkdir|cat|sleep|chown|id|kill|dirname) " all pre command _)
+                        (string-append pre #$(this-package-input "coreutils") "/bin/" command " "))
+                       (("(\\()(mkdir|cat|sleep|chown|id|kill|dirname) " all pre command _)
+                        (string-append pre #$(this-package-input "coreutils") "/bin/" command " "))
+                       (("(python3) " library _)
+                        (string-append #$(file-append (this-package-input "python")
+                                                      "/bin/python"
+                                                      (version-major+minor
+                                                       (package-version
+                                                        (this-package-input
+                                                         "python"))))
+                                       " ")))))))
+      (home-page "https://gitlab.com/methuselah-0/pydaemon")
+      (synopsis "Use python from bash")
+      (description "With pydaemon you can pipe strings of python code to one
+or multiple persistent python processes that keeps state, and get the results
+back as strings.  Can be used over either of a unix or tcp socket.")
+      (license license:cc-by-sa3.0))))
+
+(define-public bash-coding-utils
+  (let ((commit "ce9e7a8910d7debe29a07b48aa0770913b1ecdaf")
+        (revision "0"))
+    (package
+      (name "bash-coding-utils")
+      (version (git-version "0.3.0" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri
+          (git-reference
+           (commit commit)
+           (url "https://git.sr.ht/~methuselah-0/bash-coding-utils")
+           (recursive? #t))          )
+         (sha256
+          (base32 "0hgj0fy66bj5kbjs02fvjp5n9a5sz32fk45rc3id2bs0b2k9jrnx"))
+         (file-name (git-file-name name version))))
+      (build-system trivial-build-system)
+      (arguments
+       (list #:modules '((guix build utils))
+             #:builder
+             #~(begin
+                 (use-modules (guix build utils)
+                              (ice-9 ftw)
+                              (ice-9 match)
+                              (srfi srfi-26))
+                 (let* ((bash #$(this-package-input "bash"))
+                        (bin (string-append #$output "/bin"))
+                        (bcu.sh (string-append bin "/bcu.sh"))
+                        (share (string-append #$output "/share"))
+                        (doc (string-append share "/doc/" #$name))
+                        ;; Everything but bcu.sh itself is only ever accessed
+                        ;; internally by bcu, so put it all in share/.
+                        (bcu-root (string-append share "/bcu"))
+                        ;; XXX We should honour the without-tests transformation!
+                        (tests? (not #$(%current-target-system))))
+
+                   ;; Copy the ‘source’ and submodules directly to the output.
+                   (let ((source #$(package-source this-package)))
+                     (with-directory-excursion source
+                       (mkdir-p bcu-root)
+                       (for-each (lambda (file)
+                                   (copy-recursively file
+                                                     (string-append bcu-root
+                                                                    "/" file)))
+                                 (list "bcu.sh"
+                                       "dependency_paths.sh"
+                                       "bcu-test.sh"
+                                       "docs"
+                                       "src"
+                                       "submodules"))
+                       ;; Moving docs/ out of bcu-root would break symlinks.
+                       (mkdir-p (dirname doc))
+                       (symlink (string-append bcu-root "/docs") doc)))
+
+                   ;; Patch absolute file name references.
+                   (let* ((original-path (getenv "PATH"))
+                          (shebang-inputs '(#$@(map (lambda (name)
+                                                      (this-package-input name))
+                                                    '("guile"
+                                                      "python"))))
+                          (shebang-path (string-join
+                                         (map (cut string-append <> "/bin")
+                                              (cons bash shebang-inputs))
+                                         ":")))
+                     (setenv "PATH" shebang-path)
+                     (for-each patch-shebang
+                               (find-files #$output "\\.(sh|scm|py)$"))
+                     (setenv "PATH" original-path))
+
+                   ;; Add paths to dependencies - defined in
+                   ;; dependency_paths.sh, except the libguile-bash.so
+                   ;; file.
+                   (substitute* (find-files #$output "\\.sh$")
+                     (("[^ ]*(/lib/bash/libguile-bash\\.so)" _ library)
+                      (string-append
+                       #$(this-package-input "guile-bash-for-bash-coding-utils")
+                       library)))
+
+                   ;; TODO: use a PCRE regex to substitute invocations of coreutils
+                   ;; commands
+                   ;; TODO: condense below substitutions?
+                   (substitute* (find-files #$output "dependency_paths\\.sh$")
+                     (("export BCUCTYPES=(ctypes.sh)" _ library)
+                      (string-append "export BCUCTYPES="
+                                     #$(this-package-input "bash-ctypes")
+                                     "/bin/" library))
+                     (("export BCUDIFF=(diff)" _ library)
+                      (string-append "export BCUDIFF="
+                                     #$(this-package-input "diffutils")
+                                     "/bin/" library))
+                     (("export BCUPING=(ping)" _ library)
+                      (string-append "export BCUPING=/run/setuid-programs/ping"))
+                     (("export BCUPS=(ps)" _ library)
+                      (string-append "export BCUPS="
+                                     #$(this-package-input "procps")
+                                     "/bin/" library))
+                     (("export BCUFILE=(file)" _ library)
+                      (string-append "export BCUFILE="
+                                     #$(this-package-input "findutils")
+                                     "/bin/" library))
+                     (("export BCUFIND=(find)" _ library)
+                      (string-append "export BCUFIND="
+                                     #$(this-package-input "findutils")
+                                     "/bin/" library))
+                     (("export BCUFLOCK=(flock)" _ library)
+                      (string-append "export BCUFLOCK="
+                                     #$(this-package-input "util-linux")
+                                     "/bin/" library))
+                     (("export BCUGAWK=(gawk)" _ library)
+                      (string-append "export BCUGAWK="
+                                     #$(this-package-input "gawk")
+                                     "/bin/" library))
+                     (("export BCUGREP=(grep)" _ library)
+                      (string-append "export BCUGREP="
+                                     #$(this-package-input "grep")
+                                     "/bin/" library))
+                     (("export GUILE_LOAD_PATH=(.*)$")
+                      (string-append "export GUILE_LOAD_PATH=\""
+                                     (string-join
+                                      '(#$@(map (lambda (name)
+                                                  (file-append (this-package-input name)
+                                                               "/share/guile/site/"
+                                                               (version-major+minor
+                                                                (package-version
+                                                                 (this-package-input
+                                                                  "guile")))))
+                                                '("guile-bash-for-bash-coding-utils")))
+                                      ":")
+                                     "${GUILE_LOAD_PATH:+:}${GUILE_LOAD_PATH}\"\n"))
+                     (("export BCUJQ=(jq)" _ library)
+                      (string-append "export BCUJQ="
+                                     #$(this-package-input "jq")
+                                     "/bin/" library))
+                     (("export BCULSOF=(lsof)" _ library)
+                      (string-append "export BCULSOF="
+                                     #$(this-package-input "lsof")
+                                     "/bin/" library))
+                     (("export BCUNMAP=(nmap)" _ library)
+                      (string-append "export BCUNMAP="
+                                     #$(this-package-input "nmap")
+                                     "/bin/" library))
+                     (("export BCUPCREGREP=(pcregrep)" _ library)
+                      (string-append "export BCUPCREGREP="
+                                     (assoc-ref %build-inputs "pcre:bin")
+                                     "/bin/" library))
+                     (("export BCUPERL=(perl)" _ library)
+                      (string-append "export BCUPERL="
+                                     #$(this-package-input "perl")
+                                     "/bin/" library))
+                     (("export BCUPHP=(php)" _ library)
+                      (string-append "export BCUPHP="
+                                     #$(this-package-input "php")
+                                     "/bin/" library))
+                     (("export BCUPS=(ps)" _ library)
+                      (string-append "export BCUPS="
+                                     #$(this-package-input "procps")
+                                     "/bin/" library))
+                     (("export BCUPYDAEMON=(pydaemon.sh)" _ library)
+                      (string-append "export BCUPYDAEMON="
+                                     #$(this-package-input "pydaemon")
+                                     "/bin/" library))
+                     (("export BCUPYTHONVERSION=(.*)$" _)
+                      (string-append "export BCUPYTHONVERSION="
+                                     #$(version-major+minor
+                                        (package-version
+                                         (this-package-input
+                                          "python")))))
+                     (("export BCUPYTHON=python(.*)$" _)
+                      (string-append "export BCUPYTHON="
+                                     #$(file-append (this-package-input "python")
+                                                    "/bin/python"
+                                                    (version-major+minor
+                                                     (package-version
+                                                      (this-package-input
+                                                       "python"))))
+                                     "\n"))
+                     (("export PYTHONPATH=.*" all)
+                      (string-append "export PYTHONPATH=\""
+                                     (string-join
+                                      '(#$@(map (lambda (name)
+                                                  (file-append (this-package-input name)
+                                                               "/lib/python"
+                                                               (version-major+minor
+                                                                (package-version
+                                                                 (this-package-input
+                                                                  "python")))
+                                                               "/site-packages"))
+                                                '("python"
+                                                  "python-elementpath"
+                                                  "python-lxml"
+                                                  "python-netaddr")))
+                                      ":")
+                                     "${PYTHONPATH:+:}${PYTHONPATH}\"\n"))
+                     (("export BCUSED=(sed)" _ library)
+                      (string-append "export BCUSED="
+                                     #$(this-package-input "sed")
+                                     "/bin/" library))
+                     (("export BCUSOCAT=(socat)" _ library)
+                      (string-append "export BCUSOCAT="
+                                     #$(this-package-input "socat")
+                                     "/bin/" library))
+                     (("export BCUTREE=(tree)" _ library)
+                      (string-append "export BCUTREE="
+                                     #$(this-package-input "tree")
+                                     "/bin/" library))
+                     (("export BCUWHICH=(which)" _ library)
+                      (string-append "export BCUWHICH="
+                                     #$(this-package-input "which")
+                                     "/bin/" library))
+                     (("export XDG_DATA_DIRS=(.*)$")
+                      (string-append
+                       "[[ -e /run/current-system/profile/share ]] && "
+                       "export XDG_DATA_DIRS="
+                       "/run/current-system/profile/share"
+                       "${XDG_DATA_DIRS:+:}${XDG_DATA_DIRS}\n"))
+                     (("export BCUXARGS=(xargs)" _ library)
+                      (string-append "export BCUXARGS="
+                                     #$(this-package-input "findutils")
+                                     "/bin/" library))
+                     (("export BCUXDGOPEN=(xdg-open)" _ library)
+                      (string-append "export BCUXDGOPEN="
+                                     #$(this-package-input "xdg-utils")
+                                     "/bin/" library))
+                     (("export BCUXMLLINT=(xmllint)" _ library)
+                      (string-append "export BCUXMLLINT="
+                                     #$(this-package-input "libxml2-xpath0")
+                                     "/bin/" library)))
+
+                   ;; Symlink to bcu.sh from the output bin directory.
+                   (mkdir-p bin)
+                   (symlink (string-append bcu-root "/bcu.sh") bcu.sh)
+                   (chmod bcu.sh #o555)
+
+                   ;; Disable network and gui tests, and one test for setopts which
+                   ;; doesn't work inside the Guix build environment.
+                   (with-output-to-file (string-append bcu-root "/disabled_tests.txt")
+                     (lambda _
+                       (format #t "~{~a~%~}"
+                               (list "ip_of_test_1"
+                                     "setopts_test_4"
+                                     "web_media_server_test_1"
+                                     "web_api_server_test_1"
+                                     "find_gui_test_1"))))
+
+                   ;; Set up a minimal test environment & run the tests.
+                   (when tests?
+                     (setenv "PATH" (string-append bin ":"
+                                                   bash "/bin:"
+                                                   (getenv "PATH")))
+                     (setenv "SHELL"
+                             (string-append bash "/bin/bash"))
+                     (for-each (lambda (test-input)
+                                 (setenv "PATH"
+                                         (string-append
+                                          (assoc-ref %build-inputs test-input)
+                                          "/bin:" (getenv "PATH"))))
+                               (list "coreutils"))
+                     (setenv "HOME" "/tmp")
+                     (with-directory-excursion bcu-root
+                       (invoke "./bcu-test.sh")
+                       ;; No need to keep passed tests in the final output
+                       (for-each delete-file
+                                 (list "bcu-test.sh"
+                                       "disabled_tests.txt"))))))))
+      (native-inputs
+       `( ;; org-html-themes is bundled upstream as a git submodule,
+         ;; but we package it separately and copy it manually above.
+         ("org-html-themes" ,(package-source org-html-themes/methuselah-0))
+         ("coreutils" ,coreutils) ;; Needed for tests.
+         ;; TODO: unable to get the correct hash for pcre:bin output using
+         ;; the new notation (see inputs list below)
+         ("pcre:bin" ,pcre "bin")))
+      (inputs (list bash
+                    bash-ctypes
+                    coreutils
+                    diffutils
+                    file
+                    findutils
+                    gawk
+                    grep
+                    guile-3.0
+                    guile-bash-for-bash-coding-utils
+                    jq
+                    libxml2-xpath0
+                    lsof
+                    nmap
+                    ;;`(,pcre "bin") ;; TODO doesn't work when calling
+                    ;; #$(this-package-input pcre)!
+                    perl
+                    php
+                    procps
+                    pydaemon
+                    python
+                    python-elementpath
+                    python-lxml
+                    python-netaddr
+                    python-yq
+                    sed
+                    socat
+                    tree
+                    which
+                    xdg-utils
+                    util-linux))
+      (propagated-inputs
+       `(("bash" ,bash))) ;; the bash shell needs to be the same version
+      ;;as guile-bash is compiled against
+      (home-page "https://git.sr.ht/~methuselah-0/bash-coding-utils")
+      (synopsis "Functions and tools for software prototyping in Bash")
+      (description
+       "Bash-Coding-Utils is a library of Bash functions and wrappers that can
+be useful when writing quick implementations of new programs.  It helps you
+work with JSON, XML, API's and parallelization, and installs some helper
+programs commonly used in Bash scripting.  Just run @command{. bcu.sh}, type
+@command{bcu__}, hit @key{TAB} to see available functions and give any of them
+the @code{--help} flag to see how to use it, or run @command{bcu__docs} for
+the full HTML documentation.")
+      (license license:gpl3))))
+
 (define-public bash-bcu
   (let ((commit "7046374017733531b823ff9db063e583a3e469ef")
 	(revision "2")
@@ -610,6 +1067,5 @@ chunks can be expressions as well as simple tokens.")
 ;;guile-bash2.2
 ;;guile-base64
 ;;orgmk
-;;bash-coding-utils.sh
+;;bash-coding-utils
 ;;bash-bcu
-

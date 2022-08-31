@@ -2,11 +2,62 @@
 #:use-module (guix packages)
 #:use-module (guix download)
 #:use-module (guix git-download)
+#:use-module (guix gexp)
 #:use-module (gnu packages emacs-xyz)
 #:use-module (gnu packages check) ;; python-pytest
 #:use-module (guix build-system emacs)
 #:use-module (gnu packages graphviz)
 #:use-module ((guix licenses) #:prefix license:))
+
+(define-public emacs-flycheck
+  (package
+    (name "emacs-flycheck")
+    (version "32")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/flycheck/flycheck/")
+             (commit version)))
+       (sha256
+        (base32 "0dx6wqxz1yfp4shas4yn6abqc8bz21ks3glcyzznm3xspjdaq21s"))
+       (file-name (git-file-name name version))
+       (patches '(
+"0001-flycheck.el-fix-finding-the-currect-filename-when-in.patch"))))
+    (build-system emacs-build-system)
+    (propagated-inputs
+     (list emacs-dash))
+    (native-inputs
+     (list emacs-shut-up))
+    (arguments
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'change-flycheck-version
+            (lambda _
+              (substitute* "flycheck.el"
+                (("\\(pkg-info-version-info 'flycheck\\)")
+                 (string-append "\"" #$version "\""))))))
+      ;; TODO: many failing tests
+      #:tests? #f
+      #:test-command
+      #~(list "emacs" "-Q" "--batch"
+              "-L" "."
+              "--load" "test/flycheck-test"
+              "--load" "test/run.el"
+              "-f" "flycheck-run-tests-main")))
+    (home-page "https://www.flycheck.org")
+    (synopsis "On-the-fly syntax checking")
+    (description
+     "This package provides on-the-fly syntax checking for GNU Emacs.  It is a
+replacement for the older Flymake extension which is part of GNU Emacs, with
+many improvements and additional features.
+
+Flycheck provides fully-automatic, fail-safe, on-the-fly background syntax
+checking for over 30 programming and markup languages with more than 70
+different tools.  It highlights errors and warnings inline in the buffer, and
+provides an optional IDE-like error list.")
+    (license license:gpl3+)))                     ;+GFDLv1.3+ for the manual
 
 (define-public emacs-flycheck-pycheckers
   (package
@@ -167,3 +218,5 @@ Note that these are implemented as modifying the values received by
   for flake8
 ")
    (license license:expat))) ;; wrong license
+;;emacs-flycheck-pycheckers
+

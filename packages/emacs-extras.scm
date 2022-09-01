@@ -22,7 +22,7 @@
        (sha256
         (base32 "0dx6wqxz1yfp4shas4yn6abqc8bz21ks3glcyzznm3xspjdaq21s"))
        (file-name (git-file-name name version))
-       (patches (list (string-append (dirname (current-filename) "/0001-flycheck.el-fix-finding-the-currect-filename-when-in.patch"))))))
+       (patches (list (string-append (dirname (current-filename)) "/0001-flycheck.el-fix-finding-the-currect-filename-when-in.patch")))))
     (build-system emacs-build-system)
     (propagated-inputs
      (list emacs-dash))

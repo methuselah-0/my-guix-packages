@@ -1019,3 +1019,22 @@ responsive web components.")
    (license #f)))
 ;;python-quarto
 
+;;python-nbdev-stdlib ;; WORKS
+;; (define-public python-quarto-cli
+;;   (package
+;;     (name "python-quarto-cli")
+;;     (version "1.1.251")
+;;     (source (origin
+;;               (method url-fetch)
+;;               (uri (string-append "https://github.com/quarto-dev/quarto-cli/releases/download/v" version "/quarto-" version ".tar.gz"))
+;;               (sha256
+;;                (base32
+;;                 "1ldjxpj8lcs8145v4yqxj0v5rc6viwzs8mrm2d31b40w6x5dsf5k"))))
+;;     (build-system python-build-system)
+;;     (arguments '(#:tests? #f))
+;;     (home-page "https://github.com/quarto-dev/quarto-cli")
+;;     (synopsis "Publish things with quarto")
+;;     (description "Publish code with quarto")
+;;     (license license:expat)))
+;;python-quarto-cli
+

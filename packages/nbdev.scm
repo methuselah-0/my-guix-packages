@@ -864,36 +864,36 @@ responsive web components.")
 ;;python-sphinxext-rediraffe ;;WORKS
 ;;python-sphinxcontrib-mermaid ;; WORKS with tests disabled
 ;;python-sphinx-pytest
-(define-public python-ablog
-  (package
-    (name "python-ablog")
-    (version "0.10.29")
-    (source (origin
-              (method url-fetch)
-              (uri (pypi-uri "ablog" version))
-              (sha256
-               (base32
-                "100waw56xw9518q9srm3n37i3r3l4wx2p18i93bkikx755ffhv5b"))))
-    (build-system python-build-system)
-    (propagated-inputs (list python-dateutil
-                             python-docutils
-                             python-feedgen
-                             python-invoke
-                             python-sphinx
-                             python-watchdog))
-    (native-inputs (list python-alabaster
-                         python-ipython
-                         python-myst-parser
-                         python-nbsphinx
-                         python-pytest
-                         python-sphinx-automodapi))
-    (home-page "https://ablog.readthedocs.org/")
-    (synopsis
-     "A Sphinx extension that converts any documentation or personal website project into a full-fledged blog.")
-    (description
-     "This package provides a Sphinx extension that converts any documentation or
-personal website project into a full-fledged blog.")
-    (license license:expat)))
+;; (define-public python-ablog
+;;   (package
+;;     (name "python-ablog")
+;;     (version "0.10.29")
+;;     (source (origin
+;;               (method url-fetch)
+;;               (uri (pypi-uri "ablog" version))
+;;               (sha256
+;;                (base32
+;;                 "100waw56xw9518q9srm3n37i3r3l4wx2p18i93bkikx755ffhv5b"))))
+;;     (build-system python-build-system)
+;;     (propagated-inputs (list python-dateutil
+;;                              python-docutils
+;;                              python-feedgen
+;;                              python-invoke
+;;                              python-sphinx
+;;                              python-watchdog))
+;;     (native-inputs (list python-alabaster
+;;                          python-ipython
+;;                          python-myst-parser
+;;                          python-nbsphinx
+;;                          python-pytest
+;;                          python-sphinx-automodapi))
+;;     (home-page "https://ablog.readthedocs.org/")
+;;     (synopsis
+;;      "A Sphinx extension that converts any documentation or personal website project into a full-fledged blog.")
+;;     (description
+;;      "This package provides a Sphinx extension that converts any documentation or
+;; personal website project into a full-fledged blog.")
+;;     (license license:expat)))
 ;;python-sphinx-design
 ;;python-nbdev
 ;;python-requests-cache ;; fails

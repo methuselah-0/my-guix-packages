@@ -1,4 +1,4 @@
-(define-module (gnu packages nbdev)
+(define-module (packages nbdev)
   #:use-module (gnu packages) ;; because of complaints in /var/log/cuirass/evaluations/1.gz
   #:use-module (gnu packages base) ;; because of findutils
   #:use-module (guix packages)

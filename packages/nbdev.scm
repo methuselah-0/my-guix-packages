@@ -1000,13 +1000,17 @@ responsive web components.")
   (package
    (name "python-quarto")
    (version "0.1.0")
+   ;;
    (source (origin
-            (method url-fetch)
-            (uri (pypi-uri "quarto" version))
+            (method git-fetch)
+            (uri (git-reference
+                  (commit "4fcf29d33f8da520cdfd690d5dd53d556a21c09d")
+	          (url "https://github.com/quarto-dev/quarto-python.git")))
             (sha256
              (base32
-              "05gd5p3jgjr9krw26slgmk5yz0sh36gam7zk7afmnkr0220rg96r"))))
+              "0hwi8lv3j8zd6zakcp4frkq2nnj2128jd72id6h594g91q88b9y4"))))
    (build-system python-build-system)
+   (arguments '(#:tests? #f))
    (propagated-inputs (list python-ipykernel python-jupyter-core
                             python-nbclient python-nbformat python-pyyaml))
    (home-page "https://github.com/quarto-dev/quarto-python")
@@ -1014,3 +1018,4 @@ responsive web components.")
    (description "Python Interface to 'Quarto' Markdown Publishing System")
    (license #f)))
 ;;python-quarto
+

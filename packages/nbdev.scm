@@ -976,7 +976,7 @@ responsive web components.")
 
 ;;python-svg.py ;; WORKS
 ;; python-nbdev-numpy ;; WORKS
-;;python-nbdev-stdlib ;; WORKS
+
 (define-public python-jsonref
   (package
     (name "python-jsonref")
@@ -993,9 +993,25 @@ responsive web components.")
     (synopsis "An implementation of JSON Reference for Python")
     (description "An implementation of JSON Reference for Python")
     (license license:expat)))
-;; python-ghapi ;; WORKS
-;;python-execnb ;; WORKS
-;;python-fastcore
+
+;; (define-public python-quarto-cli
+;;   (package
+;;     (name "python-quarto-cli")
+;;     (version "1.1.251")
+;;     (source (origin
+;;               (method url-fetch)
+;;               (uri (string-append "https://github.com/quarto-dev/quarto-cli/releases/download/v" version "/quarto-" version ".tar.gz"))
+;;               (sha256
+;;                (base32
+;;                 "1ldjxpj8lcs8145v4yqxj0v5rc6viwzs8mrm2d31b40w6x5dsf5k"))))
+;;     (build-system python-build-system)
+;;     (arguments '(#:tests? #f))
+;;     (home-page "https://github.com/quarto-dev/quarto-cli")
+;;     (synopsis "Publish things with quarto")
+;;     (description "Publish code with quarto")
+;;     (license license:expat)))
+;; python-quarto-cli
+
 (define-public python-quarto
   (package
    (name "python-quarto")
@@ -1017,24 +1033,3 @@ responsive web components.")
    (synopsis "Python Interface to 'Quarto' Markdown Publishing System")
    (description "Python Interface to 'Quarto' Markdown Publishing System")
    (license #f)))
-;;python-quarto
-
-;;python-nbdev-stdlib ;; WORKS
-;; (define-public python-quarto-cli
-;;   (package
-;;     (name "python-quarto-cli")
-;;     (version "1.1.251")
-;;     (source (origin
-;;               (method url-fetch)
-;;               (uri (string-append "https://github.com/quarto-dev/quarto-cli/releases/download/v" version "/quarto-" version ".tar.gz"))
-;;               (sha256
-;;                (base32
-;;                 "1ldjxpj8lcs8145v4yqxj0v5rc6viwzs8mrm2d31b40w6x5dsf5k"))))
-;;     (build-system python-build-system)
-;;     (arguments '(#:tests? #f))
-;;     (home-page "https://github.com/quarto-dev/quarto-cli")
-;;     (synopsis "Publish things with quarto")
-;;     (description "Publish code with quarto")
-;;     (license license:expat)))
-;;python-quarto-cli
-

@@ -16,67 +16,67 @@
 
 (define-public fwknop-client
   (package
-   (name "fwknop-client")
-   (version "3.0.0")
-   (source
-    (origin
-     (method url-fetch)
-     (uri "http://www.cipherdyne.org/fwknop/download/fwknop-2.6.10.tar.gz")
-     (sha256
-      (base32
-       "1wbwa8fzqp6dmc59dcm26c9nb75zlix4m55czh855v4jmq5ha59b"))))
-   (build-system gnu-build-system)
-   (arguments
-    `(#:configure-flags '("--disable-server")
-      #:phases (modify-phases %standard-phases
-                 (add-after 'unpack 'fix-compilation-with-GCC's-fno-common-flag
-                   (lambda _
-                     (substitute* "client/log_msg.h"
-                       (("log_level_t") ""))
-                     #t)))))
-   (native-inputs
-    `(("libtool" ,libtool)
-      ("which" ,which)
-      ("automake" ,automake)
-      ("autoconf" ,autoconf)
-      ("libpcap" ,libpcap)
-      ("texinfo" ,texinfo)))
-   (propagated-inputs
-    `(("iptables" ,iptables)))
-   (synopsis "Tool that does fwknop stuff")
-   (description "next-gen port-knocking")
-   (home-page "http://www.cipherdyne.org/fwknop/index.html")
-   (license license:gpl2)))
+    (name "fwknop-client")
+    (version "2.6.10")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "http://www.cipherdyne.org/fwknop/download/fwknop-" version ".tar.gz"))
+       (sha256
+        (base32
+         "1wbwa8fzqp6dmc59dcm26c9nb75zlix4m55czh855v4jmq5ha59b"))))
+    (build-system gnu-build-system)
+    (arguments
+     `(#:configure-flags '("--disable-server")
+       #:phases (modify-phases %standard-phases
+                  (add-after 'unpack 'fix-compilation-with-GCC's-fno-common-flag
+                    (lambda _
+                      (substitute* "client/log_msg.h"
+                        (("log_level_t") ""))
+                      #t)))))
+    (native-inputs
+     `(("libtool" ,libtool)
+       ("which" ,which)
+       ("automake" ,automake)
+       ("autoconf" ,autoconf)
+       ("libpcap" ,libpcap)
+       ("texinfo" ,texinfo)))
+    (propagated-inputs
+     `(("iptables" ,iptables)))
+    (synopsis "Next generation port-knocking")
+    (description "Fwknop implements an authorization scheme known as Single Packet Authorizatio (SPA) for Linux systems running iptables. This mechanism requires only a single encrypted and non-replayed packet to communicate various pieces of information including desired access through an iptables policy. The main application of this program is to use iptables in a default-drop stance to protect services such as SSH with an additional layer of security in order to make the exploitation of vulnerabilities (both 0-day and unpatched code) much more difficult. This package contains the fwknop client.")
+    (home-page "http://www.cipherdyne.org/fwknop/index.html")
+    (license license:gpl2)))
 (define-public fwknop-server
   (package
-   (name "fwknop-server")
-   (version "2.6.10")
-   (source
-    (origin
-     (method url-fetch)
-     (uri "http://www.cipherdyne.org/fwknop/download/fwknop-2.6.10.tar.gz")
-     (sha256
-      (base32
-       "1wbwa8fzqp6dmc59dcm26c9nb75zlix4m55czh855v4jmq5ha59b"))))
-   (build-system gnu-build-system)
-   (arguments
-    `(#:configure-flags '("--disable-client")
-      #:phases (modify-phases %standard-phases
-                 (add-after 'unpack 'fix-compilation-with-GCC's-fno-common-flag
-                   (lambda _
-                     (substitute* "client/log_msg.h"
-                       (("log_level_t") ""))
-                     #t)))))
-   (native-inputs
-    `(("libtool" ,libtool)
-      ("which" ,which)
-      ("automake" ,automake)
-      ("autoconf" ,autoconf)
-      ("libpcap" ,libpcap)
-      ("texinfo" ,texinfo)))
-   (propagated-inputs
-    `(("iptables" ,iptables)))
-   (synopsis "Tool that does fwknop stuff")
-   (description "next-gen port-knocking")
-   (home-page "http://www.cipherdyne.org/fwknop/index.html")
-   (license license:gpl2)))
+    (name "fwknop-server")
+    (version "2.6.10")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "http://www.cipherdyne.org/fwknop/download/fwknop-" version ".tar.gz"))
+       (sha256
+        (base32
+         "1wbwa8fzqp6dmc59dcm26c9nb75zlix4m55czh855v4jmq5ha59b"))))
+    (build-system gnu-build-system)
+    (arguments
+     `(#:configure-flags '("--disable-client")
+       #:phases (modify-phases %standard-phases
+                  (add-after 'unpack 'fix-compilation-with-GCC's-fno-common-flag
+                    (lambda _
+                      (substitute* "client/log_msg.h"
+                        (("log_level_t") ""))
+                      #t)))))
+    (native-inputs
+     `(("libtool" ,libtool)
+       ("which" ,which)
+       ("automake" ,automake)
+       ("autoconf" ,autoconf)
+       ("libpcap" ,libpcap)
+       ("texinfo" ,texinfo)))
+    (propagated-inputs
+     `(("iptables" ,iptables)))
+    (synopsis "Next generation port-knocking")
+    (description "Fwknop implements an authorization scheme known as Single Packet Authorizatio (SPA) for Linux systems running iptables. This mechanism requires only a single encrypted and non-replayed packet to communicate various pieces of information including desired access through an iptables policy. The main application of this program is to use iptables in a default-drop stance to protect services such as SSH with an additional layer of security in order to make the exploitation of vulnerabilities (both 0-day and unpatched code) much more difficult. This package contains the fwknop daemon.")
+    (home-page "http://www.cipherdyne.org/fwknop/index.html")
+    (license license:gpl2)))

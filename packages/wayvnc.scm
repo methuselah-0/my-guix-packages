@@ -108,6 +108,8 @@
              aml
              libdrm
              ;;gbm (optional)
+             ;; add ffmpeg because it wants libavcodec when mesa (gbm) is added to neatvnc
+             ffmpeg
              gnutls ;; required by neatvnc runtime
              libxkbcommon
              libjpeg-turbo ;; required by neatvnc runtime
@@ -186,6 +188,7 @@
    (native-inputs (list libdrm meson pkg-config))
    (inputs (list aml ffmpeg gnutls libdrm libjpeg-turbo
                  ;;gbm (optional)
+                 mesa ;; has gbm in it, this makes wayvnc package ask for libavcodec which is in ffmpeg
                  ;;pam (optional)
                  pixman zlib))
    (home-page "https://github.com/any1/neatvnc") ;; TODO continue here!

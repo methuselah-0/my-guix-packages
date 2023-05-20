@@ -651,10 +651,10 @@ back as strings.  Can be used over either of a unix or tcp socket.")
                         ;; XXX We should honour the without-tests transformation!
                         (tests? (not #$(%current-target-system))))
 
-                   ;; Copy the ‘source’ and submodules directly to the output.
+                   ;; Copy the ‘source’ to the output and replace submodules.
                    (let ((source #$(package-source this-package)))
                      (with-directory-excursion source
-                       (mkdir-p bcu-root)
+                       (mkdir-p (string-append bcu-root "/submodules"))
                        (for-each (lambda (file)
                                    (copy-recursively file
                                                      (string-append bcu-root
@@ -663,12 +663,10 @@ back as strings.  Can be used over either of a unix or tcp socket.")
                                        "dependency_paths.sh"
                                        "bcu-test.sh"
                                        "docs"
-                                       "src"
-                                       "submodules"))
-                       ;; Moving docs/ out of bcu-root would break symlinks.
-                       (mkdir-p (dirname doc))
-                       (symlink (string-append bcu-root "/docs") doc)))
-
+                                       "src"))
+                       (copy-recursively (assoc-ref %build-inputs "org-html-themes")
+                                         (string-append bcu-root
+                                                        "/submodules/org-html-themes"))))
                    ;; Patch absolute file name references.
                    (let* ((original-path (getenv "PATH"))
                           (shebang-inputs '(#$@(map (lambda (name)

@@ -74,6 +74,8 @@
   #:use-module (guix utils)
   #:use-module ((srfi srfi-1) #:select (alist-delete)))
 
+;;(add-to-load-path (dirname (current-filename))) ;; because bash-coding-utils needs it - guix build bash-coding-utils will otherwise fail because it can't find the guile-bash-for-bash-coding-utils package).
+
 ;; not needed anymore, since bash-ctypes is in guix master.
 ;; (define-public ctypes.sh
 ;;   (let ((commit "9d43f1bc4958ac136786f8c3b82cd3aa50713f49")
@@ -530,7 +532,7 @@ chunks can be expressions as well as simple tokens.")
   ;; XXX A form of https://github.com/fniessen/org-html-themes but not
   ;; drop-in compatible (using that would break the BCU docs).
   ;; ‘Ideally’ we'd re-render them but uugh.
-  (let ((commit "8fff1d4c0879537b81f94d157a8c36485c790ee5")
+  (let ((commit "2889f7b867867dbaf6e059755e1f4e9bc0892332")
         (revision "0"))
     (package
       (name "org-html-themes")
@@ -543,7 +545,7 @@ chunks can be expressions as well as simple tokens.")
                (url "https://gitlab.com/methuselah-0/org-html-themes.git")))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "1hddgfdry8r65a5zqm1pc0rgicv78ls6giavfr5g0rzx428i1j45"))))
+          (base32 "11zr7k8jqldaf6wx3yshiya7f8ryv4ms4bibghnxyrd45gknbnx9"))))
       (build-system copy-build-system)
       (home-page "https://github.com/fniessen/org-html-themes") ; XXX
       (synopsis "Export Org mode files to HTML")
@@ -610,6 +612,8 @@ or multiple persistent python processes that keeps state, and get the results
 back as strings.  Can be used over either of a unix or tcp socket.")
       (license license:cc-by-sa3.0))))
 
+
+;; needs to be install with guix build -L /path/to/this/channel or /path/to/this/channel/packages bash-coding-utils
 (define-public bash-coding-utils
   (let ((commit "ce9e7a8910d7debe29a07b48aa0770913b1ecdaf")
         (revision "0"))

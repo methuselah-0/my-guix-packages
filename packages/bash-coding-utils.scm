@@ -691,8 +691,6 @@ back as strings.  Can be used over either of a unix or tcp socket.")
                        #$(this-package-input "guile-bash-for-bash-coding-utils")
                        library)))
 
-                   ;; TODO: use a PCRE regex to substitute invocations of coreutils
-                   ;; commands
                    ;; TODO: condense below substitutions?
                    (substitute* (find-files #$output "dependency_paths\\.sh$")
                      (("export BCUCTYPES=(ctypes.sh)" _ library)
@@ -882,8 +880,6 @@ back as strings.  Can be used over either of a unix or tcp socket.")
          ;; but we package it separately and copy it manually above.
          ("org-html-themes" ,(package-source org-html-themes/methuselah-0))
          ("coreutils" ,coreutils) ;; Needed for tests.
-         ;; TODO: unable to get the correct hash for pcre:bin output using
-         ;; the new notation (see inputs list below)
          ("pcre:bin" ,pcre "bin")))
       (inputs (list bash
                     bash-ctypes
@@ -899,8 +895,6 @@ back as strings.  Can be used over either of a unix or tcp socket.")
                     libxml2-xpath0
                     lsof
                     nmap
-                    ;;`(,pcre "bin") ;; TODO doesn't work when calling
-                    ;; #$(this-package-input pcre)!
                     perl
                     php
                     procps

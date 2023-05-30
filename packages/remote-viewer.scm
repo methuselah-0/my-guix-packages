@@ -29,6 +29,7 @@
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gstreamer)
+  #:use-module (gnu packages gsasl)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages image)
   #:use-module (gnu packages libusb)
@@ -50,23 +51,29 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix utils))
 
-(define-public remote-viewer
+(define-public remote-viewer-11
   (package
     (name "virt-viewer")
-    (version "9.0")
+    (version "11.0")
     (source (origin
               (method url-fetch)
               (uri (string-append
-                "https://virt-manager.org/download/sources/virt-viewer/"
-                "virt-viewer-" version ".tar.gz"))
+		;;"https://virt-manager.org/download/sources/virt-viewer/"
+                "https://releases.pagure.org/virt-viewer/"
+                "virt-viewer-" version ".tar.xz"))
               (sha256
                (base32
-                "09a83mzyn3b4nd7wpa659g1zf1fjbzb79rk968bz6k5xl21k7d4i"))))
+                ;;"09a83mzyn3b4nd7wpa659g1zf1fjbzb79rk968bz6k5xl21k7d4i"))))
+		"1l5bv6x6j21l487mk3n93ai121gg62n6b069r2jpf72cbhra4gx4"))))
     (build-system gnu-build-system)
     (inputs
       `(("gtk+" ,gtk+)
         ("libcap" ,libcap)
         ("libxml2" ,libxml2)
+	("json-glib", json-glib)
+	("gobject-introspection", gobject-introspection)
+	;;("gsasl", gsasl)
+	("cyrus-sasl", cyrus-sasl)
         ("spice-gtk" ,spice-gtk)))
     (native-inputs
       `(("glib:bin" ,glib "bin")
@@ -90,4 +97,50 @@
 VNC.")
     (home-page "https://virt-manager.org")
     (license license:gpl2+)))
-;;remote-viewer
+(define-public remote-viewer
+  (package
+    (name "virt-viewer")
+    (version "9.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+		"https://virt-manager.org/download/sources/virt-viewer/"
+                ;;"https://releases.pagure.org/virt-viewer/"
+                "virt-viewer-" version ".tar.xz"))
+              (sha256
+               (base32
+                "09a83mzyn3b4nd7wpa659g1zf1fjbzb79rk968bz6k5xl21k7d4i"))))
+		;;"1l5bv6x6j21l487mk3n93ai121gg62n6b069r2jpf72cbhra4gx4"
+                ;; ))))
+    (build-system gnu-build-system)
+    (inputs
+      `(("gtk+" ,gtk+)
+        ("libcap" ,libcap)
+        ("libxml2" ,libxml2)
+	("json-glib", json-glib)
+	("gobject-introspection", gobject-introspection)
+	;; ;;("gsasl", gsasl)
+	("cyrus-sasl", cyrus-sasl)
+        ("spice-gtk" ,spice-gtk)))
+    (native-inputs
+      `(("glib:bin" ,glib "bin")
+        ("intltool" ,intltool)
+        ("pkg-config" ,pkg-config)))
+    (arguments
+      `(#:configure-flags
+        '("--with-spice-gtk")
+        #:phases
+         (modify-phases %standard-phases
+           (add-after
+            'install 'wrap-remote-viewer
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let ((out             (assoc-ref outputs "out"))
+                    (gst-plugin-path (getenv "GST_PLUGIN_SYSTEM_PATH")))
+                (wrap-program (string-append out "/bin/remote-viewer")
+                  `("GST_PLUGIN_SYSTEM_PATH" ":" prefix (,gst-plugin-path))))
+              #t)))))
+    (synopsis "Graphical console client for virtual machines")
+    (description "Graphical console client for virtual machines using SPICE or
+VNC.")
+    (home-page "https://virt-manager.org")
+    (license license:gpl2+)))

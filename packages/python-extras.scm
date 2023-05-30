@@ -648,6 +648,9 @@ simulation, statistical modeling, machine learning and much more.")
      "Decompiler for python3.3")
     (license license:expat)))
 
+;;...checking requirements: OK
+;;...trying to load module uncompyle6: I don't know about Python version '3.10.7' yet.
+;;Python versions 3.9 and greater are not supported.
 (define-public python-uncompyle6
   (package
     (name "python-uncompyle6")
